@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Ads Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        wb: '#e0296b',
+                        ozon: '#005bff',
+                        dark: {
+                            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0',
+                            300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b',
+                            600: '#475569', 700: '#334155', 800: '#1e293b',
+                            850: '#172033', 900: '#0f172a', 950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .animate-fade-in { animation: fadeIn 0.35s ease-out both; }
+        .animate-slide-in { animation: slideIn 0.3s ease-out both; }
+        .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+        .spin { animation: spin 1s linear infinite; }
+        .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .nav-link.active { color: #fff; background: #334155; }
+        .nav-link { transition: all 0.15s ease-out; }
+        .section-content { display: none; }
+        .section-content.active { display: block; }
+        .modal-backdrop { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+
+        /* Sparkline styles */
+        .sparkline { width: 60px; height: 24px; }
+
+        /* Toggle switch */
+        .toggle-switch { width: 40px; height: 22px; border-radius: 11px; position: relative; cursor: pointer; }
+        .toggle-switch::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; top: 2px; left: 2px; transition: all 0.2s; background: white; }
+        .toggle-switch.on { background: #6366f1; }
+        .toggle-switch.on::after { left: 20px; }
+        .toggle-switch.off { background: #475569; }
+
+        /* Tab system for campaign detail */
+        .tab-btn.active { color: #fff; border-bottom-color: #6366f1; }
+    </style>
+</head>
+<body class="bg-dark-950 text-dark-200 min-h-screen font-sans antialiased">
+    <div id="app" class="flex flex-col min-h-screen">
+        <!-- Top Navbar -->
+        <header class="border-b border-dark-800/80 bg-dark-950/90 backdrop-blur-sm sticky top-0 z-50">
+            <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-14">
+                    <div class="flex items-center gap-8">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                                <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z"/>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-semibold tracking-tight text-white">AI Ads Manager</span>
+                        </div>
+                        <nav class="flex items-center gap-1" id="nav-links">
+                            <a href="#" data-section="dashboard" class="nav-link active px-3 py-2 text-sm font-medium rounded-md">Главная</a>
+                            <a href="#" data-section="campaigns" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Кампании</a>
+                            <a href="#" data-section="analytics" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Аналитика</a>
+                            <a href="#" data-section="recommendations" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Рекомендации</a>
+                            <a href="#" data-section="actions" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Действия</a>
+                            <a href="#" data-section="rules" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Правила</a>
+                            <a href="#" data-section="settings" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Настройки</a>
+                        </nav>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-dark-800/80 border border-dark-700/50" id="health-indicator">
+                            <span class="w-2 h-2 rounded-full bg-dark-500 pulse-dot" id="health-dot"></span>
+                            <span class="text-xs text-dark-400" id="health-text">Проверка...</span>
+                        </div>
+                        <button id="btn-trigger-analysis" class="inline-flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.97]">
+                            <svg id="trigger-spinner" class="w-4 h-4 hidden spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                            <span class="hidden sm:inline">Оптимизация</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Toast Container -->
+        <div id="toast-container" class="fixed top-16 right-4 z-50 flex flex-col gap-2 max-w-sm"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col">
+            <div class="max-w-screen-2xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
+
+                <!-- ===== DASHBOARD ===== -->
+                <section id="section-dashboard" class="section-content active">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8" id="summary-cards">
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Кампаний</span>
+                                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25z"/></svg>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold text-white" id="stat-total-campaigns">—</div>
+                            <div class="text-xs text-dark-500 mt-1" id="stat-campaigns-delta"></div>
+                        </div>
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Расход сегодня</span>
+                                <div class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold text-white" id="stat-spent-today">—</div>
+                        </div>
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Клики</span>
+                                <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834-1.66l-1.591 1.591M2.25 12h3.5m12.678 0H14.5m.566 5.882l1.591-1.591M4.75 18.364l1.591-1.591"/></svg>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold text-white" id="stat-total-clicks">—</div>
+                        </div>
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Заказы</span>
+                                <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold text-white" id="stat-total-orders">—</div>
+                        </div>
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Рекомендации</span>
+                                <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold text-white" id="stat-pending">—</div>
+                        </div>
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Режим</span>
+                                <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.841m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312"/></svg>
+                                </div>
+                            </div>
+                            <div class="text-2xl font-bold text-white" id="stat-auto-mode">—</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Campaigns Table -->
+                        <div class="lg:col-span-2 bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                            <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                                <h2 class="text-sm font-semibold text-white">Кампании</h2>
+                                <div class="flex items-center gap-2">
+                                    <select id="filter-platform" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <option value="">Все платформы</option>
+                                        <option value="wildberries">Wildberries</option>
+                                        <option value="ozon">Ozon</option>
+                                    </select>
+                                    <select id="filter-status" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <option value="">Все статусы</option>
+                                        <option value="active">Активные</option>
+                                        <option value="paused">На паузе</option>
+                                        <option value="completed">Завершённые</option>
+                                    </select>
+                                    <button onclick="syncCampaigns()" class="text-xs px-3 py-1 bg-indigo-600/20 text-indigo-400 rounded-md hover:bg-indigo-600/30 transition-all">↓ Импорт</button>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto" id="campaigns-body">
+                                <table class="w-full text-sm">
+                                    <thead>
+                                        <tr class="border-b border-dark-800/40">
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Название</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Платформа</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Статус</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">CTR</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Расход</th>
+                                            <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Тренд</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-campaigns"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Recent Recommendations -->
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                            <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                                <h2 class="text-sm font-semibold text-white">Рекомендации</h2>
+                                <a href="#" data-section="recommendations" class="text-xs text-indigo-400 hover:text-indigo-300" onclick="event.preventDefault();navigateTo('recommendations')">Все →</a>
+                            </div>
+                            <div class="divide-y divide-dark-800/40 max-h-96 overflow-y-auto" id="recent-recommendations"></div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Actions Log -->
+                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                        <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                            <h2 class="text-sm font-semibold text-white">Журнал действий</h2>
+                            <a href="#" data-section="actions" class="text-xs text-indigo-400 hover:text-indigo-300" onclick="event.preventDefault();navigateTo('actions')">Все →</a>
+                        </div>
+                        <div class="divide-y divide-dark-800/40 max-h-64 overflow-y-auto" id="recent-actions-log"></div>
+                    </div>
+                </section>
+
+                <!-- ===== CAMPAIGNS SECTION ===== -->
+                <section id="section-campaigns" class="section-content">
+                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                        <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                            <h2 class="text-sm font-semibold text-white">Все кампании</h2>
+                            <div class="flex items-center gap-2">
+                                <select id="filter-platform2" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <option value="">Все платформы</option>
+                                    <option value="wildberries">Wildberries</option>
+                                    <option value="ozon">Ozon</option>
+                                </select>
+                                <select id="filter-status2" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <option value="">Все статусы</option>
+                                    <option value="active">Активные</option>
+                                    <option value="paused">На паузе</option>
+                                    <option value="completed">Завершённые</option>
+                                </select>
+                                <button onclick="loadAllData()" class="text-xs px-3 py-1 bg-dark-800 border border-dark-700 rounded-md hover:bg-dark-700 transition-all">Обновить</button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-dark-800/40">
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Название</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Платформа</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Тип</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Статус</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Бюджет</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Ставка</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">CTR</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-campaigns-full"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== CAMPAIGN DETAIL SECTION ===== -->
+                <section id="section-campaign-detail" class="section-content">
+                    <div class="mb-6">
+                        <button onclick="navigateTo('campaigns')" class="inline-flex items-center gap-1.5 text-sm text-dark-400 hover:text-white transition-all">
+                            <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25h11.25m0 0v11.25"/></svg>
+                            Назад к кампаниям
+                        </button>
+                    </div>
+
+                    <!-- Campaign Header Card -->
+                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in mb-6">
+                        <div class="px-5 py-4 flex items-start justify-between flex-wrap gap-4">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h2 class="text-lg font-semibold text-white truncate" id="detail-name">—</h2>
+                                    <span id="detail-platform-badge" class="inline-flex px-2 py-0.5 rounded text-xs font-medium"></span>
+                                    <span id="detail-status-badge" class="inline-flex px-2 py-0.5 rounded text-xs font-medium"></span>
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+                                    <div><span class="text-dark-500">Тип:</span> <span class="text-dark-300" id="detail-type">—</span></div>
+                                    <div><span class="text-dark-500">Бюджет:</span> <span class="text-dark-300" id="detail-budget">—</span></div>
+                                    <div><span class="text-dark-500">Ставка:</span> <span class="text-dark-300" id="detail-bid">—</span></div>
+                                    <div><span class="text-dark-500">Обновлено:</span> <span class="text-dark-300" id="detail-updated">—</span></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2" id="detail-status-buttons">
+                                <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-600/20 text-green-400 rounded-lg hover:bg-green-600/30 transition-all">Старт</button>
+                                <button onclick="changeCampaignStatus('paused')" class="px-3 py-1.5 text-xs bg-amber-600/20 text-amber-400 rounded-lg hover:bg-amber-600/30 transition-all">Пауза</button>
+                                <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-dark-700 text-dark-300 rounded-lg hover:bg-dark-600 transition-all">Стоп</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in mb-6">
+                        <div class="px-5 border-b border-dark-800/60 flex items-center gap-6">
+                            <button class="tab-btn px-3 py-3 text-sm font-medium text-dark-400 border-b-2 border-transparent active" data-tab="keywords" onclick="switchDetailTab('keywords', this)">Ключевые слова</button>
+                            <button class="tab-btn px-3 py-3 text-sm font-medium text-dark-400 border-b-2 border-transparent" data-tab="stats" onclick="switchDetailTab('stats', this)">Статистика</button>
+                            <button class="tab-btn px-3 py-3 text-sm font-medium text-dark-400 border-b-2 border-transparent" data-tab="decisions" onclick="switchDetailTab('decisions', this)">Решения ИИ</button>
+                        </div>
+
+                        <!-- Keywords Tab -->
+                        <div id="tab-keywords" class="tab-content">
+                            <div class="px-5 py-3 border-b border-dark-800/40 flex items-center justify-between">
+                                <h3 class="text-sm font-medium text-dark-300">Ключевые слова и кластеры</h3>
+                                <div class="flex items-center gap-2">
+                                    <select id="kw-filter-status" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <option value="">Все статусы</option>
+                                        <option value="active">Активные</option>
+                                        <option value="minus">Минусованные</option>
+                                        <option value="unmanaged">Неуправляемые</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead>
+                                        <tr class="border-b border-dark-800/40">
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Кластер</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Статус</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Ставка</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Показы</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Клики</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">CTR</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Расход</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Заказы</th>
+                                            <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-keywords"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Stats Tab -->
+                        <div id="tab-stats" class="tab-content hidden px-5 py-6">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <div>
+                                    <h4 class="text-sm font-medium text-dark-300 mb-3">Расход за период</h4>
+                                    <div class="bg-dark-950 border border-dark-800/40 rounded-lg p-4">
+                                        <svg id="sparkline-cost" class="w-full h-32" style="min-height: 128px;"></svg>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-dark-300 mb-3">CTR за период</h4>
+                                    <div class="bg-dark-950 border border-dark-800/40 rounded-lg p-4">
+                                        <svg id="sparkline-ctr" class="w-full h-32" style="min-height: 128px;"></svg>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-dark-300 mb-3">Заказы за период</h4>
+                                    <div class="bg-dark-950 border border-dark-800/40 rounded-lg p-4">
+                                        <svg id="sparkline-orders" class="w-full h-32" style="min-height: 128px;"></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Decisions Tab -->
+                        <div id="tab-decisions" class="tab-content hidden px-5 py-6">
+                            <div id="detail-decisions-list" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== ANALYTICS SECTION ===== -->
+                <section id="section-analytics" class="section-content">
+                    <!-- Overview Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="text-xs uppercase tracking-wider text-dark-500 mb-2">Общий CTR</div>
+                            <div class="text-2xl font-bold text-white" id="analytics-ctr">—</div>
+                            <div class="text-xs mt-1" id="analytics-ctr-delta"></div>
+                        </div>
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="text-xs uppercase tracking-wider text-dark-500 mb-2">Общий расход</div>
+                            <div class="text-2xl font-bold text-white" id="analytics-cost">—</div>
+                        </div>
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="text-xs uppercase tracking-wider text-dark-500 mb-2">Общие заказы</div>
+                            <div class="text-2xl font-bold text-white" id="analytics-orders">—</div>
+                        </div>
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                            <div class="text-xs uppercase tracking-wider text-dark-500 mb-2">Ключевых слов</div>
+                            <div class="text-2xl font-bold text-white" id="analytics-keywords">—</div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                            <div class="px-5 py-4 border-b border-dark-800/60"><h2 class="text-sm font-semibold text-white">Расход по кампаниям (топ-10)</h2></div>
+                            <div class="p-5" id="chart-cost-bars"></div>
+                        </div>
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                            <div class="px-5 py-4 border-b border-dark-800/60"><h2 class="text-sm font-semibold text-white">CTR по кампаниям (топ-10)</h2></div>
+                            <div class="p-5" id="chart-ctr-bars"></div>
+                        </div>
+                    </div>
+
+                    <!-- Campaign Stats Table -->
+                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                        <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                            <h2 class="text-sm font-semibold text-white">Статистика по кампаниям за последние дни</h2>
+                            <select id="analytics-platform" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <option value="">Все платформы</option>
+                                <option value="wildberries">Wildberries</option>
+                                <option value="ozon">Ozon</option>
+                            </select>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-dark-800/40">
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Кампания</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Дата</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Показы</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Клики</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">CTR</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Расход</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Заказы</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Тренд</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-analytics-stats"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== RECOMMENDATIONS SECTION ===== -->
+                <section id="section-recommendations" class="section-content">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold text-white">Рекомендации ИИ</h2>
+                        <div class="flex items-center gap-2">
+                            <select id="rec-filter-status" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <option value="">Все статусы</option>
+                                <option value="pending">Ожидает</option>
+                                <option value="executed">Выполнено</option>
+                                <option value="rejected">Отклонено</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid gap-4" id="all-recommendations"></div>
+                </section>
+
+                <!-- ===== ACTIONS SECTION ===== -->
+                <section id="section-actions" class="section-content">
+                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                        <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                            <h2 class="text-sm font-semibold text-white">Журнал действий</h2>
+                            <div class="flex items-center gap-2">
+                                <select id="action-filter-type" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <option value="">Все типы</option>
+                                    <option value="raise_bid">Повысить ставку</option>
+                                    <option value="lower_bid">Понизить ставку</option>
+                                    <option value="minus_word">Минус-слово</option>
+                                    <option value="increase_budget">Увеличить бюджет</option>
+                                    <option value="create_search_campaign">Создать кампанию</option>
+                                    <option value="adjust_price">Скорректировать цену</option>
+                                </select>
+                                <select id="action-filter-status" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <option value="">Все статусы</option>
+                                    <option value="success">Успешно</option>
+                                    <option value="pending">Ожидает</option>
+                                    <option value="failed">Ошибка</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-dark-800/40">
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Тип</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Параметры</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Статус</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Время</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Детали</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-actions"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== RULES SECTION ===== -->
+                <section id="section-rules" class="section-content">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold text-white">Правила оптимизации</h2>
+                        <button onclick="showAddRuleModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600/20 text-indigo-400 text-sm rounded-lg hover:bg-indigo-600/30 transition-all">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                            Добавить правило
+                        </button>
+                    </div>
+
+                    <!-- Default rules table from diploma -->
+                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in mb-6">
+                        <div class="px-5 py-4 border-b border-dark-800/60">
+                            <h3 class="text-sm font-semibold text-white">Встроенные правила Wildberries</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-dark-800/40">
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Название</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Платформа</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Описание</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Параметры</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Активно</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-rules"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== SETTINGS SECTION ===== -->
+                <section id="section-settings" class="section-content">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Add Account Form -->
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                            <div class="px-5 py-4 border-b border-dark-800/60">
+                                <h2 class="text-sm font-semibold text-white">Добавить аккаунт</h2>
+                            </div>
+                            <div class="p-5">
+                                <form id="form-add-account" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-dark-300 mb-1">Платформа</label>
+                                        <select id="acc-platform" required class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                            <option value="wildberries">Wildberries</option>
+                                            <option value="ozon">Ozon</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-dark-300 mb-1">Название</label>
+                                        <input type="text" id="acc-name" required placeholder="Мой магазин" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-dark-300 mb-1">Токен WB API</label>
+                                        <input type="text" id="acc-token" placeholder="Вставьте токен из ЛК WB" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    </div>
+                                    <div id="ozon-fields" class="hidden space-y-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-dark-300 mb-1">Ozon Client ID</label>
+                                            <input type="text" id="acc-ozon-id" placeholder="Client ID" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-dark-300 mb-1">Ozon Client Secret</label>
+                                            <input type="password" id="acc-ozon-secret" placeholder="Client Secret" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.97]">
+                                        Добавить аккаунт
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Connected Accounts -->
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                            <div class="px-5 py-4 border-b border-dark-800/60">
+                                <h2 class="text-sm font-semibold text-white">Подключённые аккаунты</h2>
+                            </div>
+                            <div class="divide-y divide-dark-800/40 max-h-[400px] overflow-y-auto" id="connected-accounts"></div>
+                        </div>
+
+                        <!-- LLM Settings -->
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                            <div class="px-5 py-4 border-b border-dark-800/60">
+                                <h2 class="text-sm font-semibold text-white">Настройки LLM</h2>
+                            </div>
+                            <div class="p-5 space-y-4" id="llm-settings-form">
+                                <div class="text-sm text-dark-400">Загрузка...</div>
+                            </div>
+                        </div>
+
+                        <!-- Mode Toggle -->
+                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
+                            <div class="px-5 py-4 border-b border-dark-800/60">
+                                <h2 class="text-sm font-semibold text-white">Режим работы</h2>
+                            </div>
+                            <div class="p-5 flex items-center justify-between">
+                                <div>
+                                    <div class="text-sm font-medium text-dark-200" id="mode-label">Загрузка...</div>
+                                    <div class="text-xs text-dark-500 mt-1" id="mode-description">Автоматическое применение рекомендаций ИИ</div>
+                                </div>
+                                <div class="toggle-switch" id="auto-mode-toggle" onclick="toggleAutoMode()"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <footer class="border-t border-dark-800/60 py-3">
+            <div class="max-w-screen-2xl mx-auto px-4 text-center text-xs text-dark-600">
+                AI Ads Manager v0.1.0 — Управление рекламой Wildberries и Ozon с помощью ИИ
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div id="modal-backdrop" class="fixed inset-0 z-[100] hidden modal-backdrop" onclick="closeModal()">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-dark-900 border border-dark-700/60 rounded-2xl max-w-3xl w-full shadow-2xl max-h-[85vh] overflow-y-auto" onclick="event.stopPropagation()">
+                <div class="sticky top-0 bg-dark-900 border-b border-dark-800/60 px-5 py-4 flex items-center justify-between z-10">
+                    <h3 class="text-sm font-semibold text-white" id="modal-title">Детали</h3>
+                    <button onclick="closeModal()" class="text-dark-400 hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <div class="p-5" id="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ============================================================
+    //  CONFIG & STATE
+    // ============================================================
+    const API_BASE = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
+        ? 'http://127.0.0.1:8001/api'
+        : '/api';
+    let campaigns = [];
+    let decisions = [];
+    let actions = [];
+    let accounts = [];
+    let keywords = [];
+    let campaignStats = [];
+    let rules = [];
+    let analysisSettings = {};
+    let currentCampaignId = null;
+
+    // ============================================================
+    //  API HELPERS
+    // ============================================================
+    async function apiGet(url) {
+        const res = await fetch(API_BASE + url);
+        if (!res.ok) throw new Error(`GET ${url}: ${res.status} ${res.statusText}`);
+        return res.json();
+    }
+
+    async function apiPost(url, body = null) {
+        const res = await fetch(API_BASE + url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body ? JSON.stringify(body) : undefined,
+        });
+        if (!res.ok) { const text = await res.text(); throw new Error(`POST ${url}: ${res.status} — ${text}`); }
+        if (res.status === 204) return null;
+        return res.json();
+    }
+
+    async function apiPatch(url, body) {
+        const res = await fetch(API_BASE + url, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        if (!res.ok) { const text = await res.text(); throw new Error(`PATCH ${url}: ${res.status} — ${text}`); }
+        if (res.status === 204) return null;
+        return res.json();
+    }
+
+    async function apiDelete(url) {
+        const res = await fetch(API_BASE + url, { method: 'DELETE' });
+        if (!res.ok && res.status !== 204) { const text = await res.text(); throw new Error(`DELETE ${url}: ${res.status} — ${text}`); }
+        return true;
+    }
+
+    // ============================================================
+    //  TOAST NOTIFICATIONS
+    // ============================================================
+    function showToast(message, type = 'info') {
+        const colors = {
+            success: 'border-green-500/80 bg-dark-900 text-green-300',
+            error: 'border-red-500/80 bg-dark-900 text-red-300',
+            info: 'border-indigo-500/80 bg-dark-900 text-indigo-300',
+        };
+        const icons = {
+            success: '<svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+            error: '<svg class="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>',
+            info: '<svg class="w-5 h-5 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>',
+        };
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `flex items-center gap-3 px-4 py-3 border rounded-lg shadow-xl animate-slide-in ${colors[type] || colors.info}`;
+        toast.innerHTML = `${icons[type] || icons.info}<span class="text-sm flex-1">${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
+    }
+
+    // ============================================================
+    //  NAVIGATION
+    // ============================================================
+    function navigateTo(section) {
+        document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(el => {
+            el.classList.remove('active');
+            el.classList.add('text-dark-400');
+        });
+        const target = document.getElementById('section-' + section);
+        if (target) target.classList.add('active');
+        const link = document.querySelector(`[data-section="${section}"]`);
+        if (link) { link.classList.add('active'); link.classList.remove('text-dark-400'); }
+
+        // Section-specific loaders
+        if (section === 'analytics') renderAnalytics();
+        if (section === 'rules') loadRules();
+        if (section === 'settings') loadAnalysisSettings();
+        if (section === 'campaigns') loadAllData();
+    }
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', e => { e.preventDefault(); navigateTo(link.dataset.section); });
+    });
+
+    // ============================================================
+    //  FORMATTING
+    // ============================================================
+    function formatRUB(n) { if (n == null || isNaN(n)) return '—'; return Number(n).toLocaleString('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }); }
+    function formatDate(d) { if (!d) return '—'; return new Date(d).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+    function formatDateShort(d) { if (!d) return '—'; return new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' }); }
+
+    function platformLabel(p) {
+        if (p === 'wildberries') return 'Wildberries';
+        if (p === 'ozon') return 'Ozon';
+        return p || '—';
+    }
+
+    function statusLabel(s) {
+        const map = { active: 'Активна', paused: 'На паузе', completed: 'Завершена', pending: 'Ожидает', approved: 'Одобрено', rejected: 'Отклонено', applied: 'Применено', executed: 'Выполнено', success: 'Успешно', failed: 'Ошибка', unmanaged: 'Неупр.', minus: 'Минус' };
+        return map[s] || s || '—';
+    }
+
+    function platformClass(p) {
+        return p === 'wildberries' ? 'bg-wb/20 text-wb' : p === 'ozon' ? 'bg-ozon/20 text-ozon' : 'bg-dark-700 text-dark-300';
+    }
+
+    function statusClass(s) {
+        const map = {
+            active: 'bg-green-500/15 text-green-400', paused: 'bg-amber-500/15 text-amber-400',
+            completed: 'bg-dark-600/40 text-dark-400', pending: 'bg-indigo-500/15 text-indigo-400',
+            approved: 'bg-green-500/15 text-green-400', rejected: 'bg-red-500/15 text-red-400',
+            applied: 'bg-green-500/15 text-green-400', executed: 'bg-green-500/15 text-green-400',
+            success: 'bg-green-500/15 text-green-400', failed: 'bg-red-500/15 text-red-400',
+            unmanaged: 'bg-dark-600/40 text-dark-400', minus: 'bg-red-500/15 text-red-400',
+        };
+        return map[s] || 'bg-dark-600/40 text-dark-400';
+    }
+
+    function translateActionType(t) {
+        const m = { raise_bid: 'Повысить ставку', lower_bid: 'Понизить ставку', minus_word: 'Минус-слово', increase_budget: 'Увеличить бюджет', create_search_campaign: 'Создать кампанию', adjust_price: 'Скорректировать цену' };
+        return m[t] || t;
+    }
+
+    function esc(str) { if (!str) return '—'; const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
+    function deltaHTML(oldVal, newVal) {
+        if (oldVal === null || oldVal === undefined || newVal === null || oldVal === 0) return '';
+        const pct = ((newVal - oldVal) / Math.abs(oldVal) * 100).toFixed(1);
+        const isUp = newVal >= oldVal;
+        return `<span class="${isUp ? 'text-green-400' : 'text-red-400'}">${isUp ? '↑' : '↓'}${pct}%</span>`;
+    }
+
+    // ============================================================
+    //  SPARKLINE
+    // ============================================================
+    function sparklineSVG(values, color = '#6366f1', height = 24, width = 60) {
+        const clean = (values || []).filter(v => v != null && !isNaN(v));
+        if (clean.length < 2) return '';
+        const max = Math.max(...clean) || 1;
+        const min = Math.min(...clean) || 0;
+        const range = max - min || 1;
+        const points = clean.map((v, i) => {
+            const x = (i / (clean.length - 1)) * width;
+            const y = height - ((v - min) / range) * (height - 4) - 2;
+            return `${x.toFixed(1)},${y.toFixed(1)}`;
+        });
+        const lastVal = clean[clean.length - 1];
+        const prevVal = clean[clean.length - 2];
+        const isUp = lastVal >= prevVal;
+        const strokeColor = isUp ? '#22c55e' : '#ef4444';
+        return `<div class="sparkline inline-block" title="Poslednee: ${lastVal.toFixed(1)}"><svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg"><polyline fill="none" stroke="${strokeColor}" stroke-width="1.5" points="${points.join(' ')}"/></svg></div>`;
+    }
+
+    function barChartSVG(nameValuePairs, height = 220) {
+        if (!nameValuePairs || nameValuePairs.length === 0) return '<div class="text-sm text-dark-500 text-center py-8">Нет данных</div>';
+        const maxVal = Math.max(...nameValuePairs.map(p => p[1]), 1);
+        const padding = 40;
+        const barH = Math.min(20, (height - 20) / nameValuePairs.length - 4);
+        const svgH = nameValuePairs.length * (barH + 4) + padding;
+        const barColor = '#6366f1';
+
+        let html = `<svg width="100%" height="${svgH}" viewBox="0 0 400 ${svgH}" xmlns="http://www.w3.org/2000/svg" class="text-xs">`;
+        nameValuePairs.forEach((pair, i) => {
+            const y = padding + i * (barH + 4);
+            const w = Math.max(2, (pair[1] / maxVal) * (400 - padding - 10));
+            html += `<text x="2" y="${y + barH / 2 + 4}" class="fill-dark-400" font-size="9">${esc(pair[0]?.substring(0, 25) || '')}</text>`;
+            html += `<rect x="${padding}" y="${y}" width="${w.toFixed(1)}" height="${barH}" rx="2" fill="${barColor}" opacity="0.8"/>`;
+            html += `<text x="${(padding + w + 4).toFixed(1)}" y="${y + barH / 2 + 3}" class="fill-dark-300" font-size="9">${pair[1].toFixed(1)}</text>`;
+        });
+        html += '</svg>';
+        return html;
+    }
+
+    // ============================================================
+    //  DATA LOADERS
+    // ============================================================
+    async function loadAllData() {
+        try {
+            const [c, d, a, acc, rulesR, statsR] = await Promise.allSettled([
+                apiGet('/campaigns'),
+                apiGet('/decisions?limit=50'),
+                apiGet('/actions?limit=100'),
+                apiGet('/accounts'),
+                apiGet('/rules'),
+                apiGet('/campaign-stats?limit=30'),
+            ]);
+
+            campaigns = c.status === 'fulfilled' ? c.value : [];
+            decisions = d.status === 'fulfilled' ? d.value : [];
+            actions = a.status === 'fulfilled' ? a.value : [];
+            accounts = acc.status === 'fulfilled' ? acc.value : [];
+            if (rulesR.status === 'fulfilled') rules = rulesR.value;
+            if (statsR.status === 'fulfilled') campaignStats = statsR.value;
+
+            renderDashboard();
+            renderCampaigns();
+            renderRecommendations();
+            renderActions();
+            renderAccounts();
+        } catch (err) {
+            console.error('Ошибка загрузки:', err);
+            showToast('Ошибка загрузки: ' + err.message, 'error');
+        }
+    }
+
+    async function syncCampaigns() {
+        const wbAccounts = accounts.filter(a => a.platform === 'wildberries');
+        if (wbAccounts.length === 0) { showToast('Нет аккаунтов Wildberries', 'error'); return; }
+        for (const acc of wbAccounts) {
+            try {
+                const r = await apiPost(`/accounts/${acc.id}/sync-campaigns`);
+                showToast(`${acc.name}: ${r.imported || 0} кампаний импортировано`);
+            } catch (err) { showToast(`${acc.name}: ${err.message}`, 'error'); }
+        }
+        await loadAllData();
+    }
+
+    // ============================================================
+    //  RENDER: DASHBOARD
+    // ============================================================
+    function renderDashboard() {
+        document.getElementById('stat-total-campaigns').textContent = campaigns.length || '—';
+
+        const totalClicks = campaigns.reduce((s, c) => s + (c.latest_clicks || 0), 0);
+        const totalOrders = campaigns.reduce((s, c) => s + (c.latest_orders || 0), 0);
+        const spent = campaigns.reduce((s, c) => s + (parseFloat(c.latest_cost) || 0), 0);
+        const pending = decisions.filter(d => d.status === 'pending').length;
+        const autoMode = analysisSettings.auto_mode ? 'Авто' : 'Ручной';
+
+        document.getElementById('stat-spent-today').textContent = spent > 0 ? formatRUB(spent) : '—';
+        document.getElementById('stat-total-clicks').textContent = totalClicks || '—';
+        document.getElementById('stat-total-orders').textContent = totalOrders || '—';
+        document.getElementById('stat-pending').textContent = pending || '—';
+        document.getElementById('stat-auto-mode').textContent = autoMode;
+
+        // Campaign table (short)
+        const tbody = document.getElementById('table-campaigns');
+        if (campaigns.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-dark-500">Нет кампаний — нажмите "Импорт" чтобы загрузить из WB</td></tr>';
+            return;
+        }
+        const fp = document.getElementById('filter-platform')?.value || '';
+        const fs = document.getElementById('filter-status')?.value || '';
+        let filtered = campaigns;
+        if (fp) filtered = filtered.filter(c => c.platform === fp);
+        if (fs) filtered = filtered.filter(c => c.status === fs);
+
+        tbody.innerHTML = filtered.slice(0, 10).map(c => `
+            <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
+                <td class="px-4 py-3 text-dark-200 font-medium truncate max-w-[180px]">${esc(c.name || c.platform_campaign_id || '')}</td>
+                <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(c.platform)}">${platformLabel(c.platform)}</span></td>
+                <td class="px-4 py-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${statusClass(c.status)}">${statusLabel(c.status)}</span></td>
+                <td class="px-4 py-3 text-right text-dark-300">${c.latest_ctr != null ? c.latest_ctr.toFixed(1) + '%' : '—'}</td>
+                <td class="px-4 py-3 text-right text-dark-300">${c.latest_cost != null ? formatRUB(c.latest_cost) : '—'}</td>
+                <td class="px-4 py-3 text-center">${sparklineSVG(c.ctr_history, '#6366f1', 24, 50)}</td>
+            </tr>
+        `).join('');
+
+        // Recent recommendations
+        const rec = document.getElementById('recent-recommendations');
+        if (decisions.length === 0) {
+            rec.innerHTML = '<div class="px-4 py-8 text-center text-dark-500 text-sm">Нет рекомендаций</div>';
+        } else {
+            rec.innerHTML = decisions.slice(0, 8).map(d => {
+                const actionCount = d.actions_json?.actions?.length || 0;
+                return `
+                <div class="px-4 py-3 animate-fade-in cursor-pointer" onclick="openDecisionDetail(${d.id})">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
+                        <span class="text-xs text-dark-500">${formatDate(d.created_at)}</span>
+                    </div>
+                    <p class="text-xs text-dark-400">${actionCount} действий · ${d.llm_model || '—'}</p>
+                    ${d.status === 'pending' ? `
+                    <div class="flex items-center gap-2 mt-2">
+                        <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded hover:bg-green-600/30 transition-all">Одобрить</button>
+                        <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-2 py-1 bg-red-600/20 text-red-400 text-xs rounded hover:bg-red-600/30 transition-all">Отклонить</button>
+                    </div>` : ''}
+                </div>`;
+            }).join('');
+        }
+
+        // Recent actions log
+        const log = document.getElementById('recent-actions-log');
+        if (actions.length === 0) {
+            log.innerHTML = '<div class="px-4 py-8 text-center text-dark-500 text-sm">Нет действий</div>';
+        } else {
+            log.innerHTML = actions.slice(0, 12).map(a => `
+                <div class="px-4 py-3 flex items-center gap-3 animate-fade-in">
+                    <div class="w-2 h-2 rounded-full ${a.status === 'success' ? 'bg-green-400' : a.status === 'pending' ? 'bg-amber-400' : 'bg-red-400'}"></div>
+                    <div class="flex-1 min-w-0">
+                        <span class="text-sm font-medium text-dark-200">${translateActionType(a.action_type)}</span>
+                        <span class="text-xs text-dark-500 ml-2">${formatDate(a.applied_at)}</span>
+                    </div>
+                    <button onclick="openActionDetail(${a.id})" class="text-xs text-dark-500 hover:text-dark-300">→</button>
+                </div>
+            `).join('');
+        }
+    }
+
+    // ============================================================
+    //  RENDER: CAMPAIGNS
+    // ============================================================
+    function renderCampaigns() {
+        const tbody = document.getElementById('table-campaigns-full');
+        const fp2 = document.getElementById('filter-platform2')?.value || '';
+        const fs2 = document.getElementById('filter-status2')?.value || '';
+        let filtered = campaigns;
+        if (fp2) filtered = filtered.filter(c => c.platform === fp2);
+        if (fs2) filtered = filtered.filter(c => c.status === fs2);
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-8 text-center text-dark-500">Нет кампаний</td></tr>';
+        } else {
+            tbody.innerHTML = filtered.map(c => `
+                <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
+                    <td class="px-4 py-3 text-dark-200 font-medium truncate max-w-[200px]">${esc(c.name || c.platform_campaign_id || '')}</td>
+                    <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(c.platform)}">${platformLabel(c.platform)}</span></td>
+                    <td class="px-4 py-3 text-dark-400 text-xs">${c.campaign_type || '—'}</td>
+                    <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(c.status)}">${statusLabel(c.status)}</span></td>
+                    <td class="px-4 py-3 text-right text-dark-300">${c.daily_budget ? formatRUB(c.daily_budget) : '—'}</td>
+                    <td class="px-4 py-3 text-right text-dark-300">${c.current_bid ? formatRUB(c.current_bid) : '—'}</td>
+                    <td class="px-4 py-3 text-right text-dark-300">${c.latest_ctr ? c.latest_ctr.toFixed(1) + '%' : '—'}</td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    // ============================================================
+    //  CAMPAIGN DETAIL
+    // ============================================================
+    async function openCampaignDetail(campaignId) {
+        currentCampaignId = campaignId;
+        try {
+            const detail = await apiGet(`/campaigns/${campaignId}`);
+            // Render header
+            document.getElementById('detail-name').textContent = detail.name || detail.platform_campaign_id || '—';
+            const badge = document.getElementById('detail-platform-badge');
+            badge.className = `inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(detail.platform)}`;
+            badge.textContent = platformLabel(detail.platform);
+            const statusBadge = document.getElementById('detail-status-badge');
+            statusBadge.className = `inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(detail.status)}`;
+            statusBadge.textContent = statusLabel(detail.status);
+            document.getElementById('detail-type').textContent = detail.campaign_type || '—';
+            document.getElementById('detail-budget').textContent = detail.daily_budget ? formatRUB(detail.daily_budget) : '—';
+            document.getElementById('detail-bid').textContent = detail.current_bid ? formatRUB(detail.current_bid) : '—';
+            document.getElementById('detail-updated').textContent = formatDate(detail.updated_at);
+
+            // Keywords tab
+            keywords = detail.keywords || [];
+            renderKeywordsTable();
+
+            // Stats tab
+            renderCampaignStatsChart(detail);
+
+            // Decisions tab
+            renderCampaignDecisions(detail.id);
+
+            // Set default tab
+            switchDetailTab('keywords', document.querySelector('[data-tab="keywords"]'));
+
+            navigateTo('campaign-detail');
+        } catch (err) {
+            showToast('Ошибка: ' + err.message, 'error');
+        }
+    }
+
+    function switchDetailTab(tabName, btn) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('text-white'); b.classList.add('text-dark-400'); });
+        document.getElementById('tab-' + tabName)?.classList.remove('hidden');
+        if (btn) { btn.classList.add('active'); btn.classList.remove('text-dark-400'); btn.classList.add('text-white'); }
+    }
+
+    async function changeCampaignStatus(newStatus) {
+        if (!currentCampaignId) return;
+        const label = { active: 'Запустить', paused: 'Поставить на паузу', completed: 'Остановить' };
+        if (!confirm(`${label[newStatus] || newStatus} кампанию?`)) return;
+        try {
+            await apiPost(`/campaigns/${currentCampaignId}/status/${newStatus}`);
+            showToast(`Статус: ${statusLabel(newStatus)}`, 'success');
+            loadAllData();
+            openCampaignDetail(currentCampaignId);
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    function renderKeywordsTable() {
+        const tbody = document.getElementById('table-keywords');
+        const fs = document.getElementById('kw-filter-status')?.value || '';
+        let filtered = keywords;
+        if (fs) filtered = filtered.filter(k => k.status === fs);
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center text-dark-500">Нет ключевых слов. Синхронизируйте кампании через API WB.</td></tr>';
+            return;
+        }
+
+        // Find latest stats for each keyword
+        tbody.innerHTML = filtered.map(kw => {
+            const latestStat = (kw.stats || [])[0] || {};
+            const impressions = latestStat.impressions || 0;
+            const clicks = latestStat.clicks || 0;
+            const ctr = latestStat.ctr != null ? latestStat.ctr.toFixed(1) + '%' : '—';
+            const cost = latestStat.cost != null ? formatRUB(latestStat.cost) : '—';
+            const orders = latestStat.orders || 0;
+
+            return `
+            <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all">
+                <td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]" title="${esc(kw.keyword_text)}">${esc((kw.cluster_id || kw.keyword_text || '').substring(0, 40))}</td>
+                <td class="px-4 py-2"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(kw.status)}">${statusLabel(kw.status)}</span></td>
+                <td class="px-4 py-2 text-right text-dark-300 text-xs">${kw.current_bid ? formatRUB(kw.current_bid) : '—'}</td>
+                <td class="px-4 py-2 text-right text-dark-400">${impressions.toLocaleString('ru')}</td>
+                <td class="px-4 py-2 text-right text-dark-400">${clicks.toLocaleString('ru')}</td>
+                <td class="px-4 py-2 text-right text-dark-400">${ctr}</td>
+                <td class="px-4 py-2 text-right text-dark-400">${cost}</td>
+                <td class="px-4 py-2 text-right text-dark-400">${orders}</td>
+                <td class="px-4 py-2 text-center">
+                    <div class="flex items-center justify-center gap-1">
+                        ${kw.status !== 'minus' ? `<button onclick="minusKeyword(${kw.id})" class="p-1 text-dark-500 hover:text-red-400 transition-colors" title="Минусовать"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg></button>` : ''}
+                        <button onclick="editKeywordBid(${kw.id}, ${kw.current_bid || 0})" class="p-1 text-dark-500 hover:text-indigo-400 transition-colors" title="Изменить ставку"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0H4.5z"/></svg></button>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    async function minusKeyword(kwId) {
+        if (!confirm('Минусовать ключевое слово? Реклама по нему будет отключена.')) return;
+        try {
+            await apiPatch(`/keywords/${kwId}`, { status: 'minus' });
+            showToast('Ключ минусован', 'success');
+            openCampaignDetail(currentCampaignId);
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    async function editKeywordBid(kwId, currentBid) {
+        const newBid = prompt('Новая ставка (₽):', currentBid || '');
+        if (!newBid || newBid.trim() === '') return;
+        try {
+            await apiPatch(`/keywords/${kwId}`, { current_bid: parseFloat(newBid) });
+            showToast('Ставка обновлена', 'success');
+            openCampaignDetail(currentCampaignId);
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    function renderCampaignStatsChart(detail) {
+        const stats = (detail.recent_stats || []).slice().reverse();
+        const costData = stats.map(s => s.total_cost || 0);
+        const ctrData = stats.map(s => (s.total_ctr || 0) * 100);
+        const ordersData = stats.map(s => s.total_orders || 0);
+
+        document.getElementById('sparkline-cost').innerHTML = sparklineSVG(costData, '#ef4444', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>';
+        document.getElementById('sparkline-ctr').innerHTML = sparklineSVG(ctrData, '#22c55e', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>';
+        document.getElementById('sparkline-orders').innerHTML = sparklineSVG(ordersData, '#3b82f6', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>';
+    }
+
+    async function renderCampaignDecisions(campaignId) {
+        const container = document.getElementById('detail-decisions-list');
+        try {
+            const decs = await apiGet(`/decisions?campaign_id=${campaignId}&limit=15`);
+            if (decs.length === 0) {
+                container.innerHTML = '<div class="text-sm text-dark-500 text-center py-8">Нет решений ИИ по этой кампании</div>';
+                return;
+            }
+            container.innerHTML = decs.map(d => {
+                const actionCount = d.actions_json?.actions?.length || 0;
+                return `
+                <div class="bg-dark-800/30 border border-dark-700/40 rounded-lg p-4 cursor-pointer" onclick="openDecisionDetail(${d.id})">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
+                        <span class="text-xs text-dark-500">${formatDate(d.created_at)}</span>
+                    </div>
+                    <div class="text-xs text-dark-400">${d.llm_model} · ${d.llm_provider} · ${actionCount} действий</div>
+                    ${(d.actions || []).length > 0 ? `
+                    <div class="flex flex-wrap gap-1 mt-2">
+                        ${(d.actions || []).slice(0, 5).map(a => `<span class="px-1.5 py-0.5 bg-dark-900 rounded text-xs text-dark-300">${translateActionType(a.action_type)}</span>`).join('')}
+                    </div>` : ''}
+                </div>`;
+            }).join('');
+        } catch (err) {
+            container.innerHTML = `<div class="text-sm text-red-400 text-center">${esc(err.message)}</div>`;
+        }
+    }
+
+    // ============================================================
+    //  ANALYTICS SECTION
+    // ============================================================
+    function renderAnalytics() {
+        const stats = campaignStats;
+        const totalCost = stats.reduce((s, r) => s + (parseFloat(r.total_cost) || 0), 0);
+        const totalOrders = stats.reduce((s, r) => s + (r.total_orders || 0), 0);
+        const avgCTR = stats.length > 0 ? stats.reduce((s, r) => s + (parseFloat(r.total_ctr) || 0), 0) / stats.length : 0;
+        const totalKeywords = keywords.length || campaigns.reduce((s, c) => s + (c.keywords_count || 0), 0);
+
+        document.getElementById('analytics-ctr').textContent = avgCTR ? (avgCTR * 100).toFixed(2) + '%' : '—';
+        document.getElementById('analytics-cost').textContent = totalCost > 0 ? formatRUB(totalCost) : '—';
+        document.getElementById('analytics-orders').textContent = totalOrders || '—';
+        document.getElementById('analytics-keywords').textContent = totalKeywords || '—';
+
+        // Bar charts
+        const topCost = campaigns.slice(0, 10).map(c => [c.name?.substring(0, 25), c.latest_cost || 0]).filter(v => v[1] > 0);
+        document.getElementById('chart-cost-bars').innerHTML = barChartSVG(topCost);
+
+        const topCTR = campaigns.slice(0, 10).map(c => [c.name?.substring(0, 25), (c.latest_ctr || 0) * 100]).filter(v => v[1] > 0);
+        document.getElementById('chart-ctr-bars').innerHTML = barChartSVG(topCTR);
+
+        // Campaign stats table
+        renderAnalyticsStats();
+    }
+
+    function renderAnalyticsStats() {
+        const tbody = document.getElementById('table-analytics-stats');
+        const fp = document.getElementById('analytics-platform')?.value || '';
+        let filtered = campaigns;
+        if (fp) filtered = filtered.filter(c => c.platform === fp);
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-dark-500">Нет данных</td></tr>';
+            return;
+        }
+
+        // Combine campaign stats
+        let rows = [];
+        for (const c of filtered) {
+            const name = c.name?.substring(0, 30) || c.platform_campaign_id || '';
+            const recentStats = ((c.recent_stats || [])[0]) || { total_impressions: c.latest_impressions || 0, total_clicks: c.latest_clicks || 0, total_ctr: c.latest_ctr || 0, total_cost: c.latest_cost || 0, total_orders: c.latest_orders || 0, date: null };
+            rows.push({ ...recentStats, campaign_name: name, platform: c.platform });
+        }
+
+        rows.sort((a, b) => (b.total_cost || 0) - (a.total_cost || 0));
+
+        tbody.innerHTML = rows.map(r => `
+            <tr class="border-b border-dark-800/20">
+                <td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]">${esc(r.campaign_name)}</td>
+                <td class="px-4 py-2 text-dark-400 text-xs">${r.date ? formatDateShort(r.date) : '—'}</td>
+                <td class="px-4 py-2 text-right text-dark-400">${(r.total_impressions || 0).toLocaleString('ru')}</td>
+                <td class="px-4 py-2 text-right text-dark-400">${(r.total_clicks || 0).toLocaleString('ru')}</td>
+                <td class="px-4 py-2 text-right">${r.total_ctr != null ? (r.total_ctr * 100).toFixed(2) + '%' : '—'}</td>
+                <td class="px-4 py-2 text-right text-dark-300">${r.total_cost != null ? formatRUB(r.total_cost) : '—'}</td>
+                <td class="px-4 py-2 text-right text-dark-400">${r.total_orders || 0}</td>
+                <td class="px-4 py-2 text-center">${sparklineSVG([r.total_impressions, r.total_clicks, r.total_orders], '#6366f1', 24, 50)}</td>
+            </tr>
+        `).join('');
+    }
+
+    document.getElementById('analytics-platform')?.addEventListener('change', renderAnalyticsStats);
+
+    // ============================================================
+    //  RENDER: RECOMMENDATIONS
+    // ============================================================
+    function renderRecommendations() {
+        const container = document.getElementById('all-recommendations');
+        let filtered = decisions;
+        const fs = document.getElementById('rec-filter-status')?.value || '';
+        if (fs) filtered = filtered.filter(d => d.status === fs);
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="px-4 py-8 text-center text-dark-500 text-sm bg-dark-900/80 border border-dark-800/60 rounded-xl">Нет рекомендаций</div>';
+            return;
+        }
+
+        container.innerHTML = filtered.map(d => {
+            const actionCount = d.actions_json?.actions?.length || 0;
+            const actionsDetail = (d.actions || d.actions_json?.actions || []).map(a =>
+                `<span class="px-1.5 py-0.5 bg-dark-950 rounded text-xs text-dark-300">${translateActionType(a.action_type)}</span>`
+            ).join(' ');
+            return `
+            <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-5 animate-fade-in cursor-pointer" onclick="openDecisionDetail(${d.id})">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
+                    <span class="text-xs text-dark-500">${formatDate(d.created_at)}</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3 mb-3 text-xs">
+                    <div><span class="text-dark-500">Модель:</span> <span class="text-dark-300">${d.llm_model || '—'}</span></div>
+                    <div><span class="text-dark-500">Провайдер:</span> <span class="text-dark-300">${d.llm_provider || '—'}</span></div>
+                    <div><span class="text-dark-500">Кампания:</span> <span class="text-dark-300">${d.campaign_id || '—'}</span></div>
+                </div>
+                ${actionsDetail ? `<div class="flex flex-wrap gap-1">${actionsDetail}</div>` : ''}
+                ${d.status === 'pending' ? `
+                <div class="flex items-center gap-2 mt-3 pt-3 border-t border-dark-800/60">
+                    <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-4 py-1.5 bg-green-600/20 text-green-400 text-sm rounded-lg hover:bg-green-600/30 transition-all">Одобрить</button>
+                    <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-4 py-1.5 bg-red-600/20 text-red-400 text-sm rounded-lg hover:bg-red-600/30 transition-all">Отклонить</button>
+                </div>` : ''}
+            </div>`;
+        }).join('');
+    }
+
+    document.getElementById('rec-filter-status')?.addEventListener('change', renderRecommendations);
+
+    // ============================================================
+    //  RENDER: ACTIONS
+    // ============================================================
+    function renderActions() {
+        const tbody = document.getElementById('table-actions');
+        let filtered = [...actions];
+        const ft = document.getElementById('action-filter-type')?.value || '';
+        const fs = document.getElementById('action-filter-status')?.value || '';
+        if (ft) filtered = filtered.filter(a => a.action_type === ft);
+        if (fs) filtered = filtered.filter(a => a.status === fs);
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-dark-500">Нет действий</td></tr>';
+        } else {
+            tbody.innerHTML = filtered.map(a => `
+                <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all">
+                    <td class="px-4 py-3"><span class="text-sm text-dark-200">${translateActionType(a.action_type)}</span></td>
+                    <td class="px-4 py-3 text-xs text-dark-400 truncate max-w-[180px]">${esc(a.parameters_json ? JSON.stringify(a.parameters_json) : '')}</td>
+                    <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(a.status)}">${statusLabel(a.status)}</span></td>
+                    <td class="px-4 py-3 text-right text-xs text-dark-500">${formatDate(a.applied_at)}</td>
+                    <td class="px-4 py-3 text-center"><button onclick="openActionDetail(${a.id})" class="text-xs text-dark-400 hover:text-white">→</button></td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    document.getElementById('action-filter-type')?.addEventListener('change', renderActions);
+    document.getElementById('action-filter-status')?.addEventListener('change', renderActions);
+
+    // ============================================================
+    //  RENDER: ACCOUNTS
+    // ============================================================
+    function renderAccounts() {
+        const container = document.getElementById('connected-accounts');
+        if (accounts.length === 0) {
+            container.innerHTML = '<div class="px-4 py-8 text-center text-dark-500 text-sm">Нет подключённых аккаунтов</div>';
+        } else {
+            container.innerHTML = accounts.map(a => {
+                const hasToken = a.wb_token !== false && a.wb_token != null;
+                const tokenLabel = a.platform === 'wildberries' ? 'Токен WB' : 'Ozon ключ';
+                return `
+                <div class="px-4 py-3 flex items-center justify-between animate-fade-in">
+                    <div class="flex items-center gap-3">
+                        <span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(a.platform)}">${platformLabel(a.platform)}</span>
+                        <div>
+                            <span class="text-sm text-dark-200 font-medium">${esc(a.name)}</span>
+                            <span class="text-xs ${hasToken ? 'text-green-400' : 'text-red-400'} ml-2">${hasToken ? '✓ ' + tokenLabel : '✗ нет ' + tokenLabel}</span>
+                        </div>
+                    </div>
+                    <button onclick="setToken(${a.id}, '${a.platform}')" class="text-xs px-2 py-1 bg-indigo-600/20 text-indigo-400 rounded hover:bg-indigo-600/30 transition-all">Установить токен</button>
+                </div>`;
+            }).join('');
+        }
+    }
+
+    async function setToken(accountId, platform) {
+        const token = prompt(platform === 'wildberries' ? 'Вставьте токен WB API:' : 'Введите Ozon Client Secret:');
+        if (!token?.trim()) return;
+        try {
+            const body = platform === 'wildberries' ? { wb_token: token.trim() } : { ozon_client_secret: token.trim() };
+            await apiPatch(`/accounts/${accountId}`, body);
+            showToast('Токен установлен', 'success');
+            await loadAllData();
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    // ============================================================
+    //  RULES
+    // ============================================================
+    async function loadRules() {
+        try {
+            if (!rules.length) {
+                rules = await apiGet('/rules');
+                // If empty, seed with diploma rules
+                if (!rules.length) await seedDefaultRules();
+            }
+            renderRulesTable();
+        } catch (err) { showToast('Ошибка правил: ' + err.message, 'error'); }
+    }
+
+    async function seedDefaultRules() {
+        const wbRules = [
+            { platform: 'wildberries', rule_name: 'CTR ниже 2% при позиции > 50', rule_description: 'Минусать кластеры с низким CTR при хорошей позиции — товар не привлекателен для этого запроса', rule_params_json: { min_ctr: 0.02, max_position: 50, min_impressions: 1000 }, is_active: true },
+            { platform: 'wildberries', rule_name: 'CTR выше 4% — повышение ставки', rule_description: 'Повышать ставку на 10-15% для кластеров с CTR выше 4% и наличием заказов', rule_params_json: { min_ctr: 0.04, step_pct: 15, min_orders: 1 }, is_active: true },
+            { platform: 'wildberries', rule_name: 'Топ-1/Топ-2 — снижение ставки', rule_description: 'Снижать на 5-10% для позиций топ-1/топ-2 чтобы найти минимальную стоимость', rule_params_json: { max_position: 2, step_pct: 5 }, is_active: true },
+            { platform: 'wildberries', rule_name: 'Мусорные запросы', rule_description: 'Минусать кластеры где показы есть но кликов почти нет', rule_params_json: { min_impressions: 2000, max_ctr: 0.01 }, is_active: true },
+            { platform: 'wildberries', rule_name: 'Неупровляемые кластеры > 50 показов', rule_description: 'Рекомендовать повышение бюджета если кластер перспективный но не набирает 100 показов', rule_params_json: { min_impressions: 50, unmanaged: true }, is_active: true },
+            { platform: 'ozon', rule_name: 'Правило одного рубля', rule_description: 'Начать с минимальной ставки 1 рубль, повышать по 1 рублю в день если нет показов', rule_params_json: { initial_bid: 1, step: 1, max_per_day: 1 }, is_active: true },
+            { platform: 'ozon', rule_name: 'Балансировка трафика 30%', rule_description: 'Если доля поискового трафика < 30%, создать отдельную поисковую кампанию', rule_params_json: { min_search_share: 0.3 }, is_active: true },
+            { platform: 'ozon', rule_name: 'Уникальность показов > 60%', rule_description: 'При уникальности ниже 60% увеличить дневной бюджет', rule_params_json: { min_unique_pct: 0.6 }, is_active: true },
+            { platform: 'ozon', rule_name: 'Индекс цен', rule_description: 'При невыгодном индексе цен — плавно повышать цену на WB на 2-3%', rule_params_json: { max_price_increase_pct: 3 }, is_active: true },
+        ];
+        for (const r of wbRules) {
+            try { await apiPost('/rules', r); } catch(e) { /* skip dupes */ }
+        }
+        rules = await apiGet('/rules');
+    }
+
+    function renderRulesTable() {
+        const tbody = document.getElementById('table-rules');
+        if (!rules.length) {
+            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-dark-500">Нет правил</td></tr>';
+            return;
+        }
+        tbody.innerHTML = rules.map(r => `
+            <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all">
+                <td class="px-4 py-3 text-dark-200 font-medium text-sm">${esc(r.rule_name)}</td>
+                <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(r.platform)}">${platformLabel(r.platform)}</span></td>
+                <td class="px-4 py-3 text-xs text-dark-400 max-w-[200px] truncate" title="${esc(r.rule_description || '')}">${esc(r.rule_description || '')}</td>
+                <td class="px-4 py-3 text-xs text-dark-400 text-right">${r.rule_params_json ? JSON.stringify(r.rule_params_json) : '—'}</td>
+                <td class="px-4 py-3 text-center">
+                    <div class="toggle-switch ${r.is_active ? 'on' : 'off'}" onclick="toggleRule(${r.id}, ${r.is_active})"></div>
+                </td>
+                <td class="px-4 py-3 text-center">
+                    <div class="flex items-center justify-center gap-1">
+                        <button onclick="editRule(${r.id})" class="p-1 text-dark-500 hover:text-indigo-400 transition-colors" title="Редактировать">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.8a4.5 4.5 0 011.13-1.897l10.606-10.606.324.324z"/></svg>
+                        </button>
+                        <button onclick="deleteRule(${r.id})" class="p-1 text-dark-500 hover:text-red-400 transition-colors" title="Удалить">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21ca.342.058.679.107 1.022.166M12 10.5V6.75m-6.292 4.942a.75.75 0 011.061 0M19.5 10.5H4.5"/></svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async function toggleRule(ruleId, currentValue) {
+        try {
+            await apiPatch(`/rules/${ruleId}`, { is_active: !currentValue });
+            rules = await apiGet('/rules');
+            renderRulesTable();
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    async function editRule(ruleId) {
+        const r = rules.find(x => x.id === ruleId);
+        if (!r) return;
+        openModal('Редактировать правило', `
+            <form id="form-edit-rule" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-dark-300 mb-1">Название</label>
+                    <input type="text" id="edit-rule-name" value="${esc(r.rule_name)}" required class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-dark-300 mb-1">Платформа</label>
+                    <select id="edit-rule-platform" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                        <option value="wildberries" ${r.platform === 'wildberries' ? 'selected' : ''}>Wildberries</option>
+                        <option value="ozon" ${r.platform === 'ozon' ? 'selected' : ''}>Ozon</option>
+                        <option value="both" ${r.platform === 'both' ? 'selected' : ''}>Обе платформы</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-dark-300 mb-1">Описание</label>
+                    <textarea id="edit-rule-desc" rows="2" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">${esc(r.rule_description)}</textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-dark-300 mb-1">Параметры (JSON)</label>
+                    <textarea id="edit-rule-params" rows="4" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono">${esc(JSON.stringify(r.rule_params_json, null, 2))}</textarea>
+                </div>
+                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all">Сохранить</button>
+            </form>
+        `);
+        setTimeout(() => {
+            document.getElementById('form-edit-rule')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                try {
+                    await apiPatch(`/rules/${ruleId}`, {
+                        platform: document.getElementById('edit-rule-platform').value,
+                        rule_name: document.getElementById('edit-rule-name').value.trim(),
+                        rule_description: document.getElementById('edit-rule-desc').value.trim(),
+                        rule_params_json: JSON.parse(document.getElementById('edit-rule-params').value),
+                    });
+                    showToast('Правило обновлено', 'success');
+                    closeModal();
+                    loadRules();
+                } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+            });
+        }, 100);
+    }
+
+    async function deleteRule(ruleId) {
+        if (!confirm('Удалить правило?')) return;
+        try {
+            await apiDelete(`/rules/${ruleId}`);
+            showToast('Правило удалено', 'success');
+            loadRules();
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    function showAddRuleModal() {
+        openModal('Добавить правило', `
+            <form id="form-add-rule" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-dark-300 mb-1">Название</label>
+                    <input type="text" id="rule-name" required class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-dark-300 mb-1">Платформа</label>
+                    <select id="rule-platform" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                        <option value="wildberries">Wildberries</option>
+                        <option value="ozon">Ozon</option>
+                        <option value="both">Обе платформы</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-dark-300 mb-1">Описание</label>
+                    <textarea id="rule-desc" rows="2" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-dark-300 mb-1">Параметры (JSON)</label>
+                    <textarea id="rule-params" rows="3" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono">{"min_ctr": 0.02, "min_impressions": 1000}</textarea>
+                </div>
+                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all">Добавить правило</button>
+            </form>
+        `);
+        setTimeout(() => {
+            document.getElementById('form-add-rule')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                try {
+                    await apiPost('/rules', {
+                        platform: document.getElementById('rule-platform').value,
+                        rule_name: document.getElementById('rule-name').value.trim(),
+                        rule_description: document.getElementById('rule-desc').value.trim(),
+                        rule_params_json: JSON.parse(document.getElementById('rule-params').value),
+                    });
+                    showToast('Правило добавлено', 'success');
+                    closeModal();
+                    loadRules();
+                } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+            });
+        }, 100);
+    }
+
+    // ============================================================
+    //  LLM SETTINGS
+    // ============================================================
+    async function loadAnalysisSettings() {
+        const container = document.getElementById('llm-settings-form');
+        try {
+            analysisSettings = await apiGet('/analysis/settings');
+            const prov = analysisSettings.llm_provider || 'claude';
+            const model = analysisSettings.llm_model || '—';
+            const apiKey = analysisSettings.api_key || 'sk-hub-...';
+
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-dark-300 mb-1">Провайдер LLM</label>
+                        <div class="text-lg font-semibold text-white">${esc(prov)}</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-dark-300 mb-1">Модель</label>
+                        <div class="text-sm text-dark-300">${esc(model)}</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-dark-300 mb-1">API ключ нейросети</label>
+                        <input type="password" id="llm-api-key" value="${esc(apiKey)}" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                        <div class="text-xs text-dark-500 mt-1">Ключ от ClaudeHub (sk-hub-...). На сервере уже сохранён в .env</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-dark-300 mb-1">Base URL</label>
+                        <input type="text" id="llm-base-url" value="${esc(analysisSettings.base_url)}" readonly class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-400 cursor-not-allowed" title="Меняется в .env на сервере">
+                    </div>
+                    <button onclick="saveLlmSettings()" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all">Сохранить</button>
+                </div>
+            `;
+
+            // Mode toggle
+            const toggle = document.getElementById('auto-mode-toggle');
+            const label = document.getElementById('mode-label');
+            const desc = document.getElementById('mode-description');
+            if (analysisSettings.auto_mode) {
+                toggle.className = 'toggle-switch on';
+                label.textContent = 'Автоматический режим';
+                desc.textContent = 'ИИ применяет рекомендации без подтверждения';
+            } else {
+                toggle.className = 'toggle-switch off';
+                label.textContent = 'Полуавтоматический режим';
+                desc.textContent = 'Требует подтверждения пользователя для каждого действия';
+            }
+        } catch (err) {
+            container.innerHTML = `<div class="text-sm text-red-400">${esc(err.message)}</div>`;
+        }
+    }
+
+    async function saveLlmSettings() {
+        const apiKey = document.getElementById('llm-api-key')?.value;
+        if (!apiKey || apiKey === 'sk-hub-...') { showToast('Введите API ключ', 'error'); return; }
+        try {
+            await apiPost('/analysis/settings', { api_key: apiKey });
+            showToast('Ключ сохранён', 'success');
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    async function toggleAutoMode() {
+        try {
+            const newVal = !analysisSettings.auto_mode;
+            await apiPost('/analysis/settings', { auto_mode: newVal });
+            analysisSettings.auto_mode = newVal;
+            loadAnalysisSettings();
+            showToast(`Режим: ${newVal ? 'Авто' : 'Полуавто'}`, 'success');
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    // ============================================================
+    //  APPROVE / REJECT / ACTIONS
+    // ============================================================
+    async function approveDecision(id) {
+        try {
+            await apiPost(`/decisions/${id}/approve`);
+            showToast('Решение одобрено', 'success');
+            await loadAllData();
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    async function rejectDecision(id) {
+        try {
+            await apiPost(`/decisions/${id}/reject`);
+            showToast('Решение отклонено', 'info');
+            await loadAllData();
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    }
+
+    // ============================================================
+    //  MODALS
+    // ============================================================
+    function openModal(title, bodyHtml) {
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-body').innerHTML = bodyHtml;
+        document.getElementById('modal-backdrop').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('modal-backdrop').classList.add('hidden');
+    }
+
+    async function openDecisionDetail(id) {
+        const d = decisions.find(x => x.id === id) || (await apiGet(`/decisions?limit=200`)).find(x => x.id === id);
+        if (!d) { showToast('Решение не найдено', 'error'); return; }
+
+        const actionsCount = d.actions_json?.actions?.length || 0;
+        const actionsList = (d.actions || []).map(a => `
+            <div class="bg-dark-950 border border-dark-800/40 rounded-lg p-3 text-xs">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="px-2 py-0.5 rounded bg-indigo-600/20 text-indigo-400 font-medium">${translateActionType(a.action_type)}</span>
+                    <span class="px-2 py-0.5 rounded ${statusClass(a.status)}">${statusLabel(a.status)}</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <div class="text-dark-500 mb-1">Метрики до:</div>
+                        <pre class="p-2 bg-dark-900 rounded text-dark-400 overflow-x-auto">${esc(a.metrics_before_json ? JSON.stringify(a.metrics_before_json, null, 2) : '—')}</pre>
+                    </div>
+                    <div>
+                        <div class="text-dark-500 mb-1">Метрики после:</div>
+                        <pre class="p-2 bg-dark-900 rounded text-dark-400 overflow-x-auto">${esc(a.metrics_after_json ? JSON.stringify(a.metrics_after_json, null, 2) : '—')}</pre>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        openModal(`Решение ИИ #${d.id}`, `
+            <div class="space-y-4">
+                <div class="grid grid-cols-3 gap-3 text-xs">
+                    <div><span class="text-dark-500">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(d.status)}">${statusLabel(d.status)}</span></div>
+                    <div><span class="text-dark-500">Модель:</span> <span class="text-dark-300">${d.llm_model}</span></div>
+                    <div><span class="text-dark-500">Создано:</span> <span class="text-dark-300">${formatDate(d.created_at)}</span></div>
+                </div>
+                <div>
+                    <div class="text-xs text-dark-500 mb-1">Действия (${actionsCount}):</div>
+                    <div class="flex flex-wrap gap-1">${(d.actions_json?.actions || []).map(a =>
+                        `<span class="px-1.5 py-0.5 bg-dark-800 rounded text-xs text-dark-300">${translateActionType(a.action_type)}</span>`
+                    ).join('')}</div>
+                </div>
+                <details class="text-xs">
+                    <summary class="cursor-pointer text-dark-400 hover:text-dark-200">Показать промпт</summary>
+                    <pre class="mt-2 p-3 bg-dark-950 rounded text-dark-400 overflow-x-auto max-h-48">${esc(d.prompt_text)}</pre>
+                </details>
+                <details class="text-xs">
+                    <summary class="cursor-pointer text-dark-400 hover:text-dark-200">Показать ответ LLM</summary>
+                    <pre class="mt-2 p-3 bg-dark-950 rounded text-dark-400 overflow-x-auto max-h-48">${esc(d.llm_response)}</pre>
+                </details>
+                ${actionsList ? `<div><div class="text-xs text-dark-500 mb-2">Применённые действия:</div>${actionsList}</div>` : ''}
+            </div>
+        `);
+    }
+
+    async function openActionDetail(id) {
+        // Find locally first
+        let action = actions.find(a => a.id === id);
+        if (!action) {
+            const all = await apiGet('/actions?limit=500');
+            action = all.find(a => a.id === id);
+            if (!action) return;
+        }
+        openModal(`${translateActionType(action.action_type)} #${action.id}`, `
+            <div class="space-y-3 text-xs">
+                <div class="grid grid-cols-2 gap-2">
+                    <div><span class="text-dark-500">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(action.status)}">${statusLabel(action.status)}</span></div>
+                    <div><span class="text-dark-500">Время:</span> <span class="text-dark-300">${formatDate(action.applied_at)}</span></div>
+                </div>
+                <div>
+                    <div class="text-dark-500 mb-1">Параметры:</div>
+                    <pre class="p-3 bg-dark-950 rounded text-dark-300 overflow-x-auto">${esc(JSON.stringify(action.parameters_json, null, 2))}</pre>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <div class="text-dark-500 mb-1">Метрики до:</div>
+                        <pre class="p-2 bg-dark-900 rounded text-dark-400 overflow-x-auto">${action.metrics_before_json ? esc(JSON.stringify(action.metrics_before_json, null, 2)) : '—'}</pre>
+                    </div>
+                    <div>
+                        <div class="text-dark-500 mb-1">Метрики после:</div>
+                        <pre class="p-2 bg-dark-900 rounded text-dark-400 overflow-x-auto">${action.metrics_after_json ? esc(JSON.stringify(action.metrics_after_json, null, 2)) : '—'}</pre>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // ============================================================
+    //  TRIGGER ANALYSIS
+    // ============================================================
+    async function triggerAnalysis() {
+        const btn = document.getElementById('btn-trigger-analysis');
+        const spinner = document.getElementById('trigger-spinner');
+        btn.disabled = true;
+        spinner.classList.remove('hidden');
+        try {
+            await apiPost('/analysis/trigger');
+            showToast('Оптимизация запущена', 'success');
+            await loadAllData();
+        } catch (err) {
+            showToast('Ошибка оптимизации: ' + err.message, 'error');
+        } finally {
+            btn.disabled = false;
+            spinner.classList.add('hidden');
+        }
+    }
+
+    // ============================================================
+    //  ADD ACCOUNT FORM
+    // ============================================================
+    document.getElementById('acc-platform').addEventListener('change', function() {
+        document.getElementById('ozon-fields').classList.toggle('hidden', this.value !== 'ozon');
+    });
+
+    document.getElementById('form-add-account').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const platform = document.getElementById('acc-platform').value;
+        const name = document.getElementById('acc-name').value.trim();
+        const token = document.getElementById('acc-token').value.trim();
+        const ozonId = document.getElementById('acc-ozon-id').value.trim();
+        const ozonSecret = document.getElementById('acc-ozon-secret').value.trim();
+        if (!name) { showToast('Введите название', 'error'); return; }
+
+        const body = { platform, name };
+        if (platform === 'wildberries' && token) body.wb_token = token;
+        if (platform === 'ozon') {
+            if (ozonId) body.ozon_client_id = ozonId;
+            if (ozonSecret) body.ozon_client_secret = ozonSecret;
+        }
+        try {
+            await apiPost('/accounts', body);
+            showToast('Аккаунт добавлен', 'success');
+            document.getElementById('form-add-account').reset();
+            await loadAllData();
+        } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
+    });
+
+    // ============================================================
+    //  HEALTH CHECK
+    // ============================================================
+    async function checkHealth() {
+        try {
+            const res = await fetch(API_BASE + '/health');
+            if (res.ok) {
+                document.getElementById('health-dot').className = 'w-2 h-2 rounded-full bg-green-400 pulse-dot';
+                document.getElementById('health-text').textContent = 'Подключено';
+                document.getElementById('health-text').className = 'text-xs text-green-400';
+            } else { throw new Error(); }
+        } catch {
+            document.getElementById('health-dot').className = 'w-2 h-2 rounded-full bg-red-400 pulse-dot';
+            document.getElementById('health-text').textContent = 'Не подключено';
+            document.getElementById('health-text').className = 'text-xs text-red-400';
+        }
+    }
+
+    // ============================================================
+    //  EVENT LISTENERS
+    // ============================================================
+    document.getElementById('btn-trigger-analysis').addEventListener('click', triggerAnalysis);
+
+    // Dashboard filters
+    ['filter-platform', 'filter-status', 'filter-platform2', 'filter-status2', 'kw-filter-status'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', () => {
+            if (id === 'kw-filter-status') renderKeywordsTable();
+            else renderCampaigns();
+        });
+    });
+
+    // ============================================================
+    //  INIT
+    // ============================================================
+    checkHealth();
+    loadAllData().catch(console.error);
+    setInterval(() => {
+        if (!document.hidden) { checkHealth(); loadAllData().catch(console.error); }
+    }, 30000);
+    </script>
+</body>
+</html>
