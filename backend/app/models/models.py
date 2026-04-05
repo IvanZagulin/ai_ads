@@ -60,6 +60,7 @@ class Campaign(BaseModel):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
+    nm_ids: Mapped[list[int] | None] = mapped_column(JSON, nullable=True)
 
     account: Mapped["Account"] = relationship("Account", back_populates="campaigns")
     keywords: Mapped[list["Keyword"]] = relationship(

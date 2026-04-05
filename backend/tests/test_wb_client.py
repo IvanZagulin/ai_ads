@@ -192,44 +192,49 @@ async def test_wb_client_raises_on_401_immediately(wb_client: WBPromotionClient)
 
 
 @pytest.mark.asyncio
-async def test_set_cluster_bid_request(wb_client: WBPromotionClient) -> None:
-    """Test that set_cluster_bid sends correct JSON payload."""
+@patch("httpx.AsyncClient.post", new_callable=AsyncMock)
+async def test_set_cluster_bid_request(mock_post, wb_client: WBPromotionClient) -> None:
+    """Test that set_cluster_bid sends correct JSON payload matching WB API spec."""
     mock_response = MagicMock()
+    mock_response.status_code = 200
     mock_response.json.return_value = {"result": "ok"}
-    mock_response.raise_for_status = MagicMock()
-
-    wb_client.client = AsyncMock()
-    wb_client.client.request = AsyncMock(return_value=mock_response)
+    mock_post.return_value = mock_response
     wb_client._rate_limiter.acquire = AsyncMock()
 
-    result = await wb_client.set_cluster_bid(campaign_id=42, cluster_id="cluster_123", bid=15.50)
+    result = await wb_client.set_cluster_bid(
+        advert_id=1825035, nm_id=983512347, norm_query="книга фэнтези", bid=700
+    )
     assert result == {"result": "ok"}
-    wb_client.client.request.assert_called_once()
-    call_kwargs = wb_client.client.request.call_args[1]
-    assert call_kwargs["method"] == "POST"
+    mock_post.assert_called_once()
+    call_kwargs = mock_post.call_args[1]
     assert call_kwargs["json"] == {
-        "id": 42,
-        "params": [{"cluster": "cluster_123", "bid": 15}],
+        "bids": [{
+            "advert_id": 1825035,
+            "nm_id": 983512347,
+            "norm_query": "книга фэнтези",
+            "bid": 700,
+        }]
     }
 
 
 @pytest.mark.asyncio
-async def test_add_minus_phrase_request(wb_client: WBPromotionClient) -> None:
-    """Test that add_minus_phrase sends correct payload."""
-    mock_response = MagicMock()
-    mock_response.json.return_value = {"result": "added"}
-    mock_response.raise_for_status = MagicMock()
-
-    wb_client.client = AsyncMock()
-    wb_client.client.request = AsyncMock(return_value=mock_response)
+@patch("httpx.AsyncClient.post", new_callable=AsyncMock)
+async def test_add_minus_phrase_request(mock_post, wb_client: WBPromotionClient) -> None:
+    """Test that add_minus_phrase sends correct payload matching WB API spec."""
+    # First call: get_minus_phrases returns existing
+    existing_response = MagicMock()
+    existing_response.status_code = 200
+    existing_response.json.return_value = {"items": [{"advert_id": 42, "nm_id": 1, "norm_queries": ["-старый"]}]}
+    # Second call: set_minus_phrases
+    set_response = MagicMock()
+    set_response.status_code = 200
+    set_response.json.return_value = {"result": "ok"}
+    mock_post.side_effect = [existing_response, set_response]
     wb_client._rate_limiter.acquire = AsyncMock()
 
-    result = await wb_client.add_minus_phrase(
-        campaign_id=42, phrases=["-плохой", "-ненужный"]
-    )
-    assert result == {"result": "added"}
-    call_kwargs = wb_client.client.request.call_args[1]
-    assert call_kwargs["json"] == {
-        "id": 42,
-        "minusKeywords": [{"keyword": "-плохой"}, {"keyword": "-ненужный"}],
-    }
+    result = await wb_client.add_minus_phrase(42, 1, "-плохой")
+    assert result == {"result": "ok"}
+    # Second POST was set-minus
+    set_call = mock_post.call_args_list[1][1]
+    assert "norm_queries" in set_call["json"]
+    assert "-плохой" in set_call["json"]["norm_queries"]

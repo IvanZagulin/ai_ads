@@ -48,6 +48,7 @@ def _make_campaign(
     current_bid: float | None = 10.0,
     daily_budget: float | None = 100.0,
     platform_campaign_id: str = "12345",
+    nm_ids: list[int] | None = None,
 ) -> Campaign:
     return Campaign(
         id=campaign_id,
@@ -59,6 +60,7 @@ def _make_campaign(
         platform_campaign_id=platform_campaign_id,
         status="active",
         campaign_type="search",
+        nm_ids=nm_ids or [111111],
     )
 
 

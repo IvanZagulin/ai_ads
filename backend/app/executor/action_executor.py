@@ -134,8 +134,12 @@ class ActionExecutor:
             raise ValueError("Bid cannot be non-positive after clamping")
 
         if campaign.platform == "wildberries":
-            cluster_id = action.get("keyword_text") or str(keyword_id or "")
-            result = await self.wb.set_cluster_bid(int(campaign.platform_campaign_id or "0"), cluster_id, new_val)
+            norm_query = action.get("keyword_text", "")
+            nm_id = action.get("nm_id")
+            advert_id = int(campaign.platform_campaign_id or "0")
+            if nm_id is None and campaign.nm_ids:
+                nm_id = campaign.nm_ids[0]
+            result = await self.wb.set_cluster_bid(advert_id, nm_id or 0, norm_query, int(new_val))
         else:
             result = await self.ozon.update_bids(
                 campaign.platform_campaign_id or "",
@@ -179,8 +183,12 @@ class ActionExecutor:
             parameters["warning"] = "Bid clamped to minimum 0.01"
 
         if campaign.platform == "wildberries":
-            cluster_id = action.get("keyword_text") or str(keyword_id or "")
-            result = await self.wb.set_cluster_bid(int(campaign.platform_campaign_id or "0"), cluster_id, new_val)
+            norm_query = action.get("keyword_text", "")
+            nm_id = action.get("nm_id")
+            advert_id = int(campaign.platform_campaign_id or "0")
+            if nm_id is None and campaign.nm_ids:
+                nm_id = campaign.nm_ids[0]
+            result = await self.wb.set_cluster_bid(advert_id, nm_id or 0, norm_query, int(new_val))
         else:
             result = await self.ozon.update_bids(
                 campaign.platform_campaign_id or "",
@@ -221,9 +229,11 @@ class ActionExecutor:
         if not minus_text:
             raise ValueError("minus_text is required for minus_word action")
 
-        result = await self.wb.add_minus_phrase(
-            int(campaign.platform_campaign_id or "0"), [minus_text]
-        )
+        nm_id = action.get("nm_id")
+        if nm_id is None and campaign.nm_ids:
+            nm_id = campaign.nm_ids[0]
+        advert_id = int(campaign.platform_campaign_id or "0")
+        result = await self.wb.add_minus_phrase(advert_id, nm_id or 0, minus_text)
 
         self._minus_count_this_cycle += 1
 
