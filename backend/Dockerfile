@@ -1,13 +1,17 @@
 FROM python:3.13-slim
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+COPY pyproject.toml .
+ENV UV_SYSTEM_PYTHON=1
+RUN pip install uv && uv pip install --no-cache-dir .
 
-COPY app/ app/
-RUN chmod +x /app/app/management/migrate.sh 2>/dev/null || true
-RUN chmod +x /app/app/management/seed.sh 2>/dev/null || true
-RUN chmod +x /app/app/management/run.sh 2>/dev/null || true
+COPY . .
 
-ENV PYTHONPATH=/app:
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
