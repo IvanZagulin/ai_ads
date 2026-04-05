@@ -899,6 +899,26 @@ async def get_analysis_settings() -> dict[str, Any]:
     }
 
 
+@router.get("/frontend")
+async def serve_frontend():
+    """Serve the full frontend HTML — bypasses Cloudflare cache."""
+    from fastapi.responses import HTMLResponse, FileResponse
+    import os
+    # Try mounted path first, then Docker path
+    for path in [
+        os.path.join(os.path.dirname(__file__), "..", "..", "..", "frontend-build", "index.html"),
+        "/mnt/frontend/index.html",
+        "/app/frontend/index.html",
+    ]:
+        if os.path.exists(path):
+            return FileResponse(path, headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0",
+            })
+    return HTMLResponse("<h1>Frontend not found on server</h1>", status_code=404)
+
+
 @router.post("/analysis/settings")
 async def update_analysis_settings(data: dict = {}) -> dict[str, str]:
     existing = _read_settings_file()
