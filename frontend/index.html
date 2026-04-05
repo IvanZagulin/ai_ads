@@ -1038,11 +1038,11 @@
         // Find latest stats for each keyword
         tbody.innerHTML = filtered.map(kw => {
             const latestStat = (kw.stats || [])[0] || {};
-            const impressions = latestStat.impressions || 0;
-            const clicks = latestStat.clicks || 0;
-            const ctr = latestStat.ctr != null ? latestStat.ctr.toFixed(1) + '%' : '—';
-            const cost = latestStat.cost != null ? formatRUB(latestStat.cost) : '—';
-            const orders = latestStat.orders || 0;
+            const impressions = kw.total_impressions ?? (kw.stats?.[0]?.impressions || 0);
+            const clicks = kw.total_clicks ?? (kw.stats?.[0]?.clicks || 0);
+            const ctr = kw.total_ctr != null ? kw.total_ctr.toFixed(2) + '%' : ((kw.stats?.[0]?.ctr != null) ? ((typeof kw.stats[0].ctr === "number" && kw.stats[0].ctr > 1) ? kw.stats[0].ctr.toFixed(1) + '%' : (parseFloat(kw.stats[0].ctr) * 100).toFixed(2) + '%') : '—');
+            const cost = kw.total_cost ?? ((kw.stats?.[0]?.cost != null) ? formatRUB(kw.stats[0].cost) : '—');
+            const orders = kw.stats?.[0]?.orders || 0;
 
             return `
             <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all">
