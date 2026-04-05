@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import asyncio
 import logging
+from datetime import date, timedelta, timezone
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -214,6 +216,197 @@ async def sync_campaigns(account_id: int) -> dict[str, Any]:
             return {"status": "ok", "imported": imported, "total": len(raw_campaigns)}
 
         raise HTTPException(status_code=400, detail=f"Неподдерживаемая платформа: {account.platform}")
+
+
+# ---------------------------------------------------------------------------
+# Collect Data — clusters, bids, stats from WB API
+# ---------------------------------------------------------------------------
+@router.post("/accounts/{account_id}/collect-data")
+async def collect_data(account_id: int) -> dict[str, Any]:
+    """Fetch campaigns, clusters, bids, and stats from WB API — saves to DB."""
+
+    from app.database import async_session_factory
+    from app.models.models import Keyword, KeywordStats
+    from app.utils.encryption import decrypt_token
+
+    with session_factory() as db:
+        account = db.get(Account, account_id)
+        if account is None:
+            raise HTTPException(status_code=404, detail="Аккаунт не найден")
+        if account.platform != "wildberries":
+            raise HTTPException(status_code=400, detail="Только для Wildberries")
+        if not account.wb_token:
+            raise HTTPException(status_code=400, detail="Токен WB не настроен")
+
+    wb_client = WBPromotionClient(api_token=decrypt_token(account.wb_token))
+    campaigns = await wb_client.get_campaigns()
+    if not campaigns:
+        return {"status": "ok", "message": "Кампании не найдены"}
+
+    total_keywords_saved = 0
+    total_bids_saved = 0
+    total_stats_saved = 0
+
+    # Sync campaign nm_ids and statuses (sync DB)
+    with session_factory() as db:
+        for camp_data in campaigns:
+            adv_id = camp_data.get("wb_adv_id")
+            if not adv_id:
+                continue
+            platform_id = str(adv_id)
+            stmt = select(Campaign).where(
+                Campaign.account_id == account_id,
+                Campaign.platform_campaign_id == platform_id,
+            )
+            existing = db.execute(stmt).scalar_one_or_none()
+            if existing:
+                existing.status = camp_data.get("status", existing.status)
+                existing.name = camp_data.get("name", existing.name)
+                existing.campaign_type = camp_data.get("bid_type", existing.campaign_type)
+                existing.nm_ids = camp_data.get("nm_ids")
+                db.commit()
+
+    # Fetch clusters, bids, stats and save (async DB)
+    async with async_session_factory() as async_db:
+        for camp_data in campaigns:
+            status = camp_data.get("status")
+            adv_id = camp_data.get("wb_adv_id")
+            nm_ids = camp_data.get("nm_ids", [])
+            if not adv_id or status not in ("active", "paused"):
+                continue
+
+            camp_stmt = select(Campaign).where(
+                Campaign.account_id == account_id,
+                Campaign.platform_campaign_id == str(adv_id),
+            )
+            camp_result = await async_db.execute(camp_stmt)
+            db_camp = camp_result.scalar_one_or_none()
+            if not db_camp:
+                continue
+
+            # Update nm_ids
+            if nm_ids:
+                db_camp.nm_ids = nm_ids
+
+            # Fetch clusters (normquery list)
+            clusters = await wb_client.get_clusters(int(adv_id))
+            for item in clusters:
+                nq = item.get("normQuery", item.get("norm_query", ""))
+                if not nq:
+                    continue
+                kw_stmt = select(Keyword).where(
+                    Keyword.campaign_id == db_camp.id,
+                    Keyword.keyword_text == nq,
+                )
+                kw_result = await async_db.execute(kw_stmt)
+                kw = kw_result.scalar_one_or_none()
+                if kw is None:
+                    kw = Keyword(
+                        campaign_id=db_camp.id,
+                        cluster_id=str(item.get("clusterId", nq)),
+                        keyword_text=nq,
+                        status="active" if item.get("isActive", True) else "unmanaged",
+                    )
+                    async_db.add(kw)
+                    total_keywords_saved += 1
+
+            # Fetch cluster bids for each NM
+            for nm_id in nm_ids[:3]:
+                bids = await wb_client.get_cluster_bids(int(adv_id), nm_id)
+                for bid_item in bids:
+                    nq = bid_item.get("norm_query", "")
+                    if not nq:
+                        continue
+                    kw_stmt = select(Keyword).where(
+                        Keyword.campaign_id == db_camp.id,
+                        Keyword.keyword_text == nq,
+                    )
+                    kw_result = await async_db.execute(kw_stmt)
+                    kw = kw_result.scalar_one_or_none()
+                    if kw is None:
+                        kw = Keyword(
+                            campaign_id=db_camp.id,
+                            cluster_id=nq,
+                            keyword_text=nq,
+                            status="active",
+                            current_bid=bid_item.get("bid"),
+                        )
+                        async_db.add(kw)
+                    else:
+                        kw.current_bid = bid_item.get("bid")
+                    total_bids_saved += 1
+
+                # Fetch recent daily stats (last 7 days)
+                today = date.today()
+                from_date = (today - timedelta(days=7)).strftime("%Y-%m-%d")
+                to_date = today.strftime("%Y-%m-%d")
+                daily_stats = await wb_client.get_campaign_stats(int(adv_id), nm_id, from_date, to_date)
+                for stat in daily_stats:
+                    nq = stat.get("normQuery", "")
+                    stat_date_str = stat.get("date", "")
+                    if not nq or not stat_date_str:
+                        continue
+                    try:
+                        stat_date = date.fromisoformat(stat_date_str)
+                    except ValueError:
+                        continue
+
+                    kw_stmt = select(Keyword).where(
+                        Keyword.campaign_id == db_camp.id,
+                        Keyword.keyword_text == nq,
+                    )
+                    kw_result = await async_db.execute(kw_stmt)
+                    kw = kw_result.scalar_one_or_none()
+                    if kw is None:
+                        kw = Keyword(
+                            campaign_id=db_camp.id,
+                            cluster_id=nq,
+                            keyword_text=nq,
+                            status="active",
+                        )
+                        async_db.add(kw)
+                        await async_db.flush()
+
+                    ks_stmt = select(KeywordStats).where(
+                        KeywordStats.keyword_id == kw.id,
+                        KeywordStats.date == stat_date,
+                    )
+                    ks_result = await async_db.execute(ks_stmt)
+                    ks = ks_result.scalar_one_or_none()
+                    views = stat.get("views", 0)
+                    clicks = stat.get("clicks", 0)
+                    if ks is None:
+                        ks = KeywordStats(
+                            keyword_id=kw.id,
+                            date=stat_date,
+                            impressions=views,
+                            clicks=clicks,
+                            ctr=stat.get("ctr"),
+                            position=stat.get("avgPos", stat.get("avg_pos")),
+                            cost=stat.get("spend", 0),
+                            orders=stat.get("orders", 0),
+                        )
+                        async_db.add(ks)
+                    else:
+                        ks.impressions = views
+                        ks.clicks = clicks
+                        ks.ctr = stat.get("ctr")
+                        ks.position = stat.get("avgPos", stat.get("avg_pos"))
+                        ks.cost = stat.get("spend", 0)
+                        ks.orders = stat.get("orders", 0)
+                    total_stats_saved += 1
+
+                await asyncio.sleep(0.5)
+
+        await async_db.commit()
+
+    return {
+        "status": "ok",
+        "campaigns": len(campaigns),
+        "keywords_saved": total_keywords_saved,
+        "bids_saved": total_bids_saved,
+        "stats_saved": total_stats_saved,
+    }
 
 
 # ---------------------------------------------------------------------------
