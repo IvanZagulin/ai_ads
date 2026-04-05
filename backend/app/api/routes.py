@@ -481,7 +481,7 @@ async def get_campaign_detail(campaign_id: int) -> Any:
             select(Campaign)
             .where(Campaign.id == campaign_id)
             .options(
-                selectinload(Campaign.keywords),
+                selectinload(Campaign.keywords).selectinload(Keyword.stats),
                 selectinload(Campaign.stats),
             )
         )
@@ -489,7 +489,53 @@ async def get_campaign_detail(campaign_id: int) -> Any:
         campaign = result.scalar_one_or_none()
         if campaign is None:
             raise HTTPException(status_code=404, detail="Кампания не найдена")
-        return CampaignDetailResponse.model_validate(campaign)
+
+        # Build keyword list with aggregated stats
+        from app.schemas.schemas import KeywordResponse
+
+        kw_responses = []
+        for kw in campaign.keywords:
+            total_impr = sum(s.impressions for s in kw.stats if s.impressions)
+            total_cl = sum(s.clicks for s in kw.stats if s.clicks)
+            total_ct = sum(s.cost or 0 for s in kw.stats if s.cost is not None)
+            kw_ctr = (total_cl / total_impr * 100) if total_impr > 0 else None
+            kw_responses.append(KeywordResponse(
+                id=kw.id,
+                campaign_id=kw.campaign_id,
+                cluster_id=kw.cluster_id,
+                keyword_text=kw.keyword_text,
+                status=kw.status,
+                current_bid=kw.current_bid,
+                is_managed=kw.is_managed,
+                total_impressions=total_impr,
+                total_clicks=total_cl,
+                total_ctr=kw_ctr,
+                total_cost=total_ct if total_ct > 0 else None,
+            ))
+
+        stats_list = sorted(campaign.stats, key=lambda s: s.date, reverse=True)
+        ctr_hist = [s.total_ctr for s in stats_list if s.total_ctr is not None]
+        latest = stats_list[0] if stats_list else None
+
+        data = {
+            "id": campaign.id,
+            "account_id": campaign.account_id,
+            "platform_campaign_id": campaign.platform_campaign_id,
+            "platform": campaign.platform,
+            "campaign_type": campaign.campaign_type,
+            "status": campaign.status,
+            "name": campaign.name,
+            "daily_budget": campaign.daily_budget,
+            "current_bid": campaign.current_bid,
+            "created_at": campaign.created_at,
+            "updated_at": campaign.updated_at,
+            "latest_ctr": ctr_hist[0] if ctr_hist else None,
+            "latest_cost": latest.total_cost if latest else 0.0,
+            "ctr_history": ctr_hist[-7:],
+            "keywords": kw_responses,
+            "recent_stats": stats_list[:7],
+        }
+        return CampaignDetailResponse(**data)
 
 
 # ---------------------------------------------------------------------------

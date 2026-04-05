@@ -401,17 +401,19 @@ function CampaignDetailPage({ campaignId }) {
           <div className="overflow-x-auto">
             <table className="dark-table">
               <thead>
-                <tr><th>ID</th><th>Кластер</th><th>Текст</th><th>Статус</th><th>Ставка</th><th>Упр.</th><th>Действия</th></tr>
+                <tr><th>Текст</th><th>Показы</th><th>Клики</th><th>CTR</th><th>Стоимость</th><th>Ставка</th><th>Статус</th><th>Действия</th></tr>
               </thead>
               <tbody>
                 {d.keywords.map(kw => (
                   <tr key={kw.id}>
-                    <td className="text-muted-foreground text-xs">{kw.id}</td>
-                    <td className="text-xs">{kw.cluster_id ?? '—'}</td>
-                    <td className="font-medium max-w-[200px] truncate">{kw.keyword_text ?? '—'}</td>
+                    <td className="font-medium max-w-[250px] truncate" title={kw.keyword_text}>{kw.keyword_text ?? '—'}</td>
+                    <td className="text-xs">{kw.total_impressions ?? 0}</td>
+                    <td className="text-xs">{kw.total_clicks ?? 0}</td>
+                    <td className="text-xs" style={{ color: kw.total_ctr != null ? 'var(--neon-green)' : 'inherit' }}>{kw.total_ctr != null ? `${kw.total_ctr.toFixed(2)}%` : '—'}</td>
+                    <td className="text-xs">{kw.total_cost != null ? `${kw.total_cost.toFixed(2)} ₽` : '—'}</td>
                     {kwEditingId === kw.id ? (
                       <>
-                        <td colSpan="3">
+                        <td colSpan="5">
                           <div className="flex gap-2 items-center">
                             <select className="input text-xs py-1" value={kwForm.status ?? kw.status} onChange={e => setKwForm({...kwForm, status: e.target.value})}>
                               <option value="active">active</option>
@@ -428,9 +430,8 @@ function CampaignDetailPage({ campaignId }) {
                       </>
                     ) : (
                       <>
-                        <td><Badge variant={kw.status === 'active' ? 'success' : kw.status === 'minus' ? 'error' : 'info'}>{kw.status}</Badge></td>
                         <td>{kw.current_bid != null ? `${kw.current_bid} ₽` : '—'}</td>
-                        <td><Badge variant={kw.is_managed ? 'success' : 'info'}>{kw.is_managed ? 'упр.' : 'авто'}</Badge></td>
+                        <td><Badge variant={kw.status === 'active' ? 'success' : kw.status === 'minus' ? 'error' : 'info'}>{kw.status}</Badge></td>
                         <td>
                           <div className="flex gap-1 flex-wrap">
                             <button className="btn btn-secondary btn-sm text-xs py-0.5 px-1.5" onClick={() => { setKwEditingId(kw.id); setKwForm({}); }}>{kwLoading ? '...' : '✏️'}</button>

@@ -117,6 +117,12 @@ class KeywordResponse(BaseModel):
     current_bid: float | None = None
     is_managed: bool
 
+    # Aggregated stats (computed in endpoint)
+    total_impressions: int = 0
+    total_clicks: int = 0
+    total_ctr: float | None = None
+    total_cost: float | None = None
+
 
 # ---------------------------------------------------------------------------
 # KeywordStats
