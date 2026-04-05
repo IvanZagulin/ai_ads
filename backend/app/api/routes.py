@@ -675,6 +675,43 @@ async def health_check() -> dict[str, str]:
     return {"status": "healthy", "version": "0.1.0"}
 
 
+@router.get("/frontend-overrides.js")
+async def frontend_overrides():
+    """Serve JS override for Cloudflare-cached frontend — fixes keyword table to use total_* fields."""
+    from fastapi.responses import Response
+    js = """(function(){
+var _orig = window.renderKeywordsTable;
+window.renderKeywordsTable = function(){
+try{var t=document.getElementById('table-keywords');if(!t){_orig();return}
+var f=document.getElementById('kw-filter-status');var fs=f?f.value:'';var k=window.keywords||[];if(fs)k=k.filter(function(x){return x.status===fs});
+if(!k.length){t.innerHTML='<tr><td colspan=9 class="px-4 py-8 text-center text-dark-500">Нет ключевых слов.</td></tr>';return}
+t.innerHTML=k.map(function(kw){
+var impr=kw.total_impressions!=null?kw.total_impressions:((kw.stats&&kw.stats[0]&&kw.stats[0].impressions)||0);
+var cl=kw.total_clicks!=null?kw.total_clicks:((kw.stats&&kw.stats[0]&&kw.stats[0].clicks)||0);
+var cost=kw.total_cost!=null?kw.total_cost:((kw.stats&&kw.stats[0]&&kw.stats[0].cost)||0);
+var ctr;if(kw.total_ctr!=null){ctr=kw.total_ctr.toFixed(2)+'%';}else if(kw.stats&&kw.stats[0]&&kw.stats[0].ctr!=null){var v=kw.stats[0].ctr;ctr=(typeof v==="number"&&v>1)?v.toFixed(1)+'%':(parseFloat(v)*100).toFixed(2)+'%';}else{ctr='—';}
+var ord=(kw.stats&&kw.stats[0]&&kw.stats[0].orders)||0;
+var st=kw.status||'';var cls=st==='active'?'bg-emerald-500/10 text-emerald-400':(st==='minus'?'bg-red-500/10 text-red-400':(st==='paused'?'bg-yellow-500/10 text-yellow-400':'bg-gray-500/10 text-gray-400'));
+var lbl=st==='active'?'Активна':(st==='minus'?'Минус':(st==='paused'?'Пауза':st||'—'));
+return '<tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all">'+
+'<td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]" title="'+esc(kw.keyword_text)+'">'+esc(((kw.cluster_id||kw.keyword_text||'')+'').substring(0,40))+'</td>'+
+'<td class="px-4 py-2"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium '+cls+'">'+lbl+'</span></td>'+
+'<td class="px-4 py-2 text-right text-dark-300 text-xs">'+(kw.current_bid?formatRUB(kw.current_bid):'—')+'</td>'+
+'<td class="px-4 py-2 text-right text-dark-400">'+impr.toLocaleString('ru')+'</td>'+
+'<td class="px-4 py-2 text-right text-dark-400">'+cl.toLocaleString('ru')+'</td>'+
+'<td class="px-4 py-2 text-right text-dark-400">'+ctr+'</td>'+
+'<td class="px-4 py-2 text-right text-dark-400">'+formatRUB(cost)+'</td>'+
+'<td class="px-4 py-2 text-right text-dark-400">'+ord+'</td>'+
+'<td class="px-4 py-2 text-center"><div class="flex items-center justify-center gap-1">'+
+(st!=='minus'?'<button onclick="minusKeyword('+kw.id+')" class="p-1 text-dark-500 hover:text-red-400 transition-colors" title="Минусовать"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg></button>':'')+
+'<button onclick="editKeywordBid('+kw.id+','+(kw.current_bid||0)+')" class="p-1 text-dark-500 hover:text-indigo-400 transition-colors" title="Изменить ставку"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0H4.5z"/></svg></button>'+
+'</div></td></tr>';}).join('');
+}catch(e){console.error('override err:',e);if(_orig)_orig()}};
+})();"""
+    return Response(content=js, media_type="application/javascript",
+                    headers={"Cache-Control": "no-cache, no-store"})
+
+
 # ---------------------------------------------------------------------------
 # Keywords
 # ---------------------------------------------------------------------------
