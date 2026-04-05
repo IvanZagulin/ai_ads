@@ -469,6 +469,9 @@ async def list_campaigns(
                 updated_at=camp.updated_at,
                 latest_ctr=round(latest.total_ctr, 2) if latest and latest.total_ctr is not None else None,
                 latest_cost=latest.total_cost if latest else 0.0,
+                latest_impressions=latest.total_impressions if latest else 0,
+                latest_clicks=latest.total_clicks if latest else 0,
+                latest_orders=latest.total_orders if latest else 0,
                 ctr_history=[round(v, 2) for v in all_ctr],
             ))
         return response

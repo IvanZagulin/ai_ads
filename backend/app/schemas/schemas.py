@@ -78,6 +78,9 @@ class CampaignResponse(BaseModel):
     # Latest stats (joined from campaign_stats)
     latest_ctr: float | None = None
     latest_cost: float | None = 0.0
+    latest_impressions: int = 0
+    latest_clicks: int = 0
+    latest_orders: int = 0
     ctr_history: list[float] | None = None
 
 
