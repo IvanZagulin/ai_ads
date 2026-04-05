@@ -126,6 +126,9 @@ class KeywordResponse(BaseModel):
     total_ctr: float | None = None
     total_cost: float | None = None
 
+    # Compatibility: legacy frontend reads kw.stats[0]
+    stats: list[dict] = []
+
 
 # ---------------------------------------------------------------------------
 # KeywordStats

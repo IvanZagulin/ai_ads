@@ -502,6 +502,19 @@ async def get_campaign_detail(campaign_id: int) -> Any:
             total_cl = sum(s.clicks for s in kw.stats if s.clicks)
             total_ct = sum(s.cost or 0 for s in kw.stats if s.cost is not None)
             kw_ctr = (total_cl / total_impr * 100) if total_impr > 0 else None
+
+            # Legacy stats format for old frontend (reads kw.stats[0].impressions, etc.)
+            sorted_stats = sorted(kw.stats, key=lambda s: s.date, reverse=True)
+            latest_kw_stats = sorted_stats[0] if sorted_stats else None
+            stats_compat = [{
+                "impressions": s.impressions or 0,
+                "clicks": s.clicks or 0,
+                "ctr": s.ctr,
+                "cost": s.cost,
+                "orders": s.orders or 0,
+                "date": s.date.isoformat() if s.date else None,
+            } for s in sorted_stats[:7]]
+
             kw_responses.append(KeywordResponse(
                 id=kw.id,
                 campaign_id=kw.campaign_id,
@@ -514,6 +527,7 @@ async def get_campaign_detail(campaign_id: int) -> Any:
                 total_clicks=total_cl,
                 total_ctr=kw_ctr,
                 total_cost=total_ct if total_ct > 0 else None,
+                stats=stats_compat if stats_compat else [],
             ))
 
         stats_list = sorted(campaign.stats, key=lambda s: s.date, reverse=True)
