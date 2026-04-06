@@ -1,8 +1,11 @@
 import asyncio
 
+import nest_asyncio
 from celery import Celery, Task
 
 from app.config import settings
+
+nest_asyncio.apply()
 
 
 class AsyncTask(Task):
