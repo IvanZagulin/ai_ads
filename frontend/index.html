@@ -288,7 +288,25 @@
                                     <div><span class="text-dark-500">WB ID:</span> <span class="text-dark-300" id="detail-wb-id">—</span></div>
                                     <div><span class="text-dark-500">Обновлено:</span> <span class="text-dark-300" id="detail-updated">—</span></div>
                                 </div>
-                                <div class="mt-2 text-xs text-dark-500" id="detail-period-info"></div>
+                                <div class="mt-2 flex items-center gap-3 flex-wrap">
+                                    <span class="text-xs text-dark-500" id="detail-period-info"></span>
+                                    <button onclick="toggleDateRangePicker()" class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-dark-800 border border-dark-700 rounded-md text-dark-400 hover:text-dark-200 transition-colors">
+                                        📅 <span id="detail-date-label">7 дней</span>
+                                    </button>
+                                </div>
+                                <div class="hidden mt-2 bg-dark-900 border border-dark-800 rounded-lg p-3" id="detail-date-range-panel">
+                                    <div class="flex gap-2 mb-2 flex-wrap">
+                                        <button onclick="applyPreset(1)" class="px-2 py-1 text-xs bg-indigo-600/30 text-indigo-300 rounded-md hover:bg-indigo-600/50 transition-colors">1 день</button>
+                                        <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-dark-700 text-dark-300 rounded-md hover:bg-dark-600 transition-colors">7 дней</button>
+                                        <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-dark-700 text-dark-300 rounded-md hover:bg-dark-600 transition-colors">14 дней</button>
+                                        <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-dark-700 text-dark-300 rounded-md hover:bg-dark-600 transition-colors">30 дней</button>
+                                    </div>
+                                    <div class="flex gap-3 items-center">
+                                        <label class="text-xs text-dark-400 flex items-center gap-1">С: <input type="date" id="detail-date-from" class="bg-dark-800 border border-dark-700 rounded px-2 py-1 text-dark-200 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500" /></label>
+                                        <label class="text-xs text-dark-400 flex items-center gap-1">По: <input type="date" id="detail-date-to" class="bg-dark-800 border border-dark-700 rounded px-2 py-1 text-dark-200 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500" /></label>
+                                        <button onclick="applyCustomDateRange()" class="px-2 py-1 text-xs bg-indigo-600 text-white rounded-md hover:bg-indigo-500 transition-colors">Применить</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="flex items-center gap-2" id="detail-status-buttons">
                                 <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-600/20 text-green-400 rounded-lg hover:bg-green-600/30 transition-all">Старт</button>
@@ -968,13 +986,52 @@
         }
     }
 
+    // Date range state for campaign detail
+    let detailDateFrom = '';
+    let detailDateTo = '';
+
+    function daysAgo(n) {
+        const d = new Date();
+        d.setDate(d.getDate() - n);
+        return d.toISOString().slice(0, 10);
+    }
+
+    function toggleDateRangePicker() {
+        const panel = document.getElementById('detail-date-range-panel');
+        panel.classList.toggle('hidden');
+    }
+
+    function applyPreset(days) {
+        document.getElementById('detail-date-from').value = daysAgo(days);
+        document.getElementById('detail-date-to').value = daysAgo(0);
+        applyCustomDateRange();
+    }
+
+    async function applyCustomDateRange() {
+        const df = document.getElementById('detail-date-from').value;
+        const dt = document.getElementById('detail-date-to').value;
+        if (!df || !dt) { showToast('Укажите обе даты', 'error'); return; }
+        detailDateFrom = df;
+        detailDateTo = dt;
+        document.getElementById('detail-date-range-panel').classList.add('hidden');
+        const diffDays = Math.round((new Date(dt) - new Date(df)) / 86400000);
+        document.getElementById('detail-date-label').textContent = diffDays <= 0 ? dt : `${df} — ${dt}`;
+        // Re-fetch with date params
+        if (currentCampaignId) {
+            await openCampaignDetail(currentCampaignId);
+        }
+    }
+
     // ============================================================
     //  CAMPAIGN DETAIL
     // ============================================================
-    async function openCampaignDetail(campaignId) {
+    async function openCampaignDetail(campaignId, params) {
         currentCampaignId = campaignId;
         try {
-            const detail = await apiGet(`/campaigns/${campaignId}`);
+            const dateFrom = params?.date_from || detailDateFrom || daysAgo(7);
+            const dateTo = params?.date_to || detailDateTo || daysAgo(0);
+            const url = `/campaigns/${campaignId}?date_from=${dateFrom}&date_to=${dateTo}`;
+            const detail = await apiGet(url);
             // Render header
             document.getElementById('detail-name').textContent = detail.name || detail.platform_campaign_id || '—';
             const badge = document.getElementById('detail-platform-badge');
@@ -989,14 +1046,20 @@
             document.getElementById('detail-wb-id').textContent = detail.platform_campaign_id || '—';
             document.getElementById('detail-updated').textContent = formatDate(detail.updated_at);
 
-            // Show period info
-            const statsArr = (detail.keywords || []).flatMap(k => (k.stats || []).map(s => s.date));
-            if (statsArr.length) {
-                statsArr.sort();
-                const from = statsArr[0];
-                const to = statsArr[statsArr.length - 1];
-                document.getElementById('detail-period-info').textContent = `Данные за ${from} — ${to} (последние 7 дней, накопительные суммарные значения)`;
-            }
+            // Store and display selected date range
+            detailDateFrom = detail.date_from || dateFrom;
+            detailDateTo = detail.date_to || dateTo;
+            document.getElementById('detail-date-from').value = detailDateFrom;
+            document.getElementById('detail-date-to').value = detailDateTo;
+            const diffD = Math.round((new Date(detailDateTo) - new Date(detailDateFrom)) / 86400000);
+            document.getElementById('detail-date-label').textContent = diffD <= 0 ? `${detailDateTo}` : `${detailDateFrom} — ${detailDateTo}`;
+
+            // Summary row
+            const totalImp = (detail.keywords || []).reduce((s, k) => s + (k.total_impressions || 0), 0);
+            const totalCl = (detail.keywords || []).reduce((s, k) => s + (k.total_clicks || 0), 0);
+            const totalCt = (detail.keywords || []).reduce((s, k) => s + (k.total_cost || 0), 0);
+            const totalCtrEl = document.getElementById('detail-total-ctr');
+            if (totalCtrEl) totalCtrEl.textContent = totalImp > 0 ? (totalCl / totalImp * 100).toFixed(2) + '%' : '—';
 
             // Keywords tab
             keywords = detail.keywords || [];
