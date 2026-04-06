@@ -10,60 +10,14 @@ from app.utils.rate_limiter import TokenBucketRateLimiter
 
 logger = logging.getLogger(__name__)
 
-
-# WB API campaign status -> our status
 CAMPAIGN_STATUS_MAP = {
-    -1: "deleted",
-    4: "pending",
-    7: "completed",
-    8: "cancelled",
-    9: "active",
-    11: "paused",
+    -1: "deleted", 4: "pending", 7: "completed",
+    8: "cancelled", 9: "active", 11: "paused",
 }
 
 
 class WBPromotionClient:
-    """Client for Wildberries advertising API.
-
-    Auth: HeaderApiKey passed in "Authorization" header.
-    Rate limit: 5 req/sec, 200ms interval (varies per method).
-
-    Full endpoint list (advert-api.wildberries.ru):
-
-    Campaigns:
-    - GET    /adv/v1/promotion/count              — campaign IDs by type/status
-    - GET    /api/advert/v2/adverts?ids=...        — campaign details (max 50)
-    - POST   /adv/v2/seacat/save-ad                — create campaign
-    - GET    /adv/v0/start?id=...                  — start campaign (status 4 or 11)
-    - GET    /adv/v0/pause?id=...                  — pause campaign (status 9)
-    - GET    /adv/v0/stop?id=...                   — stop campaign (status 4, 9, 11)
-    - POST   /adv/v0/rename                        — rename campaign
-    - GET    /adv/v0/delete?id=...                 — delete campaign (status 4)
-
-    Bids:
-    - PATCH  /api/advert/v1/bids                   — update card bids
-    - POST   /api/advert/v1/bids/min               — minimal bids
-    - GET    /api/advert/v0/bids/recommendations   — recommended bids (nmId + advertId)
-
-    Search clusters (normquery):
-    - POST   /adv/v0/normquery/list                — active/inactive cluster list
-    - POST   /adv/v0/normquery/get-bids            — cluster bids list
-    - POST   /adv/v0/normquery/bids                — set cluster bids (POST = set, DELETE = remove)
-    - POST   /adv/v0/normquery/set-minus           — set/remove minus-phrases
-    - POST   /adv/v0/normquery/get-minus           — get minus-phrases
-
-    Statistics:
-    - POST   /adv/v0/normquery/stats               — cluster stats (aggregate)
-    - POST   /adv/v1/normquery/stats               — cluster stats (daily breakdown)
-    - GET    /adv/v3/fullstats                     — campaign full stats
-
-    Finances:
-    - GET    /adv/v1/balance                        — account balance
-    - GET    /adv/v1/budget?id=...                  — campaign budget
-    - POST   /adv/v1/budget/deposit?id=...          — deposit campaign budget
-    - GET    /adv/v1/upd?from=...&to=...            — expense history
-    - GET    /adv/v1/payments?from=...&to=...       — payment history
-    """
+    """Client for Wildberries advertising API."""
 
     def __init__(self, api_token: str, base_url: str | None = None):
         self.api_token = api_token
@@ -74,10 +28,7 @@ class WBPromotionClient:
         await self._rate_limiter.acquire()
 
     def _headers(self) -> dict[str, str]:
-        return {
-            "Authorization": self.api_token,
-            "Content-Type": "application/json",
-        }
+        return {"Authorization": self.api_token, "Content-Type": "application/json"}
 
     # ------------------------------------------------------------------ #
     # CAMPAIGNS
@@ -213,10 +164,11 @@ class WBPromotionClient:
             return resp.json()
         return {"status": resp.status_code, "error": resp.text[:300]}
 
-    # ------------------------------------------------------------------
-    # Main entry-point
-    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------ #
+    # One-call entry-point
+    # ------------------------------------------------------------------ #
     async def get_campaigns(self) -> list[dict[str, Any]]:
+        """Get all campaigns with normalized data."""
         ids = await self.get_campaign_ids()
         if not ids:
             return []
@@ -230,7 +182,7 @@ class WBPromotionClient:
         self, campaign_ids: list[int], begin_date: str, end_date: str
     ) -> list[dict[str, Any]]:
         """GET /adv/v3/fullstats — campaign-level stats (max 50 IDs)."""
-        await self._wait_rate_limit()  # limit: 3/min for this endpoint
+        await self._wait_rate_limit()  # limit: 3/min
         ids_str = ",".join(str(x) for x in campaign_ids[:50])
         url = f"{self.base_url}/adv/v3/fullstats"
         async with httpx.AsyncClient() as client:
@@ -252,20 +204,18 @@ class WBPromotionClient:
     async def get_campaign_stats(
         self, advert_id: int, nm_id: int, from_date: str, to_date: str
     ) -> list[dict[str, Any]]:
-        """POST /adv/v1/normquery/stats — campaign aggregate + cluster breakdown.
+        """POST /adv/v1/normquery/stats — daily per-cluster stats.
 
-        Returns one dict per date:
-        {
-            "date": "2026-04-05",
-            "nmId": 123, "advertId": 456,
-            # campaign aggregate
-            "views": 330, "clicks": 18, "ctr": 5.45, "spend": 136.16, "orders": 0,
-            # per-cluster breakdown
-            "clusters": [
-                {"text": "...", "views": 93, "clicks": 4, "ctr": 4.30, "spend": 39.06},
-                ...
-            ]
-        }
+        WB API response structure for /adv/v1/normquery/stats:
+
+        The "dailyStats" array is a flat list — each element = one cluster on one date
+        with a "stat" dict containing "normQuery" (the keyword/cluster text).
+
+        Returns a flat list of dicts:
+        [{"date": "2026-04-01", "normQuery": "кластер...",
+          "views": 93, "clicks": 4, "ctr": 4.3, "spend": 39, "orders": 0,
+          "avgPos": 26.64, "cpc": 930, "cpm": 1000,
+          "nmId": 698999860, "advertId": 35122192}, ...]
         """
         url = f"{self.base_url}/adv/v1/normquery/stats"
         body = {
@@ -273,57 +223,52 @@ class WBPromotionClient:
             "to": to_date,
             "items": [{"advertId": advert_id, "nmId": nm_id}],
         }
-        max_retries = 3
-        for attempt in range(max_retries + 1):
+        for attempt in range(4):
             await self._wait_rate_limit()
             async with httpx.AsyncClient() as client:
-                resp = await client.post(
-                    url, headers=self._headers(), json=body, timeout=30.0
-                )
+                try:
+                    resp = await client.post(
+                        url, headers=self._headers(), json=body, timeout=30.0
+                    )
+                except Exception:
+                    if attempt < 3:
+                        await asyncio.sleep(2 ** attempt)
+                        continue
+                    logger.warning(f"get_campaign_stats {advert_id}/{nm_id}: connection error")
+                    return []
+
             if resp.status_code == 200:
+                results: list[dict[str, Any]] = []
                 data = resp.json()
-                results = []
                 for item in data.get("items") or []:
-                    for day_stat in item.get("dailyStats", []):
-                        aggr = day_stat.get("stat", {})
-                        clusters_raw = day_stat.get("clusterStats", [])
-                        cluster_list = []
-                        for c in clusters_raw:
-                            cluster_list.append({
-                                "text": c.get("text", ""),
-                                "views": c.get("views", 0),
-                                "clicks": c.get("clicks", 0),
-                                "ctr": c.get("ctr"),
-                                "spend": c.get("spend", 0),
-                                "cpc": c.get("cpc"),
-                                "cpm": c.get("cpm"),
-                                "orders": c.get("orders", 0),
-                                "avgPos": c.get("avgPos"),
-                            })
+                    for day_stat in item.get("dailyStats") or []:
+                        stat = day_stat.get("stat", {})
+                        # Each day_stat element = one cluster keyword on one day
                         entry = {
                             "date": day_stat.get("date", ""),
+                            "normQuery": stat.get("normQuery", ""),
+                            "views": stat.get("views", 0) or 0,
+                            "clicks": stat.get("clicks", 0) or 0,
+                            "ctr": stat.get("ctr"),
+                            "spend": stat.get("spend", 0) or 0,
+                            "orders": stat.get("orders", 0) or 0,
+                            "avgPos": stat.get("avgPos"),
+                            "cpc": stat.get("cpc"),
+                            "cpm": stat.get("cpm"),
+                            "showPercent": stat.get("showPercent"),
                             "nmId": item.get("nmId"),
                             "advertId": item.get("advertId"),
-                            "views": aggr.get("views", 0),
-                            "clicks": aggr.get("clicks", 0),
-                            "ctr": aggr.get("ctr"),
-                            "spend": aggr.get("sum", aggr.get("spend", 0)),
-                            "orders": aggr.get("orders", 0),
-                            "cpc": aggr.get("cpc"),
-                            "cpm": aggr.get("cpm"),
-                            "showPercent": aggr.get("showPercent"),
-                            "clusters": cluster_list,
                         }
                         results.append(entry)
                 return results
-            if resp.status_code == 429 and attempt < max_retries:
-                import random
-                wait = (2 ** attempt) + random.uniform(0, 0.5)
-                await asyncio.sleep(wait)
-                continue
-            logger.warning(f"get_campaign_stats {advert_id}/{nm_id}: {resp.status_code}")
-            return {}
-        return {}
+            if resp.status_code == 429 and attempt < 3:
+                await asyncio.sleep(2 ** attempt + 0.5)
+            else:
+                logger.warning(
+                    f"get_campaign_stats {advert_id}/{nm_id}: {resp.status_code} {resp.text[:200]}"
+                )
+                break
+        return []
 
     async def get_cluster_stats(
         self, advert_id: int, nm_id: int, from_date: str, to_date: str
@@ -336,8 +281,7 @@ class WBPromotionClient:
             "to": to_date,
             "items": [{"advert_id": advert_id, "nm_id": nm_id}],
         }
-        max_retries = 3
-        for attempt in range(max_retries + 1):
+        for attempt in range(4):
             async with httpx.AsyncClient() as client:
                 resp = await client.post(
                     url, headers=self._headers(), json=body, timeout=30.0
@@ -351,11 +295,10 @@ class WBPromotionClient:
                         cluster_stat["nm_id"] = s.get("nm_id")
                         all_stats.append(cluster_stat)
                 return all_stats
-            if resp.status_code == 429 and attempt < max_retries:
-                import random
-                await asyncio.sleep((2 ** attempt) + random.uniform(0, 0.5))
-                continue
-            return []
+            if resp.status_code == 429 and attempt < 3:
+                await asyncio.sleep(2 ** attempt + 0.5)
+            else:
+                return []
         return []
 
     async def get_campaigns_with_stats(self, days: int = 30) -> list[dict[str, Any]]:
@@ -370,52 +313,73 @@ class WBPromotionClient:
         from_date = (today - timedelta(days=days)).strftime("%Y-%m-%d")
         to_date = today.strftime("%Y-%m-%d")
 
-        stats_campaigns = [
-            c for c in campaigns
-            if c.get("status") in ("active", "paused")
-            and c.get("wb_adv_id")
-            and c.get("nm_ids")
-        ]
-
-        for camp in stats_campaigns:
+        for camp in campaigns:
+            if camp.get("status") not in ("active", "paused"):
+                continue
             adv_id = camp.get("wb_adv_id")
             nm_ids = camp.get("nm_ids", [])
+            if not adv_id or not nm_ids:
+                continue
+
             clusters = await self.get_clusters(adv_id)
             camp["clusters"] = clusters
 
-            # Fetch daily stats for each NM (aggregate + cluster breakdown)
-            all_daily = {}  # keyed by date
+            # Fetch per-cluster daily stats for ALL nm_ids (up to 5)
+            flat_stats: list[dict[str, Any]] = []
             for nm_id in nm_ids[:5]:
-                daily = await self.get_campaign_stats(adv_id, nm_id, from_date, to_date)
-                if isinstance(daily, list):
-                    for d in daily:
-                        dt = d.get("date", "")
-                        if dt and dt not in all_daily:
-                            all_daily[dt] = d
-                        elif dt:
-                            # Merge: sum aggregates, merge clusters
-                            existing = all_daily[dt]
-                            for key in ("views", "clicks", "spend", "orders"):
-                                existing[key] = existing.get(key, 0) + d.get(key, 0)
-                            existing_cls = {c["text"]: c for c in existing.get("clusters", [])}
-                            for c in d.get("clusters", []):
-                                txt = c["text"]
-                                if txt in existing_cls:
-                                    for k in ("views", "clicks", "spend"):
-                                        existing_cls[txt][k] = existing_cls[txt].get(k, 0) + c.get(k, 0)
-                                else:
-                                    existing_cls[txt] = c.copy()
-                            existing["clusters"] = list(existing_cls.values())
+                stats = await self.get_campaign_stats(adv_id, nm_id, from_date, to_date)
+                flat_stats.extend(stats)
                 await asyncio.sleep(0.3)
 
-            camp["daily_stats"] = list(all_daily.values())
-            await asyncio.sleep(0.5)
+            # Build daily aggregate + clusters breakdown
+            daily_map: dict[str, dict[str, Any]] = {}
+            for s in flat_stats:
+                dt = s.get("date", "")
+                if not dt:
+                    continue
+                nq = s.get("normQuery", "")
+                views = s.get("views", 0)
+                clicks = s.get("clicks", 0)
+                spend = s.get("spend", 0)
+                orders = s.get("orders", 0)
+                if dt not in daily_map:
+                    daily_map[dt] = {
+                        "date": dt,
+                        "views": 0,
+                        "clicks": 0,
+                        "spend": 0,
+                        "orders": 0,
+                        "clusters": [],
+                    }
+                day = daily_map[dt]
+                day["views"] += views
+                day["clicks"] += clicks
+                day["spend"] += spend
+                day["orders"] += orders
+
+                if nq:
+                    day["clusters"].append({
+                        "text": nq,
+                        "views": views,
+                        "clicks": clicks,
+                        "spend": spend,
+                        "orders": orders,
+                        "ctr": s.get("ctr"),
+                        "avgPos": s.get("avgPos"),
+                    })
+
+            # Compute CTR for aggregated daily totals
+            for d in daily_map.values():
+                v = d["views"]
+                d["ctr"] = (d["clicks"] / v * 100) if v > 0 else None
+
+            camp["daily_stats"] = list(daily_map.values())
 
         return campaigns
 
     # ------------------------------------------------------------------ #
     # Create campaign: POST /adv/v2/seacat/save-ad
-    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------ #
     async def save_ad(
         self,
         *,
@@ -445,7 +409,7 @@ class WBPromotionClient:
 
     # ------------------------------------------------------------------ #
     # Minimal bids: POST /api/advert/v1/bids/min
-    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------ #
     async def get_min_bids(
         self,
         advert_id: int,
@@ -471,7 +435,7 @@ class WBPromotionClient:
 
     # ------------------------------------------------------------------ #
     # Items/subjects for campaign creation
-    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------ #
     async def get_items(self) -> list[dict[str, Any]]:
         """GET /adv/v1/supplier/subjects — available items for campaigns."""
         await self._wait_rate_limit()
@@ -493,157 +457,6 @@ class WBPromotionClient:
         if resp.status_code == 200:
             return resp.json()
         return []
-
-    # ------------------------------------------------------------------ #
-    # SEARCH CLUSTERS (normquery)
-    # ------------------------------------------------------------------ #
-
-    async def get_clusters(self, advert_id: int) -> list[dict[str, Any]]:
-        """POST /adv/v0/normquery/list — active/inactive search clusters.
-
-        Returns clusters that have >= 100 shows. Each item has shows, clicks,
-        ctr, is_active flag, etc.
-        """
-        await self._wait_rate_limit()
-        url = f"{self.base_url}/adv/v0/normquery/list"
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(
-                url, headers=self._headers(), json={"advertId": advert_id}, timeout=30.0
-            )
-        if resp.status_code == 200:
-            data = resp.json()
-            items = data.get("items")
-            if items is not None and isinstance(items, list):
-                return items
-        return []
-
-    async def get_cluster_bids(
-        self, advert_id: int, nm_id: int
-    ) -> list[dict[str, Any]]:
-        """POST /adv/v0/normquery/get-bids — current cluster bids.
-
-        Returns list of dicts with keys: advert_id, nm_id, norm_query, bid.
-        """
-        await self._wait_rate_limit()
-        url = f"{self.base_url}/adv/v0/normquery/get-bids"
-        body = {"items": [{"advert_id": advert_id, "nm_id": nm_id}]}
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(
-                url, headers=self._headers(), json=body, timeout=30.0
-            )
-        if resp.status_code == 200:
-            return resp.json().get("bids", [])
-        return []
-
-    async def set_cluster_bids(
-        self, bids: list[dict[str, Any]]
-    ) -> dict[str, Any]:
-        """POST /adv/v0/normquery/bids — set bids for search clusters.
-
-        Each bid dict must have:
-        - advert_id: int
-        - nm_id: int
-        - norm_query: str (the cluster text)
-        - bid: int (CPM in rubles per 1000 impressions)
-        """
-        await self._wait_rate_limit()
-        url = f"{self.base_url}/adv/v0/normquery/bids"
-        body = {"bids": bids[:100]}
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(
-                url, headers=self._headers(), json=body, timeout=30.0
-            )
-        if resp.status_code == 200:
-            return resp.json()
-        return {"status": resp.status_code, "error": resp.text[:300]}
-
-    async def remove_cluster_bids(
-        self, bids: list[dict[str, Any]]
-    ) -> dict[str, Any]:
-        """DELETE /adv/v0/normquery/bids — remove cluster bids.
-
-        Same body format as set_cluster_bids.
-        """
-        await self._wait_rate_limit()
-        url = f"{self.base_url}/adv/v0/normquery/bids"
-        body = {"bids": bids[:100]}
-        async with httpx.AsyncClient() as client:
-            resp = await client.delete(
-                url, headers=self._headers(), json=body, timeout=30.0
-            )
-        if resp.status_code == 200:
-            return resp.json()
-        return {"status": resp.status_code, "error": resp.text[:300]}
-
-    # ------------------------------------------------------------------ #
-    # Minus-phrases
-    # ------------------------------------------------------------------ #
-
-    async def get_minus_phrases(
-        self, advert_id: int, nm_id: int
-    ) -> list[str]:
-        """POST /adv/v0/normquery/get-minus — get minus-phrases list."""
-        await self._wait_rate_limit()
-        url = f"{self.base_url}/adv/v0/normquery/get-minus"
-        body = {"items": [{"advert_id": advert_id, "nm_id": nm_id}]}
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(
-                url, headers=self._headers(), json=body, timeout=30.0
-            )
-        if resp.status_code == 200:
-            data = resp.json()
-            items = data.get("items") or []
-            phrases: list[str] = []
-            for item in items:
-                phrases.extend(item.get("norm_queries") or [])
-            return phrases
-        return []
-
-    async def set_minus_phrases(
-        self, advert_id: int, nm_id: int, norm_queries: list[str]
-    ) -> dict[str, Any]:
-        """POST /adv/v0/normquery/set-minus — set/remove minus-phrases.
-
-        Sending empty array removes all minus-phrases.
-        """
-        await self._wait_rate_limit()
-        url = f"{self.base_url}/adv/v0/normquery/set-minus"
-        body = {
-            "advert_id": advert_id,
-            "nm_id": nm_id,
-            "norm_queries": norm_queries[:1000],
-        }
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(
-                url, headers=self._headers(), json=body, timeout=30.0
-            )
-        if resp.status_code == 200:
-            return resp.json()
-        return {"status": resp.status_code, "error": resp.text[:300]}
-
-    # ------------------------------------------------------------------ #
-    # Recommended bids
-    # ------------------------------------------------------------------
-
-    async def get_bids_recommendations(
-        self, advert_id: int, nm_id: int
-    ) -> dict[str, Any]:
-        """GET /api/advert/v0/bids/recommendations — recommended bids for cards and clusters.
-
-        Both nmId and advertId are REQUIRED.
-        """
-        await self._wait_rate_limit()
-        url = f"{self.base_url}/api/advert/v0/bids/recommendations"
-        async with httpx.AsyncClient() as client:
-            resp = await client.get(
-                url,
-                headers=self._headers(),
-                params={"nmId": nm_id, "advertId": advert_id},
-                timeout=30.0,
-            )
-        if resp.status_code == 200:
-            return resp.json()
-        return {"status": resp.status_code, "error": resp.text[:300]}
 
     # ------------------------------------------------------------------ #
     # FINANCES
@@ -737,25 +550,153 @@ class WBPromotionClient:
         return []
 
     # ------------------------------------------------------------------ #
-    # Helper: one-call to get campaigns + set bid for a cluster
+    # SEARCH CLUSTERS (normquery)
+    # ------------------------------------------------------------------ #
+
+    async def get_clusters(self, advert_id: int) -> list[dict[str, Any]]:
+        """POST /adv/v0/normquery/list — active/inactive search clusters."""
+        await self._wait_rate_limit()
+        url = f"{self.base_url}/adv/v0/normquery/list"
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                url, headers=self._headers(), json={"advertId": advert_id}, timeout=30.0
+            )
+        if resp.status_code == 200:
+            data = resp.json()
+            items = data.get("items")
+            if items is not None and isinstance(items, list):
+                return items
+        return []
+
+    async def get_cluster_bids(
+        self, advert_id: int, nm_id: int
+    ) -> list[dict[str, Any]]:
+        """POST /adv/v0/normquery/get-bids — current cluster bids."""
+        await self._wait_rate_limit()
+        url = f"{self.base_url}/adv/v0/normquery/get-bids"
+        body = {"items": [{"advert_id": advert_id, "nm_id": nm_id}]}
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                url, headers=self._headers(), json=body, timeout=30.0
+            )
+        if resp.status_code == 200:
+            return resp.json().get("bids", [])
+        return []
+
+    async def set_cluster_bids(
+        self, bids: list[dict[str, Any]]
+    ) -> dict[str, Any]:
+        """POST /adv/v0/normquery/bids — set bids for search clusters."""
+        await self._wait_rate_limit()
+        url = f"{self.base_url}/adv/v0/normquery/bids"
+        body = {"bids": bids[:100]}
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                url, headers=self._headers(), json=body, timeout=30.0
+            )
+        if resp.status_code == 200:
+            return resp.json()
+        return {"status": resp.status_code, "error": resp.text[:300]}
+
+    async def remove_cluster_bids(
+        self, bids: list[dict[str, Any]]
+    ) -> dict[str, Any]:
+        """DELETE /adv/v0/normquery/bids — remove cluster bids."""
+        await self._wait_rate_limit()
+        url = f"{self.base_url}/adv/v0/normquery/bids"
+        body = {"bids": bids[:100]}
+        async with httpx.AsyncClient() as client:
+            resp = await client.delete(
+                url, headers=self._headers(), json=body, timeout=30.0
+            )
+        if resp.status_code == 200:
+            return resp.json()
+        return {"status": resp.status_code, "error": resp.text[:300]}
+
+    # ------------------------------------------------------------------ #
+    # Minus-phrases
+    # ------------------------------------------------------------------ #
+
+    async def get_minus_phrases(
+        self, advert_id: int, nm_id: int
+    ) -> list[str]:
+        """POST /adv/v0/normquery/get-minus — get minus-phrases list."""
+        await self._wait_rate_limit()
+        url = f"{self.base_url}/adv/v0/normquery/get-minus"
+        body = {"items": [{"advert_id": advert_id, "nm_id": nm_id}]}
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                url, headers=self._headers(), json=body, timeout=30.0
+            )
+        if resp.status_code == 200:
+            data = resp.json()
+            items = data.get("items") or []
+            phrases: list[str] = []
+            for item in items:
+                phrases.extend(item.get("norm_queries") or [])
+            return phrases
+        return []
+
+    async def set_minus_phrases(
+        self, advert_id: int, nm_id: int, norm_queries: list[str]
+    ) -> dict[str, Any]:
+        """POST /adv/v0/normquery/set-minus — set/remove minus-phrases."""
+        await self._wait_rate_limit()
+        url = f"{self.base_url}/adv/v0/normquery/set-minus"
+        body = {
+            "advert_id": advert_id,
+            "nm_id": nm_id,
+            "norm_queries": norm_queries[:1000],
+        }
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                url, headers=self._headers(), json=body, timeout=30.0
+            )
+        if resp.status_code == 200:
+            return resp.json()
+        return {"status": resp.status_code, "error": resp.text[:300]}
+
+    # ------------------------------------------------------------------ #
+    # Recommended bids
+    # ------------------------------------------------------------------ #
+
+    async def get_bids_recommendations(
+        self, advert_id: int, nm_id: int
+    ) -> dict[str, Any]:
+        """GET /api/advert/v0/bids/recommendations — recommended bids."""
+        await self._wait_rate_limit()
+        url = f"{self.base_url}/api/advert/v0/bids/recommendations"
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(
+                url,
+                headers=self._headers(),
+                params={"nmId": nm_id, "advertId": advert_id},
+                timeout=30.0,
+            )
+        if resp.status_code == 200:
+            return resp.json()
+        return {"status": resp.status_code, "error": resp.text[:300]}
+
+    # ------------------------------------------------------------------ #
+    # Helpers
     # ------------------------------------------------------------------ #
 
     async def set_cluster_bid(self, advert_id: int, nm_id: int, norm_query: str, bid: int) -> dict[str, Any]:
-        """Set bid for a single cluster via POST /adv/v0/normquery/bids."""
+        """Set bid for a single cluster."""
         return await self.set_cluster_bids([
             {"advert_id": advert_id, "nm_id": nm_id, "norm_query": norm_query, "bid": bid}
         ])
 
     async def add_minus_phrase(self, advert_id: int, nm_id: int, phrase: str) -> dict[str, Any]:
-        """Add a minus-phrase. Fetches existing ones first, then sends the merged list."""
+        """Add a minus-phrase."""
         existing = await self.get_minus_phrases(advert_id, nm_id)
         if phrase not in existing:
             existing.append(phrase)
         return await self.set_minus_phrases(advert_id, nm_id, existing)
 
-    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------#
     # Normalization to our schema
-    # ------------------------------------------------------------------
+    # ------------------------------------------------------------------#
     @staticmethod
     def _normalize(raw: dict[str, Any]) -> dict[str, Any]:
         settings_data = raw.get("settings", {})
@@ -763,7 +704,6 @@ class WBPromotionClient:
         wb_status_code = raw.get("status", -1)
         bid_type = raw.get("bid_type", "manual")
 
-        # placements
         placements = settings_data.get("placements", {})
         placement_list = []
         if placements.get("search"):
@@ -771,7 +711,6 @@ class WBPromotionClient:
         if placements.get("recommendations"):
             placement_list.append("recommendations")
 
-        # nm_ids — extract NM IDs from nm_settings
         nm_settings = raw.get("nm_settings", [])
         nm_ids = [nm.get("nm_id") for nm in nm_settings if nm.get("nm_id")]
         nm_count = len(nm_settings)
