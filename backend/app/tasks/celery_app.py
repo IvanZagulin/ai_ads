@@ -45,8 +45,8 @@ celery_app.conf.update(
     broker_connection_retry=True,
     broker_connection_max_retries=10,
     task_track_started=True,
-    task_soft_time_limit=300,
-    task_time_limit=600,
+    task_soft_time_limit=600,
+    task_time_limit=1200,
 )
 
 celery_app.conf.beat_schedule = {
