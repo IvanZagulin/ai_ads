@@ -258,7 +258,7 @@ class WBPromotionClient:
                             "views": stat.get("views", 0) or 0,
                             "clicks": stat.get("clicks", 0) or 0,
                             "ctr": stat.get("ctr"),
-                            "spend": stat.get("spend", 0) or 0,
+                            "spend": (stat.get("spend", 0) or 0) / 100,
                             "orders": stat.get("orders", 0) or 0,
                             "avgPos": stat.get("avgPos"),
                             "cpc": stat.get("cpc"),
@@ -348,7 +348,7 @@ class WBPromotionClient:
                 nq = s.get("normQuery", "")
                 views = s.get("views", 0)
                 clicks = s.get("clicks", 0)
-                spend = s.get("spend", 0)
+                spend = s.get("spend", 0) / 100
                 orders = s.get("orders", 0)
                 if dt not in daily_map:
                     daily_map[dt] = {
