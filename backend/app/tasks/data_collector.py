@@ -202,9 +202,16 @@ async def _upsert_campaign_stats(
 
     total_impressions = int(data.get("views", 0))
     total_clicks = int(data.get("clicks", 0))
-    total_cost = float(data.get("sum", 0))
+    total_cost = round(float(data.get("sum", 0)), 4)
     total_orders = int(data.get("orders", 0))
-    total_ctr = (total_clicks / total_impressions * 100) if total_impressions > 0 else None
+    # Use WB-provided CTR if available, else compute
+    wb_ctr = data.get("ctr")
+    if wb_ctr is not None:
+        total_ctr = round(float(wb_ctr), 4)
+    elif total_impressions > 0:
+        total_ctr = round(total_clicks / total_impressions * 100, 4)
+    else:
+        total_ctr = None
     search_share = float(data.get("showPercent", 0)) or None
 
     if stats is None:

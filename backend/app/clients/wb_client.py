@@ -252,17 +252,21 @@ class WBPromotionClient:
                     for day_stat in item.get("dailyStats") or []:
                         stat = day_stat.get("stat", {})
                         # Each day_stat element = one cluster keyword on one day
+                        cpm = stat.get("cpm", 0) or 0
+                        views = stat.get("views", 0) or 0
+                        # Actual cost = impressions * cpm_kopecks / 1000 / 100 = views * cpm / 100000
+                        actual_cost = views * cpm / 100000 if cpm > 0 else 0
                         entry = {
                             "date": day_stat.get("date", ""),
                             "normQuery": stat.get("normQuery", ""),
-                            "views": stat.get("views", 0) or 0,
+                            "views": views,
                             "clicks": stat.get("clicks", 0) or 0,
                             "ctr": stat.get("ctr"),
-                            "spend": (stat.get("spend", 0) or 0) / 100,
+                            "spend": actual_cost,
                             "orders": stat.get("orders", 0) or 0,
                             "avgPos": stat.get("avgPos"),
                             "cpc": stat.get("cpc"),
-                            "cpm": stat.get("cpm"),
+                            "cpm": cpm,
                             "showPercent": stat.get("showPercent"),
                             "nmId": item.get("nmId"),
                             "advertId": item.get("advertId"),
@@ -348,7 +352,7 @@ class WBPromotionClient:
                 nq = s.get("normQuery", "")
                 views = s.get("views", 0)
                 clicks = s.get("clicks", 0)
-                spend = s.get("spend", 0) / 100
+                spend = s.get("spend", 0)
                 orders = s.get("orders", 0)
                 if dt not in daily_map:
                     daily_map[dt] = {
