@@ -478,7 +478,11 @@ async def list_campaigns(
 
 
 @router.get("/campaigns/{campaign_id}", response_model=CampaignDetailResponse)
-async def get_campaign_detail(campaign_id: int) -> Any:
+async def get_campaign_detail(
+    campaign_id: int,
+    date_from: str | None = Query(None, description="Start date YYYY-MM-DD (default: 7 days ago)"),
+    date_to: str | None = Query(None, description="End date YYYY-MM-DD (default: today)"),
+) -> Any:
     with session_factory() as db:
         stmt = (
             select(Campaign)
@@ -493,21 +497,38 @@ async def get_campaign_detail(campaign_id: int) -> Any:
         if campaign is None:
             raise HTTPException(status_code=404, detail="Кампания не найдена")
 
-        # Build keyword list with aggregated stats
         from app.schemas.schemas import KeywordResponse
 
-        kw_responses = []
-        today = date.today()
-        seven_days_ago = today - timedelta(days=7)
+        # Parse date range
+        if date_to:
+            try:
+                end_date = date.fromisoformat(date_to)
+            except ValueError:
+                end_date = date.today()
+        else:
+            end_date = date.today()
 
+        if date_from:
+            try:
+                start_date = date.fromisoformat(date_from)
+            except ValueError:
+                start_date = end_date - timedelta(days=7)
+        else:
+            start_date = end_date - timedelta(days=7)
+
+        kw_responses = []
         for kw in campaign.keywords:
-            last_7 = [s for s in kw.stats if s.date and s.date >= seven_days_ago]
-            total_impr = sum(s.impressions for s in last_7 if s.impressions)
-            total_cl = sum(s.clicks for s in last_7 if s.clicks)
-            total_ct = sum(s.cost or 0 for s in last_7 if s.cost is not None)
+            # Filter stats within date range
+            range_stats = [
+                s for s in kw.stats
+                if s.date and start_date <= s.date <= end_date
+            ]
+            total_impr = sum(s.impressions or 0 for s in range_stats)
+            total_cl = sum(s.clicks or 0 for s in range_stats)
+            total_ct = sum(s.cost or 0 for s in range_stats if s.cost is not None)
             kw_ctr = (total_cl / total_impr * 100) if total_impr > 0 else None
 
-            # Stats array: all available records sorted by date desc (for chart/tab)
+            # All stats sorted by date desc (for keyword detail chart/tab)
             sorted_stats = sorted(kw.stats, key=lambda s: s.date, reverse=True)
             stats_compat = [{
                 "impressions": s.impressions or 0,
@@ -533,9 +554,16 @@ async def get_campaign_detail(campaign_id: int) -> Any:
                 stats=stats_compat if stats_compat else [],
             ))
 
-        stats_list = sorted(campaign.stats, key=lambda s: s.date, reverse=True)
-        ctr_hist = [s.total_ctr for s in stats_list if s.total_ctr is not None]
-        latest = stats_list[0] if stats_list else None
+        # Campaign-level stats filtered to same date range
+        range_campaign_stats = [
+            s for s in campaign.stats
+            if s.date and start_date <= s.date <= end_date
+        ]
+        range_campaign_stats_sorted = sorted(range_campaign_stats, key=lambda s: s.date, reverse=True)
+        all_campaign_stats_sorted = sorted(campaign.stats, key=lambda s: s.date, reverse=True)
+
+        ctr_hist = [s.total_ctr for s in all_campaign_stats_sorted if s.total_ctr is not None]
+        latest = range_campaign_stats_sorted[0] if range_campaign_stats_sorted else None
 
         data = {
             "id": campaign.id,
@@ -553,7 +581,9 @@ async def get_campaign_detail(campaign_id: int) -> Any:
             "latest_cost": latest.total_cost if latest else 0.0,
             "ctr_history": ctr_hist[-7:],
             "keywords": kw_responses,
-            "recent_stats": stats_list[:7],
+            "recent_stats": range_campaign_stats_sorted,
+            "date_from": start_date.isoformat(),
+            "date_to": end_date.isoformat(),
         }
         return CampaignDetailResponse(**data)
 

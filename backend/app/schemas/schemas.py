@@ -87,6 +87,8 @@ class CampaignResponse(BaseModel):
 class CampaignDetailResponse(CampaignResponse):
     keywords: list["KeywordResponse"] = []
     recent_stats: list["CampaignStatsResponse"] = []
+    date_from: str | None = None
+    date_to: str | None = None
 
 
 # ---------------------------------------------------------------------------

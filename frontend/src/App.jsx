@@ -286,11 +286,39 @@ function CampaignDetailPage({ campaignId }) {
   const [kwEditingId, setKwEditingId] = useState(null);
   const [kwForm, setKwForm] = useState({});
   const [kwLoading, setKwLoading] = useState(false);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
-  useEffect(() => {
+  const todayStr = () => new Date().toISOString().slice(0, 10);
+  const daysAgoStr = (n) => {
+    const d = new Date();
+    d.setDate(d.getDate() - n);
+    return d.toISOString().slice(0, 10);
+  };
+
+  const initDates = (from, to) => {
+    if (from) {
+      setDateFrom(from);
+      setDateTo(to || todayStr());
+    } else {
+      setDateFrom(daysAgoStr(7));
+      setDateTo(todayStr());
+    }
+  };
+
+  const loadCampaign = (useFrom, useTo) => {
     setLoading(true); setError(null);
-    api.get(`/api/campaigns/${campaignId}`)
-      .then(d => setDetail(d))
+    const params = new URLSearchParams();
+    const df = useFrom || dateFrom || daysAgoStr(7);
+    const dt = useTo || dateTo || todayStr();
+    if (df) params.set('date_from', df);
+    if (dt) params.set('date_to', dt);
+    api.get(`/api/campaigns/${campaignId}?${params}`)
+      .then(d => {
+        setDetail(d);
+        initDates(d.date_from, d.date_to);
+      })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
 
@@ -299,7 +327,26 @@ function CampaignDetailPage({ campaignId }) {
       .then(d => setDecisions(Array.isArray(d) ? d : []))
       .catch(() => setDecisions([]))
       .finally(() => setDecLoading(false));
+  };
+
+  useEffect(() => {
+    initDates();
+    loadCampaign();
   }, [campaignId]);
+
+  const applyDateRange = () => {
+    setShowDatePicker(false);
+    if (dateFrom && dateTo) {
+      loadCampaign(dateFrom, dateTo);
+    }
+  };
+
+  const setPreset = (days) => {
+    setDateFrom(daysAgoStr(days));
+    setDateTo(todayStr());
+    loadCampaign(daysAgoStr(days), todayStr());
+    setShowDatePicker(false);
+  };
 
   const changeStatus = async (status) => {
     try {
@@ -352,6 +399,10 @@ function CampaignDetailPage({ campaignId }) {
 
   const d = detail;
 
+  const totalImp = d.keywords?.reduce((s, kw) => s + (kw.total_impressions || 0), 0) || 0;
+  const totalClk = d.keywords?.reduce((s, kw) => s + (kw.total_clicks || 0), 0) || 0;
+  const totalCst = d.keywords?.reduce((s, kw) => s + (kw.total_cost || 0), 0) || 0;
+
   return (
     <div className="space-y-6">
       {/* Back button + header */}
@@ -367,7 +418,11 @@ function CampaignDetailPage({ campaignId }) {
               ID: {d.platform_campaign_id} &midddot; {platformBadge(d.platform)} {statusBadge(d.status)}
             </div>
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-2 flex-wrap items-center">
+            {/* Date selector */}
+            <button className="btn btn-secondary btn-sm text-xs" onClick={() => setShowDatePicker(!showDatePicker)}>
+              📅 {dateFrom} — {dateTo}
+            </button>
             {d.status !== 'active' && (
               <button className="btn btn-primary btn-sm" onClick={() => changeStatus('active')}>Старт</button>
             )}
@@ -380,6 +435,42 @@ function CampaignDetailPage({ campaignId }) {
           </div>
         </div>
 
+        {/* Date picker panel */}
+        {showDatePicker && (
+          <div className="bg-background/80 border border-border rounded-lg p-3 mb-4">
+            <div className="text-xs text-muted-foreground mb-2 font-medium">Период:</div>
+            {/* Preset buttons */}
+            <div className="flex gap-2 mb-3 flex-wrap">
+              <button className="btn btn-primary btn-sm text-xs" onClick={() => setPreset(1)}>1 день</button>
+              <button className="btn btn-secondary btn-sm text-xs" onClick={() => setPreset(7)}>7 дней</button>
+              <button className="btn btn-secondary btn-sm text-xs" onClick={() => setPreset(14)}>14 дней</button>
+              <button className="btn btn-secondary btn-sm text-xs" onClick={() => setPreset(30)}>30 дней</button>
+            </div>
+            <div className="flex gap-3 items-center">
+              <label className="text-xs flex items-center gap-1">
+                С:
+                <input type="date" className="input text-xs py-1" value={dateFrom}
+                  onChange={e => setDateFrom(e.target.value)} />
+              </label>
+              <label className="text-xs flex items-center gap-1">
+                По:
+                <input type="date" className="input text-xs py-1" value={dateTo}
+                  onChange={e => setDateTo(e.target.value)} />
+              </label>
+              <button className="btn btn-primary btn-sm text-xs" onClick={applyDateRange}>Применить</button>
+            </div>
+          </div>
+        )}
+
+        {/* Summary for selected period */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
+          <div><div className="text-xs text-muted-foreground">Период</div><div className="font-medium">{dateFrom} — {dateTo}</div></div>
+          <div><div className="text-xs text-muted-foreground">Показы</div><div className="font-medium">{totalImp}</div></div>
+          <div><div className="text-xs text-muted-foreground">Клики</div><div className="font-medium">{totalClk}</div></div>
+          <div><div className="text-xs text-muted-foreground">CTR</div><div className="font-medium" style={{ color: totalImp > 0 ? 'var(--neon)' : 'inherit' }}>{totalImp > 0 ? `${(totalClk / totalImp * 100).toFixed(2)}%` : '—'}</div></div>
+          <div><div className="text-xs text-muted-foreground">Стоимость</div><div className="font-medium">{totalCst.toFixed(2)} ₽</div></div>
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div><div className="text-xs text-muted-foreground">Тип</div><div className="font-medium">{d.campaign_type ?? '—'}</div></div>
           <div><div className="text-xs text-muted-foreground">Бюджет/день</div><div className="font-medium">{d.daily_budget != null ? `${d.daily_budget} ₽` : '—'}</div></div>
@@ -388,7 +479,7 @@ function CampaignDetailPage({ campaignId }) {
         </div>
 
         <div className="mt-3">
-          <div className="text-xs text-muted-foreground mb-1">CTR за 7 дней</div>
+          <div className="text-xs text-muted-foreground mb-1">CTR за последние 7 дней</div>
           <Sparkline data={d.ctr_history || []} color="var(--neon)" />
         </div>
       </div>
