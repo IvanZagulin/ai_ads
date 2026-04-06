@@ -1165,9 +1165,27 @@
         const ctrData = stats.map(s => (s.total_ctr || 0) * 100);
         const ordersData = stats.map(s => s.total_orders || 0);
 
-        document.getElementById('sparkline-cost').innerHTML = sparklineSVG(costData, '#ef4444', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>';
-        document.getElementById('sparkline-ctr').innerHTML = sparklineSVG(ctrData, '#22c55e', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>';
-        document.getElementById('sparkline-orders').innerHTML = sparklineSVG(ordersData, '#3b82f6', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>';
+        const avgCost = costData.length ? (costData.reduce((a, b) => a + b, 0) / costData.length) : 0;
+        const avgCtr = ctrData.length ? (ctrData.reduce((a, b) => a + b, 0) / ctrData.length) : 0;
+        const totalOrders = ordersData.reduce((a, b) => a + b, 0);
+        const totalCost = costData.reduce((a, b) => a + b, 0);
+
+        const buildStatCard = (html, avgLabel, avgValue) => {
+            return `<div class="flex flex-col items-center gap-2">${html}<div class="text-xs text-dark-500">${avgLabel}: <span class="text-dark-300 font-medium">${avgValue}</span></div></div>`;
+        };
+
+        document.getElementById('sparkline-cost').innerHTML = buildStatCard(
+            sparklineSVG(costData, '#ef4444', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>',
+            'Расход всего', formatRUB(totalCost)
+        );
+        document.getElementById('sparkline-ctr').innerHTML = buildStatCard(
+            sparklineSVG(ctrData, '#22c55e', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>',
+            'CTR средний', avgCtr.toFixed(2) + '%'
+        );
+        document.getElementById('sparkline-orders').innerHTML = buildStatCard(
+            sparklineSVG(ordersData, '#3b82f6', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>',
+            'Заказов всего', totalOrders.toString()
+        );
     }
 
     async function renderCampaignDecisions(campaignId) {
