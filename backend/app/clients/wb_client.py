@@ -251,7 +251,7 @@ class WBPromotionClient:
 
     async def get_campaign_stats(
         self, advert_id: int, nm_id: int, from_date: str, to_date: str
-    ) -> dict[str, Any]:
+    ) -> list[dict[str, Any]]:
         """POST /adv/v1/normquery/stats — campaign aggregate + cluster breakdown.
 
         Returns one dict per date:
