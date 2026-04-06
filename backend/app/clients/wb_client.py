@@ -760,7 +760,7 @@ class WBPromotionClient:
             "placement_types": placement_list,
             "nm_ids": nm_ids,
             "nm_count": nm_count,
-            "current_bid": max_bid if max_bid > 0 else None,
+            "current_bid": max_bid / 100 if max_bid > 0 else None,
             "created_at": ts.get("created"),
             "started_at": ts.get("started"),
             "updated_at": ts.get("updated"),
