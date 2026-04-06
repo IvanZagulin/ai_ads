@@ -73,8 +73,16 @@ class WBPromotionClient:
                     f"WB details error: {resp.status_code}, {resp.text[:300]}"
                 )
                 continue
-            for c in resp.json().get("adverts", []):
-                results.append(self._normalize(c))
+            raw_list = resp.json().get("adverts", [])
+            # Fetch budgets for this chunk in parallel
+            budgets = await self._fetch_budgets_for_chunk(chunk)
+            budget_map = {b["campaign_id"]: b for b in budgets}
+            for c in raw_list:
+                norm = self._normalize(c)
+                wb_id = c.get("id")
+                if wb_id and wb_id in budget_map:
+                    norm["daily_budget"] = budget_map[wb_id].get("total")
+                results.append(norm)
         return results
 
     async def start_campaign(self, advert_id: int) -> int:
@@ -462,6 +470,24 @@ class WBPromotionClient:
     # FINANCES
     # ------------------------------------------------------------------ #
 
+    async def _fetch_budgets_for_chunk(self, campaign_ids: list[int]) -> list[dict[str, Any]]:
+        """Fetch budgets for a list of campaign IDs in parallel (non-blocking)."""
+        results: list[dict[str, Any]] = []
+        async with httpx.AsyncClient() as client:
+            tasks = []
+            for cid in campaign_ids:
+                await self._rate_limiter.acquire()
+                url = f"{self.base_url}/adv/v1/budget"
+                tasks.append(client.get(url, headers=self._headers(), params={"id": cid}, timeout=15.0))
+            responses = await asyncio.gather(*tasks, return_exceptions=True)
+            for cid, resp in zip(campaign_ids, responses):
+                if isinstance(resp, Exception) or resp.status_code != 200:
+                    logger.debug(f"Budget fetch failed for campaign {cid}")
+                    continue
+                data = resp.json()
+                results.append({"campaign_id": cid, **data})
+        return results
+
     async def get_balance(self) -> dict[str, Any]:
         """GET /adv/v1/balance — account balance, netting, bonuses."""
         await self._wait_rate_limit()
@@ -715,6 +741,15 @@ class WBPromotionClient:
         nm_ids = [nm.get("nm_id") for nm in nm_settings if nm.get("nm_id")]
         nm_count = len(nm_settings)
 
+        # Extract bids from nm_settings[].bids_kopecks (values in kopecks, convert to kopecks as-is)
+        # For unified: bids are the same for all placements
+        # We take max bid across all nm_settings and placements
+        max_bid = 0
+        for nm in nm_settings or []:
+            for bk in (nm.get("bids_kopecks") or {}).values():
+                if bk and bk > max_bid:
+                    max_bid = bk
+
         return {
             "wb_adv_id": raw.get("id"),
             "name": settings_data.get("name", ""),
@@ -725,6 +760,7 @@ class WBPromotionClient:
             "placement_types": placement_list,
             "nm_ids": nm_ids,
             "nm_count": nm_count,
+            "current_bid": max_bid if max_bid > 0 else None,
             "created_at": ts.get("created"),
             "started_at": ts.get("started"),
             "updated_at": ts.get("updated"),
