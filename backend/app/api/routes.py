@@ -497,15 +497,18 @@ async def get_campaign_detail(campaign_id: int) -> Any:
         from app.schemas.schemas import KeywordResponse
 
         kw_responses = []
+        today = date.today()
+        seven_days_ago = today - timedelta(days=7)
+
         for kw in campaign.keywords:
-            total_impr = sum(s.impressions for s in kw.stats if s.impressions)
-            total_cl = sum(s.clicks for s in kw.stats if s.clicks)
-            total_ct = sum(s.cost or 0 for s in kw.stats if s.cost is not None)
+            last_7 = [s for s in kw.stats if s.date and s.date >= seven_days_ago]
+            total_impr = sum(s.impressions for s in last_7 if s.impressions)
+            total_cl = sum(s.clicks for s in last_7 if s.clicks)
+            total_ct = sum(s.cost or 0 for s in last_7 if s.cost is not None)
             kw_ctr = (total_cl / total_impr * 100) if total_impr > 0 else None
 
-            # Legacy stats format for old frontend (reads kw.stats[0].impressions, etc.)
+            # Stats array: all available records sorted by date desc (for chart/tab)
             sorted_stats = sorted(kw.stats, key=lambda s: s.date, reverse=True)
-            latest_kw_stats = sorted_stats[0] if sorted_stats else None
             stats_compat = [{
                 "impressions": s.impressions or 0,
                 "clicks": s.clicks or 0,
@@ -513,7 +516,7 @@ async def get_campaign_detail(campaign_id: int) -> Any:
                 "cost": s.cost,
                 "orders": s.orders or 0,
                 "date": s.date.isoformat() if s.date else None,
-            } for s in sorted_stats[:7]]
+            } for s in sorted_stats]
 
             kw_responses.append(KeywordResponse(
                 id=kw.id,

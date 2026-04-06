@@ -73,10 +73,10 @@ async def collect_wb_data(self, account_id: int) -> dict[str, Any]:
                 if campaign is None:
                     continue
 
-                # Process daily cluster stats from /adv/v1/normquery/stats
+                # Process daily stats from /adv/v1/normquery/stats
                 daily_stats = camp_data.get("daily_stats", [])
-                for stat in daily_stats:
-                    stat_date_str = stat.get("date", "")
+                for day_entry in daily_stats:
+                    stat_date_str = day_entry.get("date", "")
                     if not stat_date_str:
                         continue
                     try:
@@ -84,30 +84,32 @@ async def collect_wb_data(self, account_id: int) -> dict[str, Any]:
                     except ValueError:
                         continue
 
-                    # Upsert campaign-level daily stats
+                    # Upsert campaign-level daily stats (aggregate of all clusters)
                     await _upsert_campaign_stats(session, campaign, stat_date, {
-                        "views": stat.get("views", 0),
-                        "clicks": stat.get("clicks", 0),
-                        "sum": stat.get("spend", 0),
-                        "orders": stat.get("orders", 0),
-                        "ctr": stat.get("ctr"),
+                        "views": day_entry.get("views", 0),
+                        "clicks": day_entry.get("clicks", 0),
+                        "sum": day_entry.get("spend", 0),
+                        "orders": day_entry.get("orders", 0),
+                        "ctr": day_entry.get("ctr"),
                     })
                     saved_stats += 1
 
-                    # Upsert keyword/cluster-level stats
-                    norm_query = stat.get("normQuery", "")
-                    if norm_query:
+                    # Upsert keyword/cluster-level stats from cluster breakdown
+                    for cluster in day_entry.get("clusters", []):
+                        cluster_text = cluster.get("text", "")
+                        if not cluster_text:
+                            continue
                         kw = await _upsert_keyword(session, campaign, {
-                            "text": norm_query,
-                            "cluster_id": norm_query,
+                            "text": cluster_text,
+                            "cluster_id": cluster_text,
                         })
                         await _upsert_keyword_stats(session, kw, stat_date, {
-                            "views": stat.get("views", 0),
-                            "clicks": stat.get("clicks", 0),
-                            "ctr": stat.get("ctr"),
-                            "orders": stat.get("orders", 0),
-                            "sum": stat.get("spend", 0),
-                            "avgPosition": stat.get("avgPos"),
+                            "views": cluster.get("views", 0),
+                            "clicks": cluster.get("clicks", 0),
+                            "ctr": cluster.get("ctr"),
+                            "orders": cluster.get("orders", 0),
+                            "sum": cluster.get("spend", 0),
+                            "avgPosition": cluster.get("avgPos"),
                         })
                         saved_keywords += 1
 

@@ -251,12 +251,21 @@ class WBPromotionClient:
 
     async def get_campaign_stats(
         self, advert_id: int, nm_id: int, from_date: str, to_date: str
-    ) -> list[dict[str, Any]]:
-        """POST /adv/v1/normquery/stats — daily cluster-level stats.
+    ) -> dict[str, Any]:
+        """POST /adv/v1/normquery/stats — campaign aggregate + cluster breakdown.
 
-        Returns list of daily stat dicts:
-        [{"date": "2026-01-27", "normQuery": "...", "views": N, "clicks": N,
-          "ctr": N, "orders": N, "spend": N, "cpc": N, "cpm": N, "avgPos": N, ...}]
+        Returns one dict per date:
+        {
+            "date": "2026-04-05",
+            "nmId": 123, "advertId": 456,
+            # campaign aggregate
+            "views": 330, "clicks": 18, "ctr": 5.45, "spend": 136.16, "orders": 0,
+            # per-cluster breakdown
+            "clusters": [
+                {"text": "...", "views": 93, "clicks": 4, "ctr": 4.30, "spend": 39.06},
+                ...
+            ]
+        }
         """
         url = f"{self.base_url}/adv/v1/normquery/stats"
         body = {
@@ -276,11 +285,36 @@ class WBPromotionClient:
                 results = []
                 for item in data.get("items") or []:
                     for day_stat in item.get("dailyStats", []):
-                        stat = day_stat.get("stat", {})
-                        stat["date"] = day_stat.get("date", "")
-                        stat["nmId"] = item.get("nmId")
-                        stat["advertId"] = item.get("advertId")
-                        results.append(stat)
+                        aggr = day_stat.get("stat", {})
+                        clusters_raw = day_stat.get("clusterStats", [])
+                        cluster_list = []
+                        for c in clusters_raw:
+                            cluster_list.append({
+                                "text": c.get("text", ""),
+                                "views": c.get("views", 0),
+                                "clicks": c.get("clicks", 0),
+                                "ctr": c.get("ctr"),
+                                "spend": c.get("spend", 0),
+                                "cpc": c.get("cpc"),
+                                "cpm": c.get("cpm"),
+                                "orders": c.get("orders", 0),
+                                "avgPos": c.get("avgPos"),
+                            })
+                        entry = {
+                            "date": day_stat.get("date", ""),
+                            "nmId": item.get("nmId"),
+                            "advertId": item.get("advertId"),
+                            "views": aggr.get("views", 0),
+                            "clicks": aggr.get("clicks", 0),
+                            "ctr": aggr.get("ctr"),
+                            "spend": aggr.get("sum", aggr.get("spend", 0)),
+                            "orders": aggr.get("orders", 0),
+                            "cpc": aggr.get("cpc"),
+                            "cpm": aggr.get("cpm"),
+                            "showPercent": aggr.get("showPercent"),
+                            "clusters": cluster_list,
+                        }
+                        results.append(entry)
                 return results
             if resp.status_code == 429 and attempt < max_retries:
                 import random
@@ -288,8 +322,8 @@ class WBPromotionClient:
                 await asyncio.sleep(wait)
                 continue
             logger.warning(f"get_campaign_stats {advert_id}/{nm_id}: {resp.status_code}")
-            return []
-        return []
+            return {}
+        return {}
 
     async def get_cluster_stats(
         self, advert_id: int, nm_id: int, from_date: str, to_date: str
@@ -349,12 +383,32 @@ class WBPromotionClient:
             clusters = await self.get_clusters(adv_id)
             camp["clusters"] = clusters
 
-            # Fetch daily stats for each NM
-            all_daily = []
-            for nm_id in nm_ids[:3]:  # limit to first 3 NM IDs to avoid spam
+            # Fetch daily stats for each NM (aggregate + cluster breakdown)
+            all_daily = {}  # keyed by date
+            for nm_id in nm_ids[:5]:
                 daily = await self.get_campaign_stats(adv_id, nm_id, from_date, to_date)
-                all_daily.extend(daily)
-            camp["daily_stats"] = all_daily
+                if isinstance(daily, list):
+                    for d in daily:
+                        dt = d.get("date", "")
+                        if dt and dt not in all_daily:
+                            all_daily[dt] = d
+                        elif dt:
+                            # Merge: sum aggregates, merge clusters
+                            existing = all_daily[dt]
+                            for key in ("views", "clicks", "spend", "orders"):
+                                existing[key] = existing.get(key, 0) + d.get(key, 0)
+                            existing_cls = {c["text"]: c for c in existing.get("clusters", [])}
+                            for c in d.get("clusters", []):
+                                txt = c["text"]
+                                if txt in existing_cls:
+                                    for k in ("views", "clicks", "spend"):
+                                        existing_cls[txt][k] = existing_cls[txt].get(k, 0) + c.get(k, 0)
+                                else:
+                                    existing_cls[txt] = c.copy()
+                            existing["clusters"] = list(existing_cls.values())
+                await asyncio.sleep(0.3)
+
+            camp["daily_stats"] = list(all_daily.values())
             await asyncio.sleep(0.5)
 
         return campaigns
