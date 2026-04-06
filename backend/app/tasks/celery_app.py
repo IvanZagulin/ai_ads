@@ -12,6 +12,12 @@ class AsyncTask(Task):
     def __call__(self, *args, **kwargs):
         result = self.run(*args, **kwargs)
         if asyncio.iscoroutine(result):
+            try:
+                loop = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = None
+            if loop is not None:
+                return loop.run_until_complete(result)
             return asyncio.run(result)
         return result
 
