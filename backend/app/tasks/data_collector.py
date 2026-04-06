@@ -453,7 +453,8 @@ async def collect_wb_data_all_accounts() -> dict[str, Any]:
 
     for account in accounts:
         if account.platform == "wildberries":
-            results[str(account.id)] = await collect_wb_data(account.id)
+            # collect_wb_data is a celery task, AsyncTask.__call__ handles async
+            results[str(account.id)] = collect_wb_data(account.id)
 
     return results
 
@@ -466,6 +467,6 @@ async def collect_ozon_data_all_accounts() -> dict[str, Any]:
 
     for account in accounts:
         if account.platform == "ozon":
-            results[str(account.id)] = await collect_ozon_data(account.id)
+            results[str(account.id)] = collect_ozon_data(account.id)
 
     return results
