@@ -154,11 +154,16 @@ async def _find_or_create_wb_campaign(
             account_id=account_id,
             platform_campaign_id=platform_id,
             platform="wildberries",
-            campaign_type=data.get("bid_type", "search"),
+            campaign_type=data.get("campaign_type", "search"),
             status=data.get("status", "active"),
             name=data.get("name", f"WB Campaign {platform_id}"),
             daily_budget=data.get("daily_budget"),
             current_bid=data.get("current_bid"),
+            nm_ids=data.get("nm_ids") or [],
+            wb_status=data.get("wb_status"),
+            wb_bid_type=data.get("bid_type"),
+            wb_payment_type=data.get("payment_type"),
+            wb_placement_types=data.get("placement_types"),
         )
         session.add(campaign)
     else:
@@ -168,6 +173,16 @@ async def _find_or_create_wb_campaign(
             campaign.current_bid = data["current_bid"]
         if data.get("daily_budget") is not None:
             campaign.daily_budget = data["daily_budget"]
+        if data.get("nm_ids") is not None:
+            campaign.nm_ids = data["nm_ids"]
+        if data.get("wb_status") is not None:
+            campaign.wb_status = data["wb_status"]
+        if data.get("bid_type") is not None:
+            campaign.wb_bid_type = data["bid_type"]
+        if data.get("payment_type") is not None:
+            campaign.wb_payment_type = data["payment_type"]
+        if data.get("placement_types") is not None:
+            campaign.wb_placement_types = data["placement_types"]
         campaign.updated_at = datetime.now(timezone.utc)
 
     await session.flush()

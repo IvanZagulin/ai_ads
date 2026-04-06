@@ -54,6 +54,10 @@ class Campaign(BaseModel):
     name: Mapped[str] = mapped_column(String(500), nullable=False)
     daily_budget: Mapped[float | None] = mapped_column(Double, nullable=True)
     current_bid: Mapped[float | None] = mapped_column(Double, nullable=True)
+    wb_bid_type: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    wb_payment_type: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    wb_placement_types: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
+    wb_status: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
