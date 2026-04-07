@@ -16,7 +16,6 @@
         document.documentElement.style.setProperty('--text-1', '#e0e4ec');
         document.documentElement.style.setProperty('--text-2', '#8b92a8');
         document.documentElement.style.setProperty('--text-3', '#6b7290');
-
         tailwind.config = {
             darkMode: 'class',
             fontFamily: {
@@ -45,13 +44,11 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
         /* ── scrollbar ── */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: hsla(228,25%,16%,.3); border-radius: 3px; }
         ::-webkit-scrollbar-thumb { background: hsla(225,14%,58%,.3); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: hsla(225,14%,58%,.6); }
-
         /* ── keyframes ── */
         @keyframes fadeIn     { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp   { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
@@ -63,22 +60,18 @@
         @keyframes spin       { to { transform: rotate(360deg); } }
         @keyframes shimmer    { from { transform: translateX(-100%); } to { transform: translateX(200%); } }
         @keyframes numberIn   { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-
         /* ── animations ── */
         .animate-fade-in  { animation: fadeIn .35s ease-out both; }
         .animate-fade-in-up { animation: fadeInUp 0.3s ease backwards; }
         .animate-slide-in { animation: slideIn 0.3s ease-out both; }
         .pulse-dot        { animation: pulse-dot 2s ease-in-out infinite; }
         .spin             { animation: spin 1s linear infinite; }
-
         /* ── nav links (Quasar-X glow) ── */
         .nav-link.active {
-            color: var(--neon);
-            font-weight: 600;
-            background: var(--neon-glow);
-            margin-left: -3px;
-            padding-left: 6px;
-            position: relative;
+            color: var(--neon) !important;
+            font-weight: 600 !important;
+            background: var(--neon-glow) !important;
+            position: relative !important;
         }
         .nav-link.active::before {
             content: '';
@@ -88,40 +81,47 @@
             transform: translateY(-50%);
             width: 3px;
             height: 70%;
-            background: var(--neon);
+            background: var(--neon) !important;
             border-radius: 2px;
         }
         .nav-link {
             transition: all 0.15s ease-out;
-            position: relative;
+            position: relative !important;
         }
         .nav-link:not(.active):hover {
-            color: var(--neon);
-            background: var(--neon-glow);
+            color: var(--neon) !important;
+            background: var(--neon-glow) !important;
         }
-
+        .nav-link:not(.active) {
+            color: var(--text-2) !important;
+        }
+        .nav-link:not(.active):hover {
+            color: var(--neon) !important;
+            background: var(--neon-glow) !important;
+        }
         /* ── sections ── */
         .section-content { display: none; }
         .section-content.active { display: block; }
-
         /* ── cards ── */
         .card {
-            border-radius: 14px;
-            background: hsl(228 30% 11%);
-            border: 1px solid hsla(228,20%,18%,1);
+            border-radius: 14px !important;
+            background: hsl(228 30% 11%) !important;
+            border: 1px solid hsla(228,20%,18%,1) !important;
             box-shadow: 0 8px 32px rgba(0,200,255,.06);
             transition: box-shadow .3s, transform .3s;
         }
-        .card-hover { transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow .3s; }
-        .card-hover:hover {
-            border-color: var(--neon-dim);
-            box-shadow: 0 8px 32px rgba(0,200,255,.12);
-            transform: translateY(-2px);
+        .card-hover {
+            transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow .3s;
+            border: 1px solid hsla(228,20%,18%,1) !important;
+            transform: none;
         }
-
+        .card-hover:hover {
+            border-color: var(--neon-dim) !important;
+            box-shadow: 0 8px 32px rgba(0,200,255,.12) !important;
+            transform: translateY(-2px) !important;
+        }
         /* ── stat numbers ── */
         .stat-number { animation: numberIn 0.4s ease backwards; animation-delay: 0.1s; }
-
         /* ── badge ── */
         .badge {
             display: inline-flex;
@@ -136,7 +136,6 @@
         .badge-warning { background: rgba(245,158,11,.15); color: #fbbf24; }
         .badge-error   { background: rgba(239,68,68,.15);  color: #f87171; }
         .badge-info    { background: rgba(0,200,255,.12);   color: #00c8ff; }
-
         /* ── neon gradient text ── */
         .neon-gradient {
             background: linear-gradient(135deg, var(--neon), var(--accent-blue), var(--electric));
@@ -144,7 +143,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         /* ── glow dot ── */
         .glow-dot {
             width: 8px; height: 8px;
@@ -154,7 +152,6 @@
             box-shadow: 0 0 8px var(--neon-dim);
         }
         .glow-dot.off { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,.3); }
-
         /* ── modal ── */
         .modal-backdrop {
             background: rgba(0,0,0,0.5);
@@ -163,10 +160,8 @@
         }
         details > summary { list-style: none; cursor: pointer; }
         details > summary::-webkit-details-marker { display: none; }
-
         /* ── sparkline ── */
         .sparkline { width: 60px; height: 24px; }
-
         /* ── toggle switch ── */
         .toggle-switch {
             width: 40px; height: 22px;
@@ -190,7 +185,6 @@
         }
         .toggle-switch.on::after { left: 20px; }
         .toggle-switch.off { background: #475569; }
-
         /* ── campaign card (like product-card from repraiser) ── */
         .campaign-card {
             border-radius: 14px;
@@ -220,7 +214,6 @@
             opacity: 1;
             transform: translateX(0);
         }
-
         /* ── run-row ── */
         .run-row {
             display: flex;
@@ -237,7 +230,6 @@
             background: var(--neon-glow);
             border-color: var(--neon-dim);
         }
-
         /* ── tab buttons ── */
         .tab-btn { transition: all 0.15s ease; cursor: pointer; }
         .tab-btn:hover { color: #e0e4ec !important; }
@@ -245,7 +237,6 @@
             color: #fff !important;
             border-bottom-color: var(--neon) !important;
         }
-
         /* ── skeletons for loading ── */
         .skeleton {
             background: hsl(228 25% 16%);
@@ -261,22 +252,28 @@
             background: linear-gradient(90deg, transparent, hsl(228 30% 11%), transparent);
             animation: shimmer 1.5s ease-in-out infinite;
         }
-
-        /* ── page heading ── */
-        .page-h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
+        /* ── input styling ── */
+        .input-style {
+            background: hsl(225 30% 14%) !important;
+            border: 1px solid hsla(228,20%,18%,1) !important;
+            border-radius: 8px !important;
+            color: var(--text-1);
+            padding: 0.375rem 0.75rem !important;
+            font-size: 0.8125rem !important;
+            transition: border-color 0.15s ease;
         }
-
-        /* ── logo gradient text ── */
-        .logo-gradient-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            letter-spacing: .06em;
+        .input-style:focus {
+            outline: none !important;
+            border-color: var(--neon-dim) !important;
         }
-
-        /* ── global transitions ── */
+        /* ── border utility ── */
+        .border-border { border-color: hsla(228,20%,18%,1) !important; }
+        .divide-border > * + * { border-color: hsla(228,20%,18%,1) !important; }
+        .divide-y { --tw-divide-y-reverse: 0; border-top: 1px solid hsla(228,20%,18%,.4); border-bottom: 0; }
+        /* ── header ── */
+        header {
+            background: hsla(224, 71%, 3%, 0.85) !important;
+        }
         *, *::before, *::after {
             transition:
                 background-color 0.15s ease,
@@ -288,7 +285,7 @@
 <body class="bg-dark-950 text-dark-200 min-h-screen font-sans antialiased" style="font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;">
     <div id="app" class="flex flex-col min-h-screen">
         <!-- Top Navbar -->
-        <header class="border-b /80 bg-dark-950/90 backdrop-blur-sm sticky top-0 z-50">
+        <header class="border-b border-border sticky top-0 z-50">
             <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-14">
                     <div class="flex items-center gap-8">
@@ -302,20 +299,20 @@
                         </div>
                         <nav class="flex items-center gap-1" id="nav-links">
                             <a href="#" data-section="dashboard" class="nav-link active px-3 py-2 text-sm font-medium rounded-lg">Главная</a>
-                            <a href="#" data-section="campaigns" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Кампании</a>
-                            <a href="#" data-section="analytics" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Аналитика</a>
-                            <a href="#" data-section="recommendations" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Рекомендации</a>
-                            <a href="#" data-section="actions" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Действия</a>
-                            <a href="#" data-section="rules" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Правила</a>
-                            <a href="#" data-section="settings" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Настройки</a>
+                            <a href="#" data-section="campaigns" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Кампании</a>
+                            <a href="#" data-section="analytics" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Аналитика</a>
+                            <a href="#" data-section="recommendations" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Рекомендации</a>
+                            <a href="#" data-section="actions" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Действия</a>
+                            <a href="#" data-section="rules" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Правила</a>
+                            <a href="#" data-section="settings" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Настройки</a>
                         </nav>
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="flex items-center gap-2 px-3 py-1.5 rounded-full card border /50" id="health-indicator">
                             <span class="w-2 h-2 rounded-full bg-dark-500 pulse-dot" id="health-dot"></span>
-                            <span class="text-xs text-dark-400" id="health-text">Проверка...</span>
+                            <span class="text-xs" id="health-text">Проверка...</span>
                         </div>
-                        <button id="btn-trigger-analysis" class="inline-flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.97]">
+                        <button id="btn-trigger-analysis" class="inline-flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/25 active:scale-[0.97]">
                             <svg id="trigger-spinner" class="w-4 h-4 hidden spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                             <span class="hidden sm:inline">Оптимизация</span>
                         </button>
@@ -323,30 +320,27 @@
                 </div>
             </div>
         </header>
-
         <!-- Toast Container -->
         <div id="toast-container" class="fixed top-16 right-4 z-50 flex flex-col gap-2 max-w-sm"></div>
-
         <!-- Main Content -->
         <main class="flex-1 flex flex-col">
             <div class="max-w-screen-2xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
-
                 <!-- ===== DASHBOARD ===== -->
                 <section id="section-dashboard" class="section-content active">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8" id="summary-cards">
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Кампаний</span>
+                                <span class="text-xs uppercase tracking-wider font-medium">Кампаний</span>
                                 <div class="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25z"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-total-campaigns">—</div>
-                            <div class="text-xs text-dark-400 mt-1" id="stat-campaigns-delta"></div>
+                            <div class="text-xs mt-1" id="stat-campaigns-delta"></div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Расход сегодня</span>
+                                <span class="text-xs uppercase tracking-wider font-medium">Расход сегодня</span>
                                 <div class="w-8 h-8 rounded-xl bg-red-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 </div>
@@ -355,7 +349,7 @@
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Клики</span>
+                                <span class="text-xs uppercase tracking-wider font-medium">Клики</span>
                                 <div class="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834-1.66l-1.591 1.591M2.25 12h3.5m12.678 0H14.5m.566 5.882l1.591-1.591M4.75 18.364l1.591-1.591"/></svg>
                                 </div>
@@ -364,7 +358,7 @@
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Заказы</span>
+                                <span class="text-xs uppercase tracking-wider font-medium">Заказы</span>
                                 <div class="w-8 h-8 rounded-xl bg-green-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
                                 </div>
@@ -373,7 +367,7 @@
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Рекомендации</span>
+                                <span class="text-xs uppercase tracking-wider font-medium">Рекомендации</span>
                                 <div class="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
                                 </div>
@@ -382,7 +376,7 @@
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Режим</span>
+                                <span class="text-xs uppercase tracking-wider font-medium">Режим</span>
                                 <div class="w-8 h-8 rounded-xl bg-purple-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.841m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312"/></svg>
                                 </div>
@@ -390,95 +384,91 @@
                             <div class="text-2xl font-bold text-white" id="stat-auto-mode">—</div>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                         <!-- Campaigns Table -->
                         <div class="lg:col-span-2 card animate-fade-in">
                             <div class="px-5 py-4 border-b flex items-center justify-between">
                                 <h2 class="text-sm font-semibold text-white">Кампании</h2>
                                 <div class="flex items-center gap-2">
-                                    <select id="filter-platform" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <select id="filter-platform" class="input-style  ">
                                         <option value="">Все платформы</option>
                                         <option value="wildberries">Wildberries</option>
                                         <option value="ozon">Ozon</option>
                                     </select>
-                                    <select id="filter-status" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <select id="filter-status" class="input-style  ">
                                         <option value="">Все статусы</option>
                                         <option value="active">Активные</option>
                                         <option value="paused">На паузе</option>
                                         <option value="completed">Завершённые</option>
                                     </select>
-                                    <button onclick="syncCampaigns()" class="text-xs px-3 py-1 bg-indigo-600/20 text-indigo-400 rounded-lg hover:bg-indigo-600/30 transition-all">↓ Импорт</button>
+                                    <button onclick="syncCampaigns()" class="text-xs px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-lg hover:bg-indigo-500/25 transition-all">↓ Импорт</button>
                                 </div>
                             </div>
                             <div class="overflow-x-auto" id="campaigns-body">
                                 <table class="w-full text-sm">
                                     <thead>
                                         <tr class="border-b">
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Название</th>
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Платформа</th>
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Статус</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">CTR</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Расход</th>
-                                            <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Тренд</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Название</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Платформа</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Статус</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">CTR</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Расход</th>
+                                            <th class="text-center px-4 py-2.5 text-xs font-medium uppercase">Тренд</th>
                                         </tr>
                                     </thead>
                                     <tbody id="table-campaigns"></tbody>
                                 </table>
                             </div>
                         </div>
-
                         <!-- Recent Recommendations -->
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b flex items-center justify-between">
                                 <h2 class="text-sm font-semibold text-white">Рекомендации</h2>
                                 <a href="#" data-section="recommendations" class="text-xs text-indigo-400 hover:text-indigo-300" onclick="event.preventDefault();navigateTo('recommendations')">Все →</a>
                             </div>
-                            <div class="divide-y divide-dark-800/40 max-h-96 overflow-y-auto" id="recent-recommendations"></div>
+                            <div class="divide-y border-border max-h-96 overflow-y-auto" id="recent-recommendations"></div>
                         </div>
                     </div>
-
                     <!-- Recent Actions Log -->
                     <div class="card animate-fade-in">
                         <div class="px-5 py-4 border-b flex items-center justify-between">
                             <h2 class="text-sm font-semibold text-white">Журнал действий</h2>
                             <a href="#" data-section="actions" class="text-xs text-indigo-400 hover:text-indigo-300" onclick="event.preventDefault();navigateTo('actions')">Все →</a>
                         </div>
-                        <div class="divide-y divide-dark-800/40 max-h-64 overflow-y-auto" id="recent-actions-log"></div>
+                        <div class="divide-y border-border max-h-64 overflow-y-auto" id="recent-actions-log"></div>
                     </div>
                 </section>
-
                 <!-- ===== CAMPAIGNS SECTION ===== -->
                 <section id="section-campaigns" class="section-content">
                     <div class="card animate-fade-in">
                         <div class="px-5 py-4 border-b flex items-center justify-between">
                             <h2 class="text-sm font-semibold text-white">Все кампании</h2>
                             <div class="flex items-center gap-2">
-                                <select id="filter-platform2" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <select id="filter-platform2" class="input-style  ">
                                     <option value="">Все платформы</option>
                                     <option value="wildberries">Wildberries</option>
                                     <option value="ozon">Ozon</option>
                                 </select>
-                                <select id="filter-status2" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <select id="filter-status2" class="input-style  ">
                                     <option value="">Все статусы</option>
                                     <option value="active">Активные</option>
                                     <option value="paused">На паузе</option>
                                     <option value="completed">Завершённые</option>
                                 </select>
-                                <button onclick="loadAllData()" class="text-xs px-3 py-1 bg-dark-800 border  rounded-lg hover:bg-card-fallback transition-all">Обновить</button>
+                                <button onclick="loadAllData()" class="text-xs px-3 py-1 input-style  rounded-lg hover:bg-card-fallback transition-all">Обновить</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="border-b">
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Название</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Платформа</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Тип</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Статус</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Бюджет</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Ставка</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">CTR</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Название</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Платформа</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Тип</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Статус</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Бюджет</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Ставка</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">CTR</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-campaigns-full"></tbody>
@@ -486,16 +476,14 @@
                         </div>
                     </div>
                 </section>
-
                 <!-- ===== CAMPAIGN DETAIL SECTION ===== -->
                 <section id="section-campaign-detail" class="section-content">
                     <div class="mb-6">
-                        <button onclick="navigateTo('campaigns')" class="inline-flex items-center gap-1.5 text-sm text-dark-400 hover:text-white transition-all">
+                        <button onclick="navigateTo('campaigns')" class="inline-flex items-center gap-1.5 text-sm hover:text-white transition-all">
                             <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25h11.25m0 0v11.25"/></svg>
                             Назад к кампаниям
                         </button>
                     </div>
-
                     <!-- Campaign Header Card -->
                     <div class="card animate-fade-in mb-6">
                         <div class="px-5 py-4 flex items-start justify-between flex-wrap gap-4">
@@ -513,47 +501,45 @@
                                     <div><span class="text-dark-400">Обновлено:</span> <span class="text-dark-300" id="detail-updated">—</span></div>
                                 </div>
                                 <div class="mt-2 flex items-center gap-3 flex-wrap">
-                                    <span class="text-xs text-dark-400" id="detail-period-info"></span>
-                                    <button onclick="toggleDateRangePicker()" class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-dark-800 border  rounded-lg text-dark-400 hover:text-dark-200 transition-colors">
+                                    <span class="text-xs" id="detail-period-info"></span>
+                                    <button onclick="toggleDateRangePicker()" class="inline-flex items-center gap-1 px-2 py-1 text-xs input-style  rounded-lg  transition-colors">
                                         📅 <span id="detail-date-label">7 дней</span>
                                     </button>
                                 </div>
                                 <div class="hidden mt-2 card-sm p-2" id="detail-date-range-panel">
                                     <div class="flex gap-2 mb-2 flex-wrap">
                                         <button onclick="applyPreset(1)" class="px-2 py-1 text-xs bg-indigo-600/30 text-indigo-300 rounded-lg hover:bg-indigo-600/50 transition-colors">1 день</button>
-                                        <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-card-fallback text-dark-300 rounded-lg hover:bg-dark-600 transition-colors">7 дней</button>
-                                        <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-card-fallback text-dark-300 rounded-lg hover:bg-dark-600 transition-colors">14 дней</button>
-                                        <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-card-fallback text-dark-300 rounded-lg hover:bg-dark-600 transition-colors">30 дней</button>
+                                        <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-card-fallback rounded-lg hover:bg-dark-600 transition-colors">7 дней</button>
+                                        <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-card-fallback rounded-lg hover:bg-dark-600 transition-colors">14 дней</button>
+                                        <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-card-fallback rounded-lg hover:bg-dark-600 transition-colors">30 дней</button>
                                     </div>
                                     <div class="flex gap-3 items-center">
-                                        <label class="text-xs text-dark-400 flex items-center gap-1">С: <input type="date" id="detail-date-from" class="bg-dark-800 border  rounded px-2 py-1 text-dark-200 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500" /></label>
-                                        <label class="text-xs text-dark-400 flex items-center gap-1">По: <input type="date" id="detail-date-to" class="bg-dark-800 border  rounded px-2 py-1 text-dark-200 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500" /></label>
+                                        <label class="text-xs flex items-center gap-1">С: <input type="date" id="detail-date-from" class="input-style  " /></label>
+                                        <label class="text-xs flex items-center gap-1">По: <input type="date" id="detail-date-to" class="input-style  " /></label>
                                         <button onclick="applyCustomDateRange()" class="px-2 py-1 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors">Применить</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2" id="detail-status-buttons">
-                                <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-600/20 text-green-400 rounded-xl hover:bg-green-600/30 transition-all">Старт</button>
-                                <button onclick="changeCampaignStatus('paused')" class="px-3 py-1.5 text-xs bg-amber-600/20 text-amber-400 rounded-xl hover:bg-amber-600/30 transition-all">Пауза</button>
-                                <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-card-fallback text-dark-300 rounded-xl hover:bg-dark-600 transition-all">Стоп</button>
+                                <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-500/20 text-green-400 rounded-xl hover:bg-green-500/25 transition-all">Старт</button>
+                                <button onclick="changeCampaignStatus('paused')" class="px-3 py-1.5 text-xs bg-amber-500/20 text-amber-400 rounded-xl hover:bg-amber-600/30 transition-all">Пауза</button>
+                                <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-card-fallback rounded-xl hover:bg-dark-600 transition-all">Стоп</button>
                             </div>
                         </div>
                     </div>
-
                     <!-- Tabs -->
                     <div class="card animate-fade-in mb-6">
                         <div class="px-5 border-b flex items-center gap-6">
-                            <button class="tab-btn px-3 py-3 text-sm font-medium text-dark-400 border-b-2 border-transparent active" data-tab="keywords" onclick="switchDetailTab('keywords', this)">Ключевые слова</button>
-                            <button class="tab-btn px-3 py-3 text-sm font-medium text-dark-400 border-b-2 border-transparent" data-tab="stats" onclick="switchDetailTab('stats', this)">Статистика</button>
-                            <button class="tab-btn px-3 py-3 text-sm font-medium text-dark-400 border-b-2 border-transparent" data-tab="decisions" onclick="switchDetailTab('decisions', this)">Решения ИИ</button>
+                            <button class="tab-btn px-3 py-3 text-sm font-medium border-b-2 border-transparent active" data-tab="keywords" onclick="switchDetailTab('keywords', this)">Ключевые слова</button>
+                            <button class="tab-btn px-3 py-3 text-sm font-medium border-b-2 border-transparent" data-tab="stats" onclick="switchDetailTab('stats', this)">Статистика</button>
+                            <button class="tab-btn px-3 py-3 text-sm font-medium border-b-2 border-transparent" data-tab="decisions" onclick="switchDetailTab('decisions', this)">Решения ИИ</button>
                         </div>
-
                         <!-- Keywords Tab -->
                         <div id="tab-keywords" class="tab-content">
                             <div class="px-5 py-3 border-b flex items-center justify-between">
-                                <h3 class="text-sm font-medium text-dark-300">Ключевые слова и кластеры</h3>
+                                <h3 class="text-sm font-medium">Ключевые слова и кластеры</h3>
                                 <div class="flex items-center gap-2">
-                                    <select id="kw-filter-status" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <select id="kw-filter-status" class="input-style  ">
                                         <option value="">Все статусы</option>
                                         <option value="active">Активные</option>
                                         <option value="minus">Минусованные</option>
@@ -565,76 +551,72 @@
                                 <table class="w-full text-sm">
                                     <thead>
                                         <tr class="border-b">
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Кластер</th>
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Статус</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Ставка</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Показы</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Клики</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">CTR</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Расход</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Заказы</th>
-                                            <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Действия</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Кластер</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Статус</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Ставка</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Показы</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Клики</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">CTR</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Расход</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Заказы</th>
+                                            <th class="text-center px-4 py-2.5 text-xs font-medium uppercase">Действия</th>
                                         </tr>
                                     </thead>
                                     <tbody id="table-keywords"></tbody>
                                 </table>
                             </div>
                         </div>
-
                         <!-- Stats Tab -->
                         <div id="tab-stats" class="tab-content hidden px-5 py-6">
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 <div>
-                                    <h4 class="text-sm font-medium text-dark-300 mb-3">Расход за период</h4>
+                                    <h4 class="text-sm font-medium mb-3">Расход за период</h4>
                                     <div class="bg-dark-950 border rounded-xl p-4">
                                         <div id="sparkline-cost" class="w-full h-32" style="min-height: 128px;"></div>
                                     </div>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-medium text-dark-300 mb-3">CTR за период</h4>
+                                    <h4 class="text-sm font-medium mb-3">CTR за период</h4>
                                     <div class="bg-dark-950 border rounded-xl p-4">
                                         <div id="sparkline-ctr" class="w-full h-32" style="min-height: 128px;"></div>
                                     </div>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-medium text-dark-300 mb-3">Заказы за период</h4>
+                                    <h4 class="text-sm font-medium mb-3">Заказы за период</h4>
                                     <div class="bg-dark-950 border rounded-xl p-4">
                                         <div id="sparkline-orders" class="w-full h-32" style="min-height: 128px;"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <!-- Decisions Tab -->
                         <div id="tab-decisions" class="tab-content hidden px-5 py-6">
                             <div id="detail-decisions-list" class="space-y-3"></div>
                         </div>
                     </div>
                 </section>
-
                 <!-- ===== ANALYTICS SECTION ===== -->
                 <section id="section-analytics" class="section-content">
                     <!-- Overview Cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div class="card p-4 card-hover animate-fade-in">
-                            <div class="text-xs uppercase tracking-wider text-dark-400 mb-2">Общий CTR</div>
+                            <div class="text-xs uppercase tracking-wider mb-2">Общий CTR</div>
                             <div class="text-2xl font-bold text-white" id="analytics-ctr">—</div>
                             <div class="text-xs mt-1" id="analytics-ctr-delta"></div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
-                            <div class="text-xs uppercase tracking-wider text-dark-400 mb-2">Общий расход</div>
+                            <div class="text-xs uppercase tracking-wider mb-2">Общий расход</div>
                             <div class="text-2xl font-bold text-white" id="analytics-cost">—</div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
-                            <div class="text-xs uppercase tracking-wider text-dark-400 mb-2">Общие заказы</div>
+                            <div class="text-xs uppercase tracking-wider mb-2">Общие заказы</div>
                             <div class="text-2xl font-bold text-white" id="analytics-orders">—</div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
-                            <div class="text-xs uppercase tracking-wider text-dark-400 mb-2">Ключевых слов</div>
+                            <div class="text-xs uppercase tracking-wider mb-2">Ключевых слов</div>
                             <div class="text-2xl font-bold text-white" id="analytics-keywords">—</div>
                         </div>
                     </div>
-
                     <!-- Charts -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="card animate-fade-in">
@@ -646,12 +628,11 @@
                             <div class="p-5" id="chart-ctr-bars"></div>
                         </div>
                     </div>
-
                     <!-- Campaign Stats Table -->
                     <div class="card animate-fade-in">
                         <div class="px-5 py-4 border-b flex items-center justify-between">
                             <h2 class="text-sm font-semibold text-white">Статистика по кампаниям за последние дни</h2>
-                            <select id="analytics-platform" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                            <select id="analytics-platform" class="input-style  ">
                                 <option value="">Все платформы</option>
                                 <option value="wildberries">Wildberries</option>
                                 <option value="ozon">Ozon</option>
@@ -661,14 +642,14 @@
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="border-b">
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Кампания</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Дата</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Показы</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Клики</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">CTR</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Расход</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Заказы</th>
-                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Тренд</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Кампания</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Дата</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Показы</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Клики</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">CTR</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Расход</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Заказы</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium uppercase">Тренд</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-analytics-stats"></tbody>
@@ -676,13 +657,12 @@
                         </div>
                     </div>
                 </section>
-
                 <!-- ===== RECOMMENDATIONS SECTION ===== -->
                 <section id="section-recommendations" class="section-content">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-lg font-semibold text-white">Рекомендации ИИ</h2>
                         <div class="flex items-center gap-2">
-                            <select id="rec-filter-status" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                            <select id="rec-filter-status" class="input-style  ">
                                 <option value="">Все статусы</option>
                                 <option value="pending">Ожидает</option>
                                 <option value="executed">Выполнено</option>
@@ -692,14 +672,13 @@
                     </div>
                     <div class="grid gap-4" id="all-recommendations"></div>
                 </section>
-
                 <!-- ===== ACTIONS SECTION ===== -->
                 <section id="section-actions" class="section-content">
                     <div class="card animate-fade-in">
                         <div class="px-5 py-4 border-b flex items-center justify-between">
                             <h2 class="text-sm font-semibold text-white">Журнал действий</h2>
                             <div class="flex items-center gap-2">
-                                <select id="action-filter-type" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <select id="action-filter-type" class="input-style  ">
                                     <option value="">Все типы</option>
                                     <option value="raise_bid">Повысить ставку</option>
                                     <option value="lower_bid">Понизить ставку</option>
@@ -708,7 +687,7 @@
                                     <option value="create_search_campaign">Создать кампанию</option>
                                     <option value="adjust_price">Скорректировать цену</option>
                                 </select>
-                                <select id="action-filter-status" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <select id="action-filter-status" class="input-style  ">
                                     <option value="">Все статусы</option>
                                     <option value="success">Успешно</option>
                                     <option value="pending">Ожидает</option>
@@ -720,11 +699,11 @@
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="border-b">
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Тип</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Параметры</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Статус</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Время</th>
-                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Детали</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Тип</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Параметры</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Статус</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Время</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium uppercase">Детали</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-actions"></tbody>
@@ -732,17 +711,15 @@
                         </div>
                     </div>
                 </section>
-
                 <!-- ===== RULES SECTION ===== -->
                 <section id="section-rules" class="section-content">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-lg font-semibold text-white">Правила оптимизации</h2>
-                        <button onclick="showAddRuleModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600/20 text-indigo-400 text-sm rounded-xl hover:bg-indigo-600/30 transition-all">
+                        <button onclick="showAddRuleModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-500/20 text-indigo-400 text-sm rounded-xl hover:bg-indigo-500/25 transition-all">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                             Добавить правило
                         </button>
                     </div>
-
                     <!-- Default rules table from diploma -->
                     <div class="card animate-fade-in mb-6">
                         <div class="px-5 py-4 border-b">
@@ -752,12 +729,12 @@
                             <table class="w-full text-sm">
                                 <thead>
                                     <tr class="border-b">
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Название</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Платформа</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Описание</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Параметры</th>
-                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Активно</th>
-                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Действия</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Название</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Платформа</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium uppercase">Описание</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium uppercase">Параметры</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium uppercase">Активно</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium uppercase">Действия</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-rules"></tbody>
@@ -765,7 +742,6 @@
                         </div>
                     </div>
                 </section>
-
                 <!-- ===== SETTINGS SECTION ===== -->
                 <section id="section-settings" class="section-content">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -777,55 +753,52 @@
                             <div class="p-5">
                                 <form id="form-add-account" class="space-y-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-dark-300 mb-1">Платформа</label>
-                                        <select id="acc-platform" required class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <label class="block text-sm font-medium mb-1">Платформа</label>
+                                        <select id="acc-platform" required class="w-full input-style  ">
                                             <option value="wildberries">Wildberries</option>
                                             <option value="ozon">Ozon</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-dark-300 mb-1">Название</label>
-                                        <input type="text" id="acc-name" required placeholder="Мой магазин" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <label class="block text-sm font-medium mb-1">Название</label>
+                                        <input type="text" id="acc-name" required placeholder="Мой магазин" class="w-full input-style   ">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-dark-300 mb-1">Токен WB API</label>
-                                        <input type="text" id="acc-token" placeholder="Вставьте токен из ЛК WB" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <label class="block text-sm font-medium mb-1">Токен WB API</label>
+                                        <input type="text" id="acc-token" placeholder="Вставьте токен из ЛК WB" class="w-full input-style   ">
                                     </div>
                                     <div id="ozon-fields" class="hidden space-y-4">
                                         <div>
-                                            <label class="block text-sm font-medium text-dark-300 mb-1">Ozon Client ID</label>
-                                            <input type="text" id="acc-ozon-id" placeholder="Client ID" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                            <label class="block text-sm font-medium mb-1">Ozon Client ID</label>
+                                            <input type="text" id="acc-ozon-id" placeholder="Client ID" class="w-full input-style   ">
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-dark-300 mb-1">Ozon Client Secret</label>
-                                            <input type="password" id="acc-ozon-secret" placeholder="Client Secret" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                            <label class="block text-sm font-medium mb-1">Ozon Client Secret</label>
+                                            <input type="password" id="acc-ozon-secret" placeholder="Client Secret" class="w-full input-style   ">
                                         </div>
                                     </div>
-                                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.97]">
+                                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/25 active:scale-[0.97]">
                                         Добавить аккаунт
                                     </button>
                                 </form>
                             </div>
                         </div>
-
                         <!-- Connected Accounts -->
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b">
                                 <h2 class="text-sm font-semibold text-white">Подключённые аккаунты</h2>
                             </div>
-                            <div class="divide-y divide-dark-800/40 max-h-[400px] overflow-y-auto" id="connected-accounts"></div>
+                            <div class="divide-y border-border max-h-[400px] overflow-y-auto" id="connected-accounts"></div>
                         </div>
-
                         <!-- LLM Settings -->
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b">
                                 <h2 class="text-sm font-semibold text-white">Настройки LLM</h2>
                             </div>
                             <div class="p-5 space-y-4" id="llm-settings-form">
-                                <div class="text-sm text-dark-400">Загрузка...</div>
+                                <div class="text-sm">Загрузка...</div>
                             </div>
                         </div>
-
                         <!-- Mode Toggle -->
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b">
@@ -834,24 +807,21 @@
                             <div class="p-5 flex items-center justify-between">
                                 <div>
                                     <div class="text-sm font-medium text-dark-200" id="mode-label">Загрузка...</div>
-                                    <div class="text-xs text-dark-400 mt-1" id="mode-description">Автоматическое применение рекомендаций ИИ</div>
+                                    <div class="text-xs mt-1" id="mode-description">Автоматическое применение рекомендаций ИИ</div>
                                 </div>
                                 <div class="toggle-switch" id="auto-mode-toggle" onclick="toggleAutoMode()"></div>
                             </div>
                         </div>
                     </div>
                 </section>
-
             </div>
         </main>
-
         <footer class="border-t py-3">
             <div class="max-w-screen-2xl mx-auto px-4 text-center text-xs text-dark-600">
                 AI Ads Manager v0.1.0 — Управление рекламой Wildberries и Ozon с помощью ИИ
             </div>
         </footer>
     </div>
-
     <!-- Modal Backdrop -->
     <div id="modal-backdrop" class="fixed inset-0 z-[100] hidden modal-backdrop" onclick="closeModal()">
         <div class="flex items-center justify-center min-h-screen p-4">
@@ -866,7 +836,6 @@
             </div>
         </div>
     </div>
-
     <script>
     // ============================================================
     //  CONFIG & STATE
@@ -883,7 +852,6 @@
     let rules = [];
     let analysisSettings = {};
     let currentCampaignId = null;
-
     // ============================================================
     //  API HELPERS
     // ============================================================
@@ -892,7 +860,6 @@
         if (!res.ok) throw new Error(`GET ${url}: ${res.status} ${res.statusText}`);
         return res.json();
     }
-
     async function apiPost(url, body = null) {
         const res = await fetch(API_BASE + url, {
             method: 'POST',
@@ -903,7 +870,6 @@
         if (res.status === 204) return null;
         return res.json();
     }
-
     async function apiPatch(url, body) {
         const res = await fetch(API_BASE + url, {
             method: 'PATCH',
@@ -914,13 +880,11 @@
         if (res.status === 204) return null;
         return res.json();
     }
-
     async function apiDelete(url) {
         const res = await fetch(API_BASE + url, { method: 'DELETE' });
         if (!res.ok && res.status !== 204) { const text = await res.text(); throw new Error(`DELETE ${url}: ${res.status} — ${text}`); }
         return true;
     }
-
     // ============================================================
     //  TOAST NOTIFICATIONS
     // ============================================================
@@ -942,7 +906,6 @@
         container.appendChild(toast);
         setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
     }
-
     // ============================================================
     //  NAVIGATION
     // ============================================================
@@ -956,57 +919,48 @@
         if (target) target.classList.add('active');
         const link = document.querySelector(`[data-section="${section}"]`);
         if (link) { link.classList.add('active'); link.classList.remove('text-dark-400'); }
-
         // Section-specific loaders
         if (section === 'analytics') renderAnalytics();
         if (section === 'rules') loadRules();
         if (section === 'settings') loadAnalysisSettings();
         if (section === 'campaigns') loadAllData();
     }
-
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', e => { e.preventDefault(); navigateTo(link.dataset.section); });
     });
-
     // ============================================================
     //  FORMATTING
     // ============================================================
     function formatRUB(n) { if (n == null || isNaN(n)) return '—'; return Number(n).toLocaleString('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }); }
     function formatDate(d) { if (!d) return '—'; return new Date(d).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
     function formatDateShort(d) { if (!d) return '—'; return new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' }); }
-
     function platformLabel(p) {
         if (p === 'wildberries') return 'Wildberries';
         if (p === 'ozon') return 'Ozon';
         return p || '—';
     }
-
     function statusLabel(s) {
         const map = { active: 'Активна', paused: 'На паузе', completed: 'Завершена', pending: 'Ожидает', approved: 'Одобрено', rejected: 'Отклонено', applied: 'Применено', executed: 'Выполнено', success: 'Успешно', failed: 'Ошибка', unmanaged: 'Неупр.', minus: 'Минус' };
         return map[s] || s || '—';
     }
-
     function platformClass(p) {
-        return p === 'wildberries' ? 'bg-wb/20 text-wb' : p === 'ozon' ? 'bg-ozon/20 text-ozon' : 'bg-card-fallback text-dark-300';
+        return p === 'wildberries' ? 'bg-wb/20 text-wb' : p === 'ozon' ? 'bg-ozon/20 text-ozon' : 'bg-card-fallback';
     }
-
     function statusClass(s) {
         const map = {
             active: 'bg-green-500/15 text-green-400', paused: 'bg-amber-500/15 text-amber-400',
-            completed: 'bg-dark-600/40 text-dark-400', pending: 'bg-indigo-500/15 text-indigo-400',
+            completed: 'bg-dark-600/40', pending: 'bg-indigo-500/15 text-indigo-400',
             approved: 'bg-green-500/15 text-green-400', rejected: 'bg-red-500/15 text-red-400',
             applied: 'bg-green-500/15 text-green-400', executed: 'bg-green-500/15 text-green-400',
             success: 'bg-green-500/15 text-green-400', failed: 'bg-red-500/15 text-red-400',
-            unmanaged: 'bg-dark-600/40 text-dark-400', minus: 'bg-red-500/15 text-red-400',
+            unmanaged: 'bg-dark-600/40', minus: 'bg-red-500/15 text-red-400',
         };
-        return map[s] || 'bg-dark-600/40 text-dark-400';
+        return map[s] || 'bg-dark-600/40';
     }
-
     function translateActionType(t) {
         const m = { raise_bid: 'Повысить ставку', lower_bid: 'Понизить ставку', minus_word: 'Минус-слово', increase_budget: 'Увеличить бюджет', create_search_campaign: 'Создать кампанию', adjust_price: 'Скорректировать цену' };
         return m[t] || t;
     }
-
     function esc(str) { if (!str) return '—'; const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
     function deltaHTML(oldVal, newVal) {
         if (oldVal === null || oldVal === undefined || newVal === null || oldVal === 0) return '';
@@ -1014,7 +968,6 @@
         const isUp = newVal >= oldVal;
         return `<span class="${isUp ? 'text-green-400' : 'text-red-400'}">${isUp ? '↑' : '↓'}${pct}%</span>`;
     }
-
     // ============================================================
     //  SPARKLINE
     // ============================================================
@@ -1035,15 +988,13 @@
         const strokeColor = isUp ? '#22c55e' : '#ef4444';
         return `<div class="sparkline inline-block" title="Poslednee: ${lastVal.toFixed(1)}"><svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg"><polyline fill="none" stroke="${strokeColor}" stroke-width="1.5" points="${points.join(' ')}"/></svg></div>`;
     }
-
     function barChartSVG(nameValuePairs, height = 220) {
-        if (!nameValuePairs || nameValuePairs.length === 0) return '<div class="text-sm text-dark-400 text-center py-8">Нет данных</div>';
+        if (!nameValuePairs || nameValuePairs.length === 0) return '<div class="text-sm text-center py-8">Нет данных</div>';
         const maxVal = Math.max(...nameValuePairs.map(p => p[1]), 1);
         const padding = 40;
         const barH = Math.min(20, (height - 20) / nameValuePairs.length - 4);
         const svgH = nameValuePairs.length * (barH + 4) + padding;
         const barColor = '#6366f1';
-
         let html = `<svg width="100%" height="${svgH}" viewBox="0 0 400 ${svgH}" xmlns="http://www.w3.org/2000/svg" class="text-xs">`;
         nameValuePairs.forEach((pair, i) => {
             const y = padding + i * (barH + 4);
@@ -1055,7 +1006,6 @@
         html += '</svg>';
         return html;
     }
-
     // ============================================================
     //  DATA LOADERS
     // ============================================================
@@ -1069,14 +1019,12 @@
                 apiGet('/rules'),
                 apiGet('/campaign-stats?limit=30'),
             ]);
-
             campaigns = c.status === 'fulfilled' ? c.value : [];
             decisions = d.status === 'fulfilled' ? d.value : [];
             actions = a.status === 'fulfilled' ? a.value : [];
             accounts = acc.status === 'fulfilled' ? acc.value : [];
             if (rulesR.status === 'fulfilled') rules = rulesR.value;
             if (statsR.status === 'fulfilled') campaignStats = statsR.value;
-
             renderDashboard();
             renderCampaigns();
             renderRecommendations();
@@ -1087,7 +1035,6 @@
             showToast('Ошибка загрузки: ' + err.message, 'error');
         }
     }
-
     async function syncCampaigns() {
         const wbAccounts = accounts.filter(a => a.platform === 'wildberries');
         if (wbAccounts.length === 0) { showToast('Нет аккаунтов Wildberries', 'error'); return; }
@@ -1099,29 +1046,25 @@
         }
         await loadAllData();
     }
-
     // ============================================================
     //  RENDER: DASHBOARD
     // ============================================================
     function renderDashboard() {
         document.getElementById('stat-total-campaigns').textContent = campaigns.length || '—';
-
         const totalClicks = campaigns.reduce((s, c) => s + (c.latest_clicks || 0), 0);
         const totalOrders = campaigns.reduce((s, c) => s + (c.latest_orders || 0), 0);
         const spent = campaigns.reduce((s, c) => s + (parseFloat(c.latest_cost) || 0), 0);
         const pending = decisions.filter(d => d.status === 'pending').length;
         const autoMode = analysisSettings.auto_mode ? 'Авто' : 'Ручной';
-
         document.getElementById('stat-spent-today').textContent = spent > 0 ? formatRUB(spent) : '—';
         document.getElementById('stat-total-clicks').textContent = totalClicks || '—';
         document.getElementById('stat-total-orders').textContent = totalOrders || '—';
         document.getElementById('stat-pending').textContent = pending || '—';
         document.getElementById('stat-auto-mode').textContent = autoMode;
-
         // Campaign table (short)
         const tbody = document.getElementById('table-campaigns');
         if (campaigns.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-dark-400">Нет кампаний — нажмите "Импорт" чтобы загрузить из WB</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center">Нет кампаний — нажмите "Импорт" чтобы загрузить из WB</td></tr>';
             return;
         }
         const fp = document.getElementById('filter-platform')?.value || '';
@@ -1129,22 +1072,20 @@
         let filtered = campaigns;
         if (fp) filtered = filtered.filter(c => c.platform === fp);
         if (fs) filtered = filtered.filter(c => c.status === fs);
-
         tbody.innerHTML = filtered.slice(0, 10).map(c => `
-            <tr class="border-b /20 hover:bg-dark-800/30 transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
+            <tr class="border-border card-hover transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
                 <td class="px-4 py-3 text-dark-200 font-medium truncate max-w-[180px]">${esc(c.name || c.platform_campaign_id || '')}</td>
                 <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(c.platform)}">${platformLabel(c.platform)}</span></td>
                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${statusClass(c.status)}">${statusLabel(c.status)}</span></td>
-                <td class="px-4 py-3 text-right text-dark-300">${c.latest_ctr != null ? c.latest_ctr.toFixed(1) + '%' : '—'}</td>
-                <td class="px-4 py-3 text-right text-dark-300">${c.latest_cost != null ? formatRUB(c.latest_cost) : '—'}</td>
+                <td class="px-4 py-3 text-right">${c.latest_ctr != null ? c.latest_ctr.toFixed(1) + '%' : '—'}</td>
+                <td class="px-4 py-3 text-right">${c.latest_cost != null ? formatRUB(c.latest_cost) : '—'}</td>
                 <td class="px-4 py-3 text-center">${sparklineSVG(c.ctr_history, '#6366f1', 24, 50)}</td>
             </tr>
         `).join('');
-
         // Recent recommendations
         const rec = document.getElementById('recent-recommendations');
         if (decisions.length === 0) {
-            rec.innerHTML = '<div class="px-4 py-8 text-center text-dark-400 text-sm">Нет рекомендаций</div>';
+            rec.innerHTML = '<div class="px-4 py-8 text-center text-sm">Нет рекомендаций</div>';
         } else {
             rec.innerHTML = decisions.slice(0, 8).map(d => {
                 const actionCount = d.actions_json?.actions?.length || 0;
@@ -1152,36 +1093,34 @@
                 <div class="px-4 py-3 animate-fade-in cursor-pointer" onclick="openDecisionDetail(${d.id})">
                     <div class="flex items-center justify-between mb-1">
                         <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
-                        <span class="text-xs text-dark-400">${formatDate(d.created_at)}</span>
+                        <span class="text-xs">${formatDate(d.created_at)}</span>
                     </div>
-                    <p class="text-xs text-dark-400">${actionCount} действий · ${d.llm_model || '—'}</p>
+                    <p class="text-xs">${actionCount} действий · ${d.llm_model || '—'}</p>
                     ${d.status === 'pending' ? `
                     <div class="flex items-center gap-2 mt-2">
-                        <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded hover:bg-green-600/30 transition-all">Одобрить</button>
-                        <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-2 py-1 bg-red-600/20 text-red-400 text-xs rounded hover:bg-red-600/30 transition-all">Отклонить</button>
+                        <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded hover:bg-green-500/25 transition-all">Одобрить</button>
+                        <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded hover:bg-red-500/25 transition-all">Отклонить</button>
                     </div>` : ''}
                 </div>`;
             }).join('');
         }
-
         // Recent actions log
         const log = document.getElementById('recent-actions-log');
         if (actions.length === 0) {
-            log.innerHTML = '<div class="px-4 py-8 text-center text-dark-400 text-sm">Нет действий</div>';
+            log.innerHTML = '<div class="px-4 py-8 text-center text-sm">Нет действий</div>';
         } else {
             log.innerHTML = actions.slice(0, 12).map(a => `
                 <div class="px-4 py-3 flex items-center gap-3 animate-fade-in">
                     <div class="w-2 h-2 rounded-full ${a.status === 'success' ? 'bg-green-400' : a.status === 'pending' ? 'bg-amber-400' : 'bg-red-400'}"></div>
                     <div class="flex-1 min-w-0">
                         <span class="text-sm font-medium text-dark-200">${translateActionType(a.action_type)}</span>
-                        <span class="text-xs text-dark-400 ml-2">${formatDate(a.applied_at)}</span>
+                        <span class="text-xs ml-2">${formatDate(a.applied_at)}</span>
                     </div>
-                    <button onclick="openActionDetail(${a.id})" class="text-xs text-dark-400 hover:text-dark-300">→</button>
+                    <button onclick="openActionDetail(${a.id})" class="text-xs hover:text-dark-300">→</button>
                 </div>
             `).join('');
         }
     }
-
     // ============================================================
     //  RENDER: CAMPAIGNS
     // ============================================================
@@ -1192,45 +1131,39 @@
         let filtered = campaigns;
         if (fp2) filtered = filtered.filter(c => c.platform === fp2);
         if (fs2) filtered = filtered.filter(c => c.status === fs2);
-
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-8 text-center text-dark-400">Нет кампаний</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-8 text-center">Нет кампаний</td></tr>';
         } else {
             tbody.innerHTML = filtered.map(c => `
-                <tr class="border-b /20 hover:bg-dark-800/30 transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
+                <tr class="border-border card-hover transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
                     <td class="px-4 py-3 text-dark-200 font-medium truncate max-w-[200px]">${esc(c.name || c.platform_campaign_id || '')}</td>
                     <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(c.platform)}">${platformLabel(c.platform)}</span></td>
-                    <td class="px-4 py-3 text-dark-400 text-xs">${c.campaign_type || '—'}</td>
+                    <td class="px-4 py-3 text-xs">${c.campaign_type || '—'}</td>
                     <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(c.status)}">${statusLabel(c.status)}</span></td>
-                    <td class="px-4 py-3 text-right text-dark-300">${c.daily_budget ? formatRUB(c.daily_budget) : '—'}</td>
-                    <td class="px-4 py-3 text-right text-dark-300">${c.current_bid ? formatRUB(c.current_bid) : '—'}</td>
-                    <td class="px-4 py-3 text-right text-dark-300">${c.latest_ctr ? c.latest_ctr.toFixed(1) + '%' : '—'}</td>
+                    <td class="px-4 py-3 text-right">${c.daily_budget ? formatRUB(c.daily_budget) : '—'}</td>
+                    <td class="px-4 py-3 text-right">${c.current_bid ? formatRUB(c.current_bid) : '—'}</td>
+                    <td class="px-4 py-3 text-right">${c.latest_ctr ? c.latest_ctr.toFixed(1) + '%' : '—'}</td>
                 </tr>
             `).join('');
         }
     }
-
     // Date range state for campaign detail
     let detailDateFrom = '';
     let detailDateTo = '';
-
     function daysAgo(n) {
         const d = new Date();
         d.setDate(d.getDate() - n);
         return d.toISOString().slice(0, 10);
     }
-
     function toggleDateRangePicker() {
         const panel = document.getElementById('detail-date-range-panel');
         panel.classList.toggle('hidden');
     }
-
     function applyPreset(days) {
         document.getElementById('detail-date-from').value = daysAgo(days);
         document.getElementById('detail-date-to').value = daysAgo(0);
         applyCustomDateRange();
     }
-
     async function applyCustomDateRange() {
         const df = document.getElementById('detail-date-from').value;
         const dt = document.getElementById('detail-date-to').value;
@@ -1245,7 +1178,6 @@
             await openCampaignDetail(currentCampaignId);
         }
     }
-
     // ============================================================
     //  CAMPAIGN DETAIL
     // ============================================================
@@ -1269,7 +1201,6 @@
             document.getElementById('detail-bid').textContent = detail.current_bid ? formatRUB(detail.current_bid) : '—';
             document.getElementById('detail-wb-id').textContent = detail.platform_campaign_id || '—';
             document.getElementById('detail-updated').textContent = formatDate(detail.updated_at);
-
             // Store and display selected date range
             detailDateFrom = detail.date_from || dateFrom;
             detailDateTo = detail.date_to || dateTo;
@@ -1277,41 +1208,33 @@
             document.getElementById('detail-date-to').value = detailDateTo;
             const diffD = Math.round((new Date(detailDateTo) - new Date(detailDateFrom)) / 86400000);
             document.getElementById('detail-date-label').textContent = diffD <= 0 ? `${detailDateTo}` : `${detailDateFrom} — ${detailDateTo}`;
-
             // Summary row
             const totalImp = (detail.keywords || []).reduce((s, k) => s + (k.total_impressions || 0), 0);
             const totalCl = (detail.keywords || []).reduce((s, k) => s + (k.total_clicks || 0), 0);
             const totalCt = (detail.keywords || []).reduce((s, k) => s + (k.total_cost || 0), 0);
             const totalCtrEl = document.getElementById('detail-total-ctr');
             if (totalCtrEl) totalCtrEl.textContent = totalImp > 0 ? (totalCl / totalImp * 100).toFixed(2) + '%' : '—';
-
             // Keywords tab
             keywords = detail.keywords || [];
             window.keywords = keywords;
             renderKeywordsTable();
-
             // Stats tab
             renderCampaignStatsChart(detail);
-
             // Decisions tab
             renderCampaignDecisions(detail.id);
-
             // Set default tab
             switchDetailTab('keywords', document.querySelector('[data-tab="keywords"]'));
-
             navigateTo('campaign-detail');
         } catch (err) {
             showToast('Ошибка: ' + err.message, 'error');
         }
     }
-
     function switchDetailTab(tabName, btn) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('text-white'); b.classList.add('text-dark-400'); });
         document.getElementById('tab-' + tabName)?.classList.remove('hidden');
         if (btn) { btn.classList.add('active'); btn.classList.remove('text-dark-400'); btn.classList.add('text-white'); }
     }
-
     async function changeCampaignStatus(newStatus) {
         if (!currentCampaignId) return;
         const label = { active: 'Запустить', paused: 'Поставить на паузу', completed: 'Остановить' };
@@ -1323,18 +1246,15 @@
             openCampaignDetail(currentCampaignId);
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     function renderKeywordsTable() {
         const tbody = document.getElementById('table-keywords');
         const fs = document.getElementById('kw-filter-status')?.value || '';
         let filtered = keywords;
         if (fs) filtered = filtered.filter(k => k.status === fs);
-
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center text-dark-400">Нет ключевых слов. Синхронизируйте кампании через API WB.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center">Нет ключевых слов. Синхронизируйте кампании через API WB.</td></tr>';
             return;
         }
-
         // Use total_* fields for cumulative 7-day stats, fall back to stats[0] if not available
         tbody.innerHTML = filtered.map(kw => {
             const latestStat = (kw.stats || [])[0] || {};
@@ -1343,27 +1263,25 @@
             const ctr = kw.total_ctr != null ? kw.total_ctr.toFixed(2) + '%' : ((kw.stats?.[0]?.ctr != null) ? ((typeof kw.stats[0].ctr === "number" && kw.stats[0].ctr > 1) ? kw.stats[0].ctr.toFixed(1) + '%' : (parseFloat(kw.stats[0].ctr) * 100).toFixed(2) + '%') : '—');
             const cost = kw.total_cost ?? ((kw.stats?.[0]?.cost != null) ? formatRUB(kw.stats[0].cost) : '—');
             const orders = kw.stats?.[0]?.orders || 0;
-
             return `
-            <tr class="border-b /20 hover:bg-dark-800/30 transition-all">
+            <tr class="border-border card-hover transition-all">
                 <td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]" title="${esc(kw.keyword_text)}"><span class="text-dark-400 text-xs mr-2">#${kw.id}</span>${esc(kw.keyword_text.substring(0, 35))}</td>
                 <td class="px-4 py-2"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(kw.status)}">${statusLabel(kw.status)}</span></td>
-                <td class="px-4 py-2 text-right text-dark-300 text-xs">${kw.current_bid ? formatRUB(kw.current_bid) : '—'}</td>
-                <td class="px-4 py-2 text-right text-dark-400">${impressions.toLocaleString('ru')}</td>
-                <td class="px-4 py-2 text-right text-dark-400">${clicks.toLocaleString('ru')}</td>
-                <td class="px-4 py-2 text-right text-dark-400">${ctr}</td>
-                <td class="px-4 py-2 text-right text-dark-400">${cost}</td>
-                <td class="px-4 py-2 text-right text-dark-400">${orders}</td>
+                <td class="px-4 py-2 text-right text-xs">${kw.current_bid ? formatRUB(kw.current_bid) : '—'}</td>
+                <td class="px-4 py-2 text-right">${impressions.toLocaleString('ru')}</td>
+                <td class="px-4 py-2 text-right">${clicks.toLocaleString('ru')}</td>
+                <td class="px-4 py-2 text-right">${ctr}</td>
+                <td class="px-4 py-2 text-right">${cost}</td>
+                <td class="px-4 py-2 text-right">${orders}</td>
                 <td class="px-4 py-2 text-center">
                     <div class="flex items-center justify-center gap-1">
-                        ${kw.status !== 'minus' ? `<button onclick="minusKeyword(${kw.id})" class="p-1 text-dark-400 hover:text-red-400 transition-colors" title="Минусовать"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg></button>` : ''}
-                        <button onclick="editKeywordBid(${kw.id}, ${kw.current_bid || 0})" class="p-1 text-dark-400 hover:text-indigo-400 transition-colors" title="Изменить ставку"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0H4.5z"/></svg></button>
+                        ${kw.status !== 'minus' ? `<button onclick="minusKeyword(${kw.id})" class="p-1 hover:text-red-400 transition-colors" title="Минусовать"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg></button>` : ''}
+                        <button onclick="editKeywordBid(${kw.id}, ${kw.current_bid || 0})" class="p-1 hover:text-indigo-400 transition-colors" title="Изменить ставку"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0H4.5z"/></svg></button>
                     </div>
                 </td>
             </tr>`;
         }).join('');
     }
-
     async function minusKeyword(kwId) {
         if (!confirm('Минусовать ключевое слово? Реклама по нему будет отключена.')) return;
         try {
@@ -1372,7 +1290,6 @@
             openCampaignDetail(currentCampaignId);
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     async function editKeywordBid(kwId, currentBid) {
         const newBid = prompt('Новая ставка (₽):', currentBid || '');
         if (!newBid || newBid.trim() === '') return;
@@ -1382,22 +1299,18 @@
             openCampaignDetail(currentCampaignId);
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     function renderCampaignStatsChart(detail) {
         const stats = (detail.recent_stats || []).slice().reverse();
         const costData = stats.map(s => s.total_cost || 0);
         const ctrData = stats.map(s => (s.total_ctr || 0) * 100);
         const ordersData = stats.map(s => s.total_orders || 0);
-
         const avgCost = costData.length ? (costData.reduce((a, b) => a + b, 0) / costData.length) : 0;
         const avgCtr = ctrData.length ? (ctrData.reduce((a, b) => a + b, 0) / ctrData.length) : 0;
         const totalOrders = ordersData.reduce((a, b) => a + b, 0);
         const totalCost = costData.reduce((a, b) => a + b, 0);
-
         const buildStatCard = (html, avgLabel, avgValue) => {
-            return `<div class="flex flex-col items-center gap-2">${html}<div class="text-xs text-dark-400">${avgLabel}: <span class="text-dark-300 font-medium">${avgValue}</span></div></div>`;
+            return `<div class="flex flex-col items-center gap-2">${html}<div class="text-xs">${avgLabel}: <span class="text-dark-300 font-medium">${avgValue}</span></div></div>`;
         };
-
         document.getElementById('sparkline-cost').innerHTML = buildStatCard(
             sparklineSVG(costData, '#ef4444', 128, 400) || '<div class="text-dark-400 text-center py-4 text-sm">Нет данных</div>',
             'Расход всего', formatRUB(totalCost)
@@ -1411,24 +1324,23 @@
             'Заказов всего', totalOrders.toString()
         );
     }
-
     async function renderCampaignDecisions(campaignId) {
         const container = document.getElementById('detail-decisions-list');
         try {
             const decs = await apiGet(`/decisions?campaign_id=${campaignId}&limit=15`);
             if (decs.length === 0) {
-                container.innerHTML = '<div class="text-sm text-dark-400 text-center py-8">Нет решений ИИ по этой кампании</div>';
+                container.innerHTML = '<div class="text-sm text-center py-8">Нет решений ИИ по этой кампании</div>';
                 return;
             }
             container.innerHTML = decs.map(d => {
                 const actionCount = d.actions_json?.actions?.length || 0;
                 return `
-                <div class="bg-dark-800/30 border /40 rounded-xl p-4 cursor-pointer" onclick="openDecisionDetail(${d.id})">
+                <div class="card card-hover rounded-xl p-4 cursor-pointer" onclick="openDecisionDetail(${d.id})">
                     <div class="flex items-center justify-between mb-2">
                         <span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
-                        <span class="text-xs text-dark-400">${formatDate(d.created_at)}</span>
+                        <span class="text-xs">${formatDate(d.created_at)}</span>
                     </div>
-                    <div class="text-xs text-dark-400">${d.llm_model} · ${d.llm_provider} · ${actionCount} действий</div>
+                    <div class="text-xs">${d.llm_model} · ${d.llm_provider} · ${actionCount} действий</div>
                     ${(d.actions || []).length > 0 ? `
                     <div class="flex flex-wrap gap-1 mt-2">
                         ${(d.actions || []).slice(0, 5).map(a => `<span class="px-1.5 py-0.5 badge-info">${translateActionType(a.action_type)}</span>`).join('')}
@@ -1439,7 +1351,6 @@
             container.innerHTML = `<div class="text-sm text-red-400 text-center">${esc(err.message)}</div>`;
         }
     }
-
     // ============================================================
     //  ANALYTICS SECTION
     // ============================================================
@@ -1449,34 +1360,27 @@
         const totalOrders = stats.reduce((s, r) => s + (r.total_orders || 0), 0);
         const avgCTR = stats.length > 0 ? stats.reduce((s, r) => s + (parseFloat(r.total_ctr) || 0), 0) / stats.length : 0;
         const totalKeywords = keywords.length || campaigns.reduce((s, c) => s + (c.keywords_count || 0), 0);
-
         document.getElementById('analytics-ctr').textContent = avgCTR ? (avgCTR * 100).toFixed(2) + '%' : '—';
         document.getElementById('analytics-cost').textContent = totalCost > 0 ? formatRUB(totalCost) : '—';
         document.getElementById('analytics-orders').textContent = totalOrders || '—';
         document.getElementById('analytics-keywords').textContent = totalKeywords || '—';
-
         // Bar charts
         const topCost = campaigns.slice(0, 10).map(c => [c.name?.substring(0, 25), c.latest_cost || 0]).filter(v => v[1] > 0);
         document.getElementById('chart-cost-bars').innerHTML = barChartSVG(topCost);
-
         const topCTR = campaigns.slice(0, 10).map(c => [c.name?.substring(0, 25), (c.latest_ctr || 0) * 100]).filter(v => v[1] > 0);
         document.getElementById('chart-ctr-bars').innerHTML = barChartSVG(topCTR);
-
         // Campaign stats table
         renderAnalyticsStats();
     }
-
     function renderAnalyticsStats() {
         const tbody = document.getElementById('table-analytics-stats');
         const fp = document.getElementById('analytics-platform')?.value || '';
         let filtered = campaigns;
         if (fp) filtered = filtered.filter(c => c.platform === fp);
-
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-dark-400">Нет данных</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center">Нет данных</td></tr>';
             return;
         }
-
         // Combine campaign stats
         let rows = [];
         for (const c of filtered) {
@@ -1484,25 +1388,21 @@
             const recentStats = ((c.recent_stats || [])[0]) || { total_impressions: c.latest_impressions || 0, total_clicks: c.latest_clicks || 0, total_ctr: c.latest_ctr || 0, total_cost: c.latest_cost || 0, total_orders: c.latest_orders || 0, date: null };
             rows.push({ ...recentStats, campaign_name: name, platform: c.platform });
         }
-
         rows.sort((a, b) => (b.total_cost || 0) - (a.total_cost || 0));
-
         tbody.innerHTML = rows.map(r => `
-            <tr class="border-b /20">
+            <tr class="border-border">
                 <td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]">${esc(r.campaign_name)}</td>
-                <td class="px-4 py-2 text-dark-400 text-xs">${r.date ? formatDateShort(r.date) : '—'}</td>
-                <td class="px-4 py-2 text-right text-dark-400">${(r.total_impressions || 0).toLocaleString('ru')}</td>
-                <td class="px-4 py-2 text-right text-dark-400">${(r.total_clicks || 0).toLocaleString('ru')}</td>
+                <td class="px-4 py-2 text-xs">${r.date ? formatDateShort(r.date) : '—'}</td>
+                <td class="px-4 py-2 text-right">${(r.total_impressions || 0).toLocaleString('ru')}</td>
+                <td class="px-4 py-2 text-right">${(r.total_clicks || 0).toLocaleString('ru')}</td>
                 <td class="px-4 py-2 text-right">${r.total_ctr != null ? (r.total_ctr * 100).toFixed(2) + '%' : '—'}</td>
-                <td class="px-4 py-2 text-right text-dark-300">${r.total_cost != null ? formatRUB(r.total_cost) : '—'}</td>
-                <td class="px-4 py-2 text-right text-dark-400">${r.total_orders || 0}</td>
+                <td class="px-4 py-2 text-right">${r.total_cost != null ? formatRUB(r.total_cost) : '—'}</td>
+                <td class="px-4 py-2 text-right">${r.total_orders || 0}</td>
                 <td class="px-4 py-2 text-center">${sparklineSVG([r.total_impressions, r.total_clicks, r.total_orders], '#6366f1', 24, 50)}</td>
             </tr>
         `).join('');
     }
-
     document.getElementById('analytics-platform')?.addEventListener('change', renderAnalyticsStats);
-
     // ============================================================
     //  RENDER: RECOMMENDATIONS
     // ============================================================
@@ -1511,22 +1411,20 @@
         let filtered = decisions;
         const fs = document.getElementById('rec-filter-status')?.value || '';
         if (fs) filtered = filtered.filter(d => d.status === fs);
-
         if (filtered.length === 0) {
-            container.innerHTML = '<div class="px-4 py-8 text-center text-dark-400 text-sm card">Нет рекомендаций</div>';
+            container.innerHTML = '<div class="px-4 py-8 text-center text-sm card">Нет рекомендаций</div>';
             return;
         }
-
         container.innerHTML = filtered.map(d => {
             const actionCount = d.actions_json?.actions?.length || 0;
             const actionsDetail = (d.actions || d.actions_json?.actions || []).map(a =>
-                `<span class="px-1.5 py-0.5 bg-dark-950 rounded text-xs text-dark-300">${translateActionType(a.action_type)}</span>`
+                `<span class="px-1.5 py-0.5 bg-dark-950 rounded text-xs">${translateActionType(a.action_type)}</span>`
             ).join(' ');
             return `
             <div class="card p-5 animate-fade-in cursor-pointer" onclick="openDecisionDetail(${d.id})">
                 <div class="flex items-center justify-between mb-3">
                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
-                    <span class="text-xs text-dark-400">${formatDate(d.created_at)}</span>
+                    <span class="text-xs">${formatDate(d.created_at)}</span>
                 </div>
                 <div class="grid grid-cols-3 gap-3 mb-3 text-xs">
                     <div><span class="text-dark-400">Модель:</span> <span class="text-dark-300">${d.llm_model || '—'}</span></div>
@@ -1536,15 +1434,13 @@
                 ${actionsDetail ? `<div class="flex flex-wrap gap-1">${actionsDetail}</div>` : ''}
                 ${d.status === 'pending' ? `
                 <div class="flex items-center gap-2 mt-3 pt-3 border-t">
-                    <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-4 py-1.5 bg-green-600/20 text-green-400 text-sm rounded-xl hover:bg-green-600/30 transition-all">Одобрить</button>
-                    <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-4 py-1.5 bg-red-600/20 text-red-400 text-sm rounded-xl hover:bg-red-600/30 transition-all">Отклонить</button>
+                    <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-4 py-1.5 bg-green-500/20 text-green-400 text-sm rounded-xl hover:bg-green-500/25 transition-all">Одобрить</button>
+                    <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-4 py-1.5 bg-red-500/20 text-red-400 text-sm rounded-xl hover:bg-red-500/25 transition-all">Отклонить</button>
                 </div>` : ''}
             </div>`;
         }).join('');
     }
-
     document.getElementById('rec-filter-status')?.addEventListener('change', renderRecommendations);
-
     // ============================================================
     //  RENDER: ACTIONS
     // ============================================================
@@ -1555,32 +1451,29 @@
         const fs = document.getElementById('action-filter-status')?.value || '';
         if (ft) filtered = filtered.filter(a => a.action_type === ft);
         if (fs) filtered = filtered.filter(a => a.status === fs);
-
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-dark-400">Нет действий</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center">Нет действий</td></tr>';
         } else {
             tbody.innerHTML = filtered.map(a => `
-                <tr class="border-b /20 hover:bg-dark-800/30 transition-all">
+                <tr class="border-border card-hover transition-all">
                     <td class="px-4 py-3"><span class="text-sm text-dark-200">${translateActionType(a.action_type)}</span></td>
-                    <td class="px-4 py-3 text-xs text-dark-400 truncate max-w-[180px]">${esc(a.parameters_json ? JSON.stringify(a.parameters_json) : '')}</td>
+                    <td class="px-4 py-3 text-xs truncate max-w-[180px]">${esc(a.parameters_json ? JSON.stringify(a.parameters_json) : '')}</td>
                     <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(a.status)}">${statusLabel(a.status)}</span></td>
-                    <td class="px-4 py-3 text-right text-xs text-dark-400">${formatDate(a.applied_at)}</td>
-                    <td class="px-4 py-3 text-center"><button onclick="openActionDetail(${a.id})" class="text-xs text-dark-400 hover:text-white">→</button></td>
+                    <td class="px-4 py-3 text-right text-xs">${formatDate(a.applied_at)}</td>
+                    <td class="px-4 py-3 text-center"><button onclick="openActionDetail(${a.id})" class="text-xs hover:text-white">→</button></td>
                 </tr>
             `).join('');
         }
     }
-
     document.getElementById('action-filter-type')?.addEventListener('change', renderActions);
     document.getElementById('action-filter-status')?.addEventListener('change', renderActions);
-
     // ============================================================
     //  RENDER: ACCOUNTS
     // ============================================================
     function renderAccounts() {
         const container = document.getElementById('connected-accounts');
         if (accounts.length === 0) {
-            container.innerHTML = '<div class="px-4 py-8 text-center text-dark-400 text-sm">Нет подключённых аккаунтов</div>';
+            container.innerHTML = '<div class="px-4 py-8 text-center text-sm">Нет подключённых аккаунтов</div>';
         } else {
             container.innerHTML = accounts.map(a => {
                 const hasToken = a.wb_token !== false && a.wb_token != null;
@@ -1594,12 +1487,11 @@
                             <span class="text-xs ${hasToken ? 'text-green-400' : 'text-red-400'} ml-2">${hasToken ? '✓ ' + tokenLabel : '✗ нет ' + tokenLabel}</span>
                         </div>
                     </div>
-                    <button onclick="setToken(${a.id}, '${a.platform}')" class="text-xs px-2 py-1 bg-indigo-600/20 text-indigo-400 rounded hover:bg-indigo-600/30 transition-all">Установить токен</button>
+                    <button onclick="setToken(${a.id}, '${a.platform}')" class="text-xs px-2 py-1 bg-indigo-500/20 text-indigo-400 rounded hover:bg-indigo-500/25 transition-all">Установить токен</button>
                 </div>`;
             }).join('');
         }
     }
-
     async function setToken(accountId, platform) {
         const token = prompt(platform === 'wildberries' ? 'Вставьте токен WB API:' : 'Введите Ozon Client Secret:');
         if (!token?.trim()) return;
@@ -1610,7 +1502,6 @@
             await loadAllData();
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     // ============================================================
     //  RULES
     // ============================================================
@@ -1624,7 +1515,6 @@
             renderRulesTable();
         } catch (err) { showToast('Ошибка правил: ' + err.message, 'error'); }
     }
-
     async function seedDefaultRules() {
         const wbRules = [
             { platform: 'wildberries', rule_name: 'CTR ниже 2% при позиции > 50', rule_description: 'Минусать кластеры с низким CTR при хорошей позиции — товар не привлекателен для этого запроса', rule_params_json: { min_ctr: 0.02, max_position: 50, min_impressions: 1000 }, is_active: true },
@@ -1642,28 +1532,27 @@
         }
         rules = await apiGet('/rules');
     }
-
     function renderRulesTable() {
         const tbody = document.getElementById('table-rules');
         if (!rules.length) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-dark-400">Нет правил</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center">Нет правил</td></tr>';
             return;
         }
         tbody.innerHTML = rules.map(r => `
-            <tr class="border-b /20 hover:bg-dark-800/30 transition-all">
+            <tr class="border-border card-hover transition-all">
                 <td class="px-4 py-3 text-dark-200 font-medium text-sm">${esc(r.rule_name)}</td>
                 <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(r.platform)}">${platformLabel(r.platform)}</span></td>
-                <td class="px-4 py-3 text-xs text-dark-400 max-w-[200px] truncate" title="${esc(r.rule_description || '')}">${esc(r.rule_description || '')}</td>
-                <td class="px-4 py-3 text-xs text-dark-400 text-right">${r.rule_params_json ? JSON.stringify(r.rule_params_json) : '—'}</td>
+                <td class="px-4 py-3 text-xs max-w-[200px] truncate" title="${esc(r.rule_description || '')}">${esc(r.rule_description || '')}</td>
+                <td class="px-4 py-3 text-xs text-right">${r.rule_params_json ? JSON.stringify(r.rule_params_json) : '—'}</td>
                 <td class="px-4 py-3 text-center">
                     <div class="toggle-switch ${r.is_active ? 'on' : 'off'}" onclick="toggleRule(${r.id}, ${r.is_active})"></div>
                 </td>
                 <td class="px-4 py-3 text-center">
                     <div class="flex items-center justify-center gap-1">
-                        <button onclick="editRule(${r.id})" class="p-1 text-dark-400 hover:text-indigo-400 transition-colors" title="Редактировать">
+                        <button onclick="editRule(${r.id})" class="p-1 hover:text-indigo-400 transition-colors" title="Редактировать">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.8a4.5 4.5 0 011.13-1.897l10.606-10.606.324.324z"/></svg>
                         </button>
-                        <button onclick="deleteRule(${r.id})" class="p-1 text-dark-400 hover:text-red-400 transition-colors" title="Удалить">
+                        <button onclick="deleteRule(${r.id})" class="p-1 hover:text-red-400 transition-colors" title="Удалить">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21ca.342.058.679.107 1.022.166M12 10.5V6.75m-6.292 4.942a.75.75 0 011.061 0M19.5 10.5H4.5"/></svg>
                         </button>
                     </div>
@@ -1671,7 +1560,6 @@
             </tr>
         `).join('');
     }
-
     async function toggleRule(ruleId, currentValue) {
         try {
             await apiPatch(`/rules/${ruleId}`, { is_active: !currentValue });
@@ -1679,31 +1567,30 @@
             renderRulesTable();
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     async function editRule(ruleId) {
         const r = rules.find(x => x.id === ruleId);
         if (!r) return;
         openModal('Редактировать правило', `
             <form id="form-edit-rule" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-dark-300 mb-1">Название</label>
-                    <input type="text" id="edit-rule-name" value="${esc(r.rule_name)}" required class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <label class="block text-sm font-medium mb-1">Название</label>
+                    <input type="text" id="edit-rule-name" value="${esc(r.rule_name)}" required class="w-full input-style  ">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-dark-300 mb-1">Платформа</label>
-                    <select id="edit-rule-platform" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <label class="block text-sm font-medium mb-1">Платформа</label>
+                    <select id="edit-rule-platform" class="w-full input-style  ">
                         <option value="wildberries" ${r.platform === 'wildberries' ? 'selected' : ''}>Wildberries</option>
                         <option value="ozon" ${r.platform === 'ozon' ? 'selected' : ''}>Ozon</option>
                         <option value="both" ${r.platform === 'both' ? 'selected' : ''}>Обе платформы</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-dark-300 mb-1">Описание</label>
-                    <textarea id="edit-rule-desc" rows="2" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">${esc(r.rule_description)}</textarea>
+                    <label class="block text-sm font-medium mb-1">Описание</label>
+                    <textarea id="edit-rule-desc" rows="2" class="w-full input-style  ">${esc(r.rule_description)}</textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-dark-300 mb-1">Параметры (JSON)</label>
-                    <textarea id="edit-rule-params" rows="4" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono">${esc(JSON.stringify(r.rule_params_json, null, 2))}</textarea>
+                    <label class="block text-sm font-medium mb-1">Параметры (JSON)</label>
+                    <textarea id="edit-rule-params" rows="4" class="w-full input-style   font-mono">${esc(JSON.stringify(r.rule_params_json, null, 2))}</textarea>
                 </div>
                 <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all">Сохранить</button>
             </form>
@@ -1725,7 +1612,6 @@
             });
         }, 100);
     }
-
     async function deleteRule(ruleId) {
         if (!confirm('Удалить правило?')) return;
         try {
@@ -1734,29 +1620,28 @@
             loadRules();
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     function showAddRuleModal() {
         openModal('Добавить правило', `
             <form id="form-add-rule" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-dark-300 mb-1">Название</label>
-                    <input type="text" id="rule-name" required class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <label class="block text-sm font-medium mb-1">Название</label>
+                    <input type="text" id="rule-name" required class="w-full input-style  ">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-dark-300 mb-1">Платформа</label>
-                    <select id="rule-platform" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <label class="block text-sm font-medium mb-1">Платформа</label>
+                    <select id="rule-platform" class="w-full input-style  ">
                         <option value="wildberries">Wildberries</option>
                         <option value="ozon">Ozon</option>
                         <option value="both">Обе платформы</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-dark-300 mb-1">Описание</label>
-                    <textarea id="rule-desc" rows="2" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"></textarea>
+                    <label class="block text-sm font-medium mb-1">Описание</label>
+                    <textarea id="rule-desc" rows="2" class="w-full input-style  "></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-dark-300 mb-1">Параметры (JSON)</label>
-                    <textarea id="rule-params" rows="3" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono">{"min_ctr": 0.02, "min_impressions": 1000}</textarea>
+                    <label class="block text-sm font-medium mb-1">Параметры (JSON)</label>
+                    <textarea id="rule-params" rows="3" class="w-full input-style   font-mono">{"min_ctr": 0.02, "min_impressions": 1000}</textarea>
                 </div>
                 <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all">Добавить правило</button>
             </form>
@@ -1778,7 +1663,6 @@
             });
         }, 100);
     }
-
     // ============================================================
     //  LLM SETTINGS
     // ============================================================
@@ -1789,30 +1673,28 @@
             const prov = analysisSettings.llm_provider || 'claude';
             const model = analysisSettings.llm_model || '—';
             const apiKey = analysisSettings.api_key || 'sk-hub-...';
-
             container.innerHTML = `
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-dark-300 mb-1">Провайдер LLM</label>
+                        <label class="block text-sm font-medium mb-1">Провайдер LLM</label>
                         <div class="text-lg font-semibold text-white">${esc(prov)}</div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-dark-300 mb-1">Модель</label>
-                        <div class="text-sm text-dark-300">${esc(model)}</div>
+                        <label class="block text-sm font-medium mb-1">Модель</label>
+                        <div class="text-sm">${esc(model)}</div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-dark-300 mb-1">API ключ нейросети</label>
-                        <input type="password" id="llm-api-key" value="${esc(apiKey)}" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                        <div class="text-xs text-dark-400 mt-1">Ключ от ClaudeHub (sk-hub-...). На сервере уже сохранён в .env</div>
+                        <label class="block text-sm font-medium mb-1">API ключ нейросети</label>
+                        <input type="password" id="llm-api-key" value="${esc(apiKey)}" class="w-full input-style  ">
+                        <div class="text-xs mt-1">Ключ от ClaudeHub (sk-hub-...). На сервере уже сохранён в .env</div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-dark-300 mb-1">Base URL</label>
-                        <input type="text" id="llm-base-url" value="${esc(analysisSettings.base_url)}" readonly class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-400 cursor-not-allowed" title="Меняется в .env на сервере">
+                        <label class="block text-sm font-medium mb-1">Base URL</label>
+                        <input type="text" id="llm-base-url" value="${esc(analysisSettings.base_url)}" readonly class="w-full input-style  rounded-xl px-3 py-2 text-sm cursor-not-allowed" title="Меняется в .env на сервере">
                     </div>
                     <button onclick="saveLlmSettings()" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all">Сохранить</button>
                 </div>
             `;
-
             // Mode toggle
             const toggle = document.getElementById('auto-mode-toggle');
             const label = document.getElementById('mode-label');
@@ -1830,7 +1712,6 @@
             container.innerHTML = `<div class="text-sm text-red-400">${esc(err.message)}</div>`;
         }
     }
-
     async function saveLlmSettings() {
         const apiKey = document.getElementById('llm-api-key')?.value;
         if (!apiKey || apiKey === 'sk-hub-...') { showToast('Введите API ключ', 'error'); return; }
@@ -1839,7 +1720,6 @@
             showToast('Ключ сохранён', 'success');
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     async function toggleAutoMode() {
         try {
             const newVal = !analysisSettings.auto_mode;
@@ -1849,7 +1729,6 @@
             showToast(`Режим: ${newVal ? 'Авто' : 'Полуавто'}`, 'success');
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     // ============================================================
     //  APPROVE / REJECT / ACTIONS
     // ============================================================
@@ -1860,7 +1739,6 @@
             await loadAllData();
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     async function rejectDecision(id) {
         try {
             await apiPost(`/decisions/${id}/reject`);
@@ -1868,7 +1746,6 @@
             await loadAllData();
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     }
-
     // ============================================================
     //  MODALS
     // ============================================================
@@ -1877,35 +1754,31 @@
         document.getElementById('modal-body').innerHTML = bodyHtml;
         document.getElementById('modal-backdrop').classList.remove('hidden');
     }
-
     function closeModal() {
         document.getElementById('modal-backdrop').classList.add('hidden');
     }
-
     async function openDecisionDetail(id) {
         const d = decisions.find(x => x.id === id) || (await apiGet(`/decisions?limit=200`)).find(x => x.id === id);
         if (!d) { showToast('Решение не найдено', 'error'); return; }
-
         const actionsCount = d.actions_json?.actions?.length || 0;
         const actionsList = (d.actions || []).map(a => `
             <div class="bg-dark-950 border rounded-xl p-3 text-xs">
                 <div class="flex items-center justify-between mb-2">
-                    <span class="px-2 py-0.5 rounded bg-indigo-600/20 text-indigo-400 font-medium">${translateActionType(a.action_type)}</span>
+                    <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 font-medium">${translateActionType(a.action_type)}</span>
                     <span class="px-2 py-0.5 rounded ${statusClass(a.status)}">${statusLabel(a.status)}</span>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <div class="text-dark-400 mb-1">Метрики до:</div>
-                        <pre class="p-2 rounded-xl text-dark-400 overflow-x-auto">${esc(a.metrics_before_json ? JSON.stringify(a.metrics_before_json, null, 2) : '—')}</pre>
+                        <pre class="p-2 rounded-xl overflow-x-auto">${esc(a.metrics_before_json ? JSON.stringify(a.metrics_before_json, null, 2) : '—')}</pre>
                     </div>
                     <div>
                         <div class="text-dark-400 mb-1">Метрики после:</div>
-                        <pre class="p-2 rounded-xl text-dark-400 overflow-x-auto">${esc(a.metrics_after_json ? JSON.stringify(a.metrics_after_json, null, 2) : '—')}</pre>
+                        <pre class="p-2 rounded-xl overflow-x-auto">${esc(a.metrics_after_json ? JSON.stringify(a.metrics_after_json, null, 2) : '—')}</pre>
                     </div>
                 </div>
             </div>
         `).join('');
-
         openModal(`Решение ИИ #${d.id}`, `
             <div class="space-y-4">
                 <div class="grid grid-cols-3 gap-3 text-xs">
@@ -1914,24 +1787,23 @@
                     <div><span class="text-dark-400">Создано:</span> <span class="text-dark-300">${formatDate(d.created_at)}</span></div>
                 </div>
                 <div>
-                    <div class="text-xs text-dark-400 mb-1">Действия (${actionsCount}):</div>
+                    <div class="text-xs mb-1">Действия (${actionsCount}):</div>
                     <div class="flex flex-wrap gap-1">${(d.actions_json?.actions || []).map(a =>
-                        `<span class="px-1.5 py-0.5 bg-dark-800 rounded text-xs text-dark-300">${translateActionType(a.action_type)}</span>`
+                        `<span class="px-1.5 py-0.5 input-style rounded text-xs">${translateActionType(a.action_type)}</span>`
                     ).join('')}</div>
                 </div>
                 <details class="text-xs">
-                    <summary class="cursor-pointer text-dark-400 hover:text-dark-200">Показать промпт</summary>
-                    <pre class="mt-2 p-3 bg-dark-950 rounded text-dark-400 overflow-x-auto max-h-48">${esc(d.prompt_text)}</pre>
+                    <summary class="cursor-pointer ">Показать промпт</summary>
+                    <pre class="mt-2 p-3 bg-dark-950 rounded overflow-x-auto max-h-48">${esc(d.prompt_text)}</pre>
                 </details>
                 <details class="text-xs">
-                    <summary class="cursor-pointer text-dark-400 hover:text-dark-200">Показать ответ LLM</summary>
-                    <pre class="mt-2 p-3 bg-dark-950 rounded text-dark-400 overflow-x-auto max-h-48">${esc(d.llm_response)}</pre>
+                    <summary class="cursor-pointer ">Показать ответ LLM</summary>
+                    <pre class="mt-2 p-3 bg-dark-950 rounded overflow-x-auto max-h-48">${esc(d.llm_response)}</pre>
                 </details>
-                ${actionsList ? `<div><div class="text-xs text-dark-400 mb-2">Применённые действия:</div>${actionsList}</div>` : ''}
+                ${actionsList ? `<div><div class="text-xs mb-2">Применённые действия:</div>${actionsList}</div>` : ''}
             </div>
         `);
     }
-
     async function openActionDetail(id) {
         // Find locally first
         let action = actions.find(a => a.id === id);
@@ -1948,24 +1820,22 @@
                 </div>
                 <div>
                     <div class="text-dark-400 mb-1">Параметры:</div>
-                    <pre class="p-3 bg-dark-950 rounded text-dark-300 overflow-x-auto">${esc(JSON.stringify(action.parameters_json, null, 2))}</pre>
+                    <pre class="p-3 bg-dark-950 rounded overflow-x-auto">${esc(JSON.stringify(action.parameters_json, null, 2))}</pre>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <div class="text-dark-400 mb-1">Метрики до:</div>
-                        <pre class="p-2 rounded-xl text-dark-400 overflow-x-auto">${action.metrics_before_json ? esc(JSON.stringify(action.metrics_before_json, null, 2)) : '—'}</pre>
+                        <pre class="p-2 rounded-xl overflow-x-auto">${action.metrics_before_json ? esc(JSON.stringify(action.metrics_before_json, null, 2)) : '—'}</pre>
                     </div>
                     <div>
                         <div class="text-dark-400 mb-1">Метрики после:</div>
-                        <pre class="p-2 rounded-xl text-dark-400 overflow-x-auto">${action.metrics_after_json ? esc(JSON.stringify(action.metrics_after_json, null, 2)) : '—'}</pre>
+                        <pre class="p-2 rounded-xl overflow-x-auto">${action.metrics_after_json ? esc(JSON.stringify(action.metrics_after_json, null, 2)) : '—'}</pre>
                     </div>
                 </div>
             </div>
         `);
     }
-
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-
     // ============================================================
     //  TRIGGER ANALYSIS
     // ============================================================
@@ -1985,14 +1855,12 @@
             spinner.classList.add('hidden');
         }
     }
-
     // ============================================================
     //  ADD ACCOUNT FORM
     // ============================================================
     document.getElementById('acc-platform').addEventListener('change', function() {
         document.getElementById('ozon-fields').classList.toggle('hidden', this.value !== 'ozon');
     });
-
     document.getElementById('form-add-account').addEventListener('submit', async (e) => {
         e.preventDefault();
         const platform = document.getElementById('acc-platform').value;
@@ -2001,7 +1869,6 @@
         const ozonId = document.getElementById('acc-ozon-id').value.trim();
         const ozonSecret = document.getElementById('acc-ozon-secret').value.trim();
         if (!name) { showToast('Введите название', 'error'); return; }
-
         const body = { platform, name };
         if (platform === 'wildberries' && token) body.wb_token = token;
         if (platform === 'ozon') {
@@ -2015,7 +1882,6 @@
             await loadAllData();
         } catch (err) { showToast('Ошибка: ' + err.message, 'error'); }
     });
-
     // ============================================================
     //  HEALTH CHECK
     // ============================================================
@@ -2033,12 +1899,10 @@
             document.getElementById('health-text').className = 'text-xs text-red-400';
         }
     }
-
     // ============================================================
     //  EVENT LISTENERS
     // ============================================================
     document.getElementById('btn-trigger-analysis').addEventListener('click', triggerAnalysis);
-
     // Dashboard filters
     ['filter-platform', 'filter-status', 'filter-platform2', 'filter-status2', 'kw-filter-status'].forEach(id => {
         document.getElementById(id)?.addEventListener('change', () => {
@@ -2046,7 +1910,6 @@
             else renderCampaigns();
         });
     });
-
     // ============================================================
     //  INIT
     // ============================================================
