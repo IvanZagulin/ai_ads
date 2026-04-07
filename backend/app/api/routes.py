@@ -46,7 +46,7 @@ from app.schemas.schemas import (
     OptimizationRuleResponse,
     OptimizationRuleUpdate,
 )
-# from app.tasks.optimization_cycle import OptimizationOrchestrator
+from app.tasks.optimization_cycle import OptimizationOrchestrator
 from app.utils.encryption import encrypt_token, decrypt_token
 from app.utils.rate_limiter import TokenBucketRateLimiter
 
@@ -690,14 +690,13 @@ async def list_actions(
 async def trigger_analysis() -> dict[str, str]:
     """Запустить цикл оптимизации вручную."""
     logger.info("Ручной запуск цикла оптимизации")
-    # orchestrator = OptimizationOrchestrator()
-    # try:
-    #     result = await orchestrator.run_full_cycle()
-    #     return {"status": "completed", "message": f"Оптимизация завершена для {len(result)} групп"}
-    # except Exception as exc:
-    #     logger.error("Оптимизация не удалась: %s", exc)
-    #     raise HTTPException(status_code=500, detail=f"Ошибка оптимизации: {exc}")
-    return {"status": "completed", "message": "Цикл оптимизации завершён"}
+    orchestrator = OptimizationOrchestrator()
+    try:
+        result = await orchestrator.run_full_cycle()
+        return {"status": "completed", "message": f"Оптимизация завершена для {len(result)} групп", "details": result}
+    except Exception as exc:
+        logger.error("Оптимизация не удалась: %s", exc)
+        raise HTTPException(status_code=500, detail=f"Ошибка оптимизации: {exc}")
 
 
 # ---------------------------------------------------------------------------
