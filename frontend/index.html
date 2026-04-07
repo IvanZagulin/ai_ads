@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" class="dark">
+<html lang="ru">
 <head><!-- cache-bust v5-1775568590-QUASAR-NEON -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +8,14 @@
     <script>
         /* ── Quasar-X Design Tokens ── */
         document.documentElement.style.setProperty('--neon',         '#00c8ff');
-        document.documentElement.style.setProperty('--neon-dim',    'rgba(0,200,255,.2)');
-        document.documentElement.style.setProperty('--neon-glow',   'rgba(0,200,255,.08)');
+        document.documentElement.style.setProperty('--neon-dim',    'rgba(0,200,255,.15)');
+        document.documentElement.style.setProperty('--neon-glow',   'rgba(0,200,255,.07)');
         document.documentElement.style.setProperty('--neon-strong', 'rgba(0,200,255,.28)');
-        document.documentElement.style.setProperty('--accent-blue', '#3d8bff');
-        document.documentElement.style.setProperty('--electric',    '#8b7cf7');
-        document.documentElement.style.setProperty('--text-1', '#e0e4ec');
-        document.documentElement.style.setProperty('--text-2', '#8b92a8');
-        document.documentElement.style.setProperty('--text-3', '#6b7290');
+        document.documentElement.style.setProperty('--accent-blue', '#0066ff');
+        document.documentElement.style.setProperty('--electric',    '#6c5ce7');
+        document.documentElement.style.setProperty('--text-1', '#1a1f36');
+        document.documentElement.style.setProperty('--text-2', '#5a6178');
+        document.documentElement.style.setProperty('--text-3', '#9ca3bc');
         tailwind.config = {
             darkMode: 'class',
             fontFamily: {
@@ -46,9 +46,9 @@
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         /* ── scrollbar ── */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: hsla(228,25%,16%,.3); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb { background: hsla(225,14%,58%,.3); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: hsla(225,14%,58%,.6); }
+        ::-webkit-scrollbar-track { background: hsla(225,14%,85%,.5); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: hsla(225,14%,70%,.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: hsla(225,14%,70%,.6); }
         /* ── keyframes ── */
         @keyframes fadeIn     { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp   { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
@@ -105,18 +105,18 @@
         /* ── cards ── */
         .card {
             border-radius: 14px !important;
-            background: hsl(228 30% 11%) !important;
-            border: 1px solid hsla(228,20%,18%,1) !important;
+            background: #fff !important;
+            border: 1px solid hsl(228,20%,90%) !important;
             box-shadow: 0 8px 32px rgba(0,200,255,.06);
             transition: box-shadow .3s, transform .3s;
         }
         .card-hover {
             transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow .3s;
-            border: 1px solid hsla(228,20%,18%,1) !important;
+            border: 1px solid hsl(228,20%,90%) !important;
             transform: none;
         }
         .card-hover:hover {
-            border-color: var(--neon-dim) !important;
+            border-color: var(--neon) !important;
             box-shadow: 0 8px 32px rgba(0,200,255,.12) !important;
             transform: translateY(-2px) !important;
         }
@@ -154,7 +154,7 @@
         .glow-dot.off { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,.3); }
         /* ── modal ── */
         .modal-backdrop {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.3);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
         }
@@ -188,7 +188,7 @@
         /* ── campaign card (like product-card from repraiser) ── */
         .campaign-card {
             border-radius: 14px;
-            border: 2px solid hsla(228,20%,18%,1);
+            border: 2px solid hsl(228,20%,90%);
             transition: all .3s cubic-bezier(.22,1,.36,1);
             position: relative;
             animation: fadeInUp 0.3s ease backwards;
@@ -222,7 +222,7 @@
             padding: 12px 16px;
             border-radius: 10px;
             background: hsl(228 30% 11%);
-            border: 1px solid hsla(228,20%,18%,1);
+            border: 1px solid hsl(228,20%,90%);
             animation: fadeInUp 0.25s ease backwards;
             transition: all 0.2s ease;
         }
@@ -255,7 +255,7 @@
         /* ── input styling ── */
         .input-style {
             background: hsl(225 30% 14%) !important;
-            border: 1px solid hsla(228,20%,18%,1) !important;
+            border: 1px solid hsl(228,20%,90%) !important;
             border-radius: 8px !important;
             color: var(--text-1);
             padding: 0.375rem 0.75rem !important;
@@ -264,15 +264,15 @@
         }
         .input-style:focus {
             outline: none !important;
-            border-color: var(--neon-dim) !important;
+            border-color: var(--neon) !important;
         }
         /* ── border utility ── */
-        .border-border { border-color: hsla(228,20%,18%,1) !important; }
-        .divide-border > * + * { border-color: hsla(228,20%,18%,1) !important; }
+        .border-border { border-color: hsl(228,20%,90%) !important; }
+        .divide-border > * + * { border-color: hsl(228,20%,90%) !important; }
         .divide-y { --tw-divide-y-reverse: 0; border-top: 1px solid hsla(228,20%,18%,.4); border-bottom: 0; }
         /* ── header ── */
         header {
-            background: hsla(224, 71%, 3%, 0.85) !important;
+            background: rgba(255,255,255,0.9) !important;
         }
         *, *::before, *::after {
             transition:
@@ -282,7 +282,7 @@
         }
     </style>
 </head>
-<body class="bg-dark-950 text-dark-200 min-h-screen font-sans antialiased" style="font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;">
+<body class="bg-[hsl(228,33%,97.6%)] text-gray-800 min-h-screen font-sans antialiased" style="font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;">
     <div id="app" class="flex flex-col min-h-screen">
         <!-- Top Navbar -->
         <header class="border-b border-border sticky top-0 z-50">
@@ -455,7 +455,7 @@
                                     <option value="paused">На паузе</option>
                                     <option value="completed">Завершённые</option>
                                 </select>
-                                <button onclick="loadAllData()" class="text-xs px-3 py-1 input-style  rounded-lg hover:bg-card-fallback transition-all">Обновить</button>
+                                <button onclick="loadAllData()" class="text-xs px-3 py-1 input-style  rounded-lg hover:bg-white transition-all">Обновить</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
@@ -494,11 +494,11 @@
                                     <span id="detail-status-badge" class="inline-flex px-2 py-0.5 rounded text-xs font-medium"></span>
                                 </div>
                                 <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
-                                    <div><span class="text-dark-400">Тип:</span> <span class="text-dark-300" id="detail-type">—</span></div>
-                                    <div><span class="text-dark-400">Бюджет:</span> <span class="text-dark-300" id="detail-budget">—</span></div>
-                                    <div><span class="text-dark-400">Ставка:</span> <span class="text-dark-300" id="detail-bid">—</span></div>
-                                    <div><span class="text-dark-400">WB ID:</span> <span class="text-dark-300" id="detail-wb-id">—</span></div>
-                                    <div><span class="text-dark-400">Обновлено:</span> <span class="text-dark-300" id="detail-updated">—</span></div>
+                                    <div><span class="text-gray-500">Тип:</span> <span class="text-gray-700" id="detail-type">—</span></div>
+                                    <div><span class="text-gray-500">Бюджет:</span> <span class="text-gray-700" id="detail-budget">—</span></div>
+                                    <div><span class="text-gray-500">Ставка:</span> <span class="text-gray-700" id="detail-bid">—</span></div>
+                                    <div><span class="text-gray-500">WB ID:</span> <span class="text-gray-700" id="detail-wb-id">—</span></div>
+                                    <div><span class="text-gray-500">Обновлено:</span> <span class="text-gray-700" id="detail-updated">—</span></div>
                                 </div>
                                 <div class="mt-2 flex items-center gap-3 flex-wrap">
                                     <span class="text-xs" id="detail-period-info"></span>
@@ -509,9 +509,9 @@
                                 <div class="hidden mt-2 card-sm p-2" id="detail-date-range-panel">
                                     <div class="flex gap-2 mb-2 flex-wrap">
                                         <button onclick="applyPreset(1)" class="px-2 py-1 text-xs bg-indigo-600/30 text-indigo-300 rounded-lg hover:bg-indigo-600/50 transition-colors">1 день</button>
-                                        <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-card-fallback rounded-lg hover:bg-dark-600 transition-colors">7 дней</button>
-                                        <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-card-fallback rounded-lg hover:bg-dark-600 transition-colors">14 дней</button>
-                                        <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-card-fallback rounded-lg hover:bg-dark-600 transition-colors">30 дней</button>
+                                        <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-dark-600 transition-colors">7 дней</button>
+                                        <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-dark-600 transition-colors">14 дней</button>
+                                        <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-dark-600 transition-colors">30 дней</button>
                                     </div>
                                     <div class="flex gap-3 items-center">
                                         <label class="text-xs flex items-center gap-1">С: <input type="date" id="detail-date-from" class="input-style  " /></label>
@@ -523,7 +523,7 @@
                             <div class="flex items-center gap-2" id="detail-status-buttons">
                                 <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-500/20 text-green-400 rounded-xl hover:bg-green-500/25 transition-all">Старт</button>
                                 <button onclick="changeCampaignStatus('paused')" class="px-3 py-1.5 text-xs bg-amber-500/20 text-amber-400 rounded-xl hover:bg-amber-600/30 transition-all">Пауза</button>
-                                <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-card-fallback rounded-xl hover:bg-dark-600 transition-all">Стоп</button>
+                                <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-white rounded-xl hover:bg-dark-600 transition-all">Стоп</button>
                             </div>
                         </div>
                     </div>
@@ -571,19 +571,19 @@
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 <div>
                                     <h4 class="text-sm font-medium mb-3">Расход за период</h4>
-                                    <div class="bg-dark-950 border rounded-xl p-4">
+                                    <div class="bg-[hsl(228,33%,97.6%)] border rounded-xl p-4">
                                         <div id="sparkline-cost" class="w-full h-32" style="min-height: 128px;"></div>
                                     </div>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-medium mb-3">CTR за период</h4>
-                                    <div class="bg-dark-950 border rounded-xl p-4">
+                                    <div class="bg-[hsl(228,33%,97.6%)] border rounded-xl p-4">
                                         <div id="sparkline-ctr" class="w-full h-32" style="min-height: 128px;"></div>
                                     </div>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-medium mb-3">Заказы за период</h4>
-                                    <div class="bg-dark-950 border rounded-xl p-4">
+                                    <div class="bg-[hsl(228,33%,97.6%)] border rounded-xl p-4">
                                         <div id="sparkline-orders" class="w-full h-32" style="min-height: 128px;"></div>
                                     </div>
                                 </div>
@@ -806,7 +806,7 @@
                             </div>
                             <div class="p-5 flex items-center justify-between">
                                 <div>
-                                    <div class="text-sm font-medium text-dark-200" id="mode-label">Загрузка...</div>
+                                    <div class="text-sm font-medium text-gray-800" id="mode-label">Загрузка...</div>
                                     <div class="text-xs mt-1" id="mode-description">Автоматическое применение рекомендаций ИИ</div>
                                 </div>
                                 <div class="toggle-switch" id="auto-mode-toggle" onclick="toggleAutoMode()"></div>
@@ -817,7 +817,7 @@
             </div>
         </main>
         <footer class="border-t py-3">
-            <div class="max-w-screen-2xl mx-auto px-4 text-center text-xs text-dark-600">
+            <div class="max-w-screen-2xl mx-auto px-4 text-center text-xs text-gray-600">
                 AI Ads Manager v0.1.0 — Управление рекламой Wildberries и Ozon с помощью ИИ
             </div>
         </footer>
@@ -828,7 +828,7 @@
             <div class="card w-full max-w-3xl max-h-[85vh] overflow-y-auto" onclick="event.stopPropagation()">
                 <div class="sticky top-0 border-b border-border px-5 py-4 flex items-center justify-between z-10">
                     <h3 class="text-sm font-semibold text-white" id="modal-title">Детали</h3>
-                    <button onclick="closeModal()" class="text-dark-400 hover:text-white transition-colors">
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-white transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
@@ -913,12 +913,12 @@
         document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(el => {
             el.classList.remove('active');
-            el.classList.add('text-dark-400');
+            el.classList.add('text-gray-500');
         });
         const target = document.getElementById('section-' + section);
         if (target) target.classList.add('active');
         const link = document.querySelector(`[data-section="${section}"]`);
-        if (link) { link.classList.add('active'); link.classList.remove('text-dark-400'); }
+        if (link) { link.classList.add('active'); link.classList.remove('text-gray-500'); }
         // Section-specific loaders
         if (section === 'analytics') renderAnalytics();
         if (section === 'rules') loadRules();
@@ -944,7 +944,7 @@
         return map[s] || s || '—';
     }
     function platformClass(p) {
-        return p === 'wildberries' ? 'bg-wb/20 text-wb' : p === 'ozon' ? 'bg-ozon/20 text-ozon' : 'bg-card-fallback';
+        return p === 'wildberries' ? 'bg-wb/20 text-wb' : p === 'ozon' ? 'bg-ozon/20 text-ozon' : 'bg-white';
     }
     function statusClass(s) {
         const map = {
@@ -1074,7 +1074,7 @@
         if (fs) filtered = filtered.filter(c => c.status === fs);
         tbody.innerHTML = filtered.slice(0, 10).map(c => `
             <tr class="border-border card-hover transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
-                <td class="px-4 py-3 text-dark-200 font-medium truncate max-w-[180px]">${esc(c.name || c.platform_campaign_id || '')}</td>
+                <td class="px-4 py-3 text-gray-800 font-medium truncate max-w-[180px]">${esc(c.name || c.platform_campaign_id || '')}</td>
                 <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(c.platform)}">${platformLabel(c.platform)}</span></td>
                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${statusClass(c.status)}">${statusLabel(c.status)}</span></td>
                 <td class="px-4 py-3 text-right">${c.latest_ctr != null ? c.latest_ctr.toFixed(1) + '%' : '—'}</td>
@@ -1113,10 +1113,10 @@
                 <div class="px-4 py-3 flex items-center gap-3 animate-fade-in">
                     <div class="w-2 h-2 rounded-full ${a.status === 'success' ? 'bg-green-400' : a.status === 'pending' ? 'bg-amber-400' : 'bg-red-400'}"></div>
                     <div class="flex-1 min-w-0">
-                        <span class="text-sm font-medium text-dark-200">${translateActionType(a.action_type)}</span>
+                        <span class="text-sm font-medium text-gray-800">${translateActionType(a.action_type)}</span>
                         <span class="text-xs ml-2">${formatDate(a.applied_at)}</span>
                     </div>
-                    <button onclick="openActionDetail(${a.id})" class="text-xs hover:text-dark-300">→</button>
+                    <button onclick="openActionDetail(${a.id})" class="text-xs hover:text-gray-700">→</button>
                 </div>
             `).join('');
         }
@@ -1136,7 +1136,7 @@
         } else {
             tbody.innerHTML = filtered.map(c => `
                 <tr class="border-border card-hover transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
-                    <td class="px-4 py-3 text-dark-200 font-medium truncate max-w-[200px]">${esc(c.name || c.platform_campaign_id || '')}</td>
+                    <td class="px-4 py-3 text-gray-800 font-medium truncate max-w-[200px]">${esc(c.name || c.platform_campaign_id || '')}</td>
                     <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(c.platform)}">${platformLabel(c.platform)}</span></td>
                     <td class="px-4 py-3 text-xs">${c.campaign_type || '—'}</td>
                     <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(c.status)}">${statusLabel(c.status)}</span></td>
@@ -1231,9 +1231,9 @@
     }
     function switchDetailTab(tabName, btn) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('text-white'); b.classList.add('text-dark-400'); });
+        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('text-white'); b.classList.add('text-gray-500'); });
         document.getElementById('tab-' + tabName)?.classList.remove('hidden');
-        if (btn) { btn.classList.add('active'); btn.classList.remove('text-dark-400'); btn.classList.add('text-white'); }
+        if (btn) { btn.classList.add('active'); btn.classList.remove('text-gray-500'); btn.classList.add('text-white'); }
     }
     async function changeCampaignStatus(newStatus) {
         if (!currentCampaignId) return;
@@ -1265,7 +1265,7 @@
             const orders = kw.stats?.[0]?.orders || 0;
             return `
             <tr class="border-border card-hover transition-all">
-                <td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]" title="${esc(kw.keyword_text)}"><span class="text-dark-400 text-xs mr-2">#${kw.id}</span>${esc(kw.keyword_text.substring(0, 35))}</td>
+                <td class="px-4 py-2 text-gray-800 font-medium truncate max-w-[160px]" title="${esc(kw.keyword_text)}"><span class="text-gray-500 text-xs mr-2">#${kw.id}</span>${esc(kw.keyword_text.substring(0, 35))}</td>
                 <td class="px-4 py-2"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(kw.status)}">${statusLabel(kw.status)}</span></td>
                 <td class="px-4 py-2 text-right text-xs">${kw.current_bid ? formatRUB(kw.current_bid) : '—'}</td>
                 <td class="px-4 py-2 text-right">${impressions.toLocaleString('ru')}</td>
@@ -1309,18 +1309,18 @@
         const totalOrders = ordersData.reduce((a, b) => a + b, 0);
         const totalCost = costData.reduce((a, b) => a + b, 0);
         const buildStatCard = (html, avgLabel, avgValue) => {
-            return `<div class="flex flex-col items-center gap-2">${html}<div class="text-xs">${avgLabel}: <span class="text-dark-300 font-medium">${avgValue}</span></div></div>`;
+            return `<div class="flex flex-col items-center gap-2">${html}<div class="text-xs">${avgLabel}: <span class="text-gray-700 font-medium">${avgValue}</span></div></div>`;
         };
         document.getElementById('sparkline-cost').innerHTML = buildStatCard(
-            sparklineSVG(costData, '#ef4444', 128, 400) || '<div class="text-dark-400 text-center py-4 text-sm">Нет данных</div>',
+            sparklineSVG(costData, '#ef4444', 128, 400) || '<div class="text-gray-500 text-center py-4 text-sm">Нет данных</div>',
             'Расход всего', formatRUB(totalCost)
         );
         document.getElementById('sparkline-ctr').innerHTML = buildStatCard(
-            sparklineSVG(ctrData, '#22c55e', 128, 400) || '<div class="text-dark-400 text-center py-4 text-sm">Нет данных</div>',
+            sparklineSVG(ctrData, '#22c55e', 128, 400) || '<div class="text-gray-500 text-center py-4 text-sm">Нет данных</div>',
             'CTR средний', avgCtr.toFixed(2) + '%'
         );
         document.getElementById('sparkline-orders').innerHTML = buildStatCard(
-            sparklineSVG(ordersData, '#3b82f6', 128, 400) || '<div class="text-dark-400 text-center py-4 text-sm">Нет данных</div>',
+            sparklineSVG(ordersData, '#3b82f6', 128, 400) || '<div class="text-gray-500 text-center py-4 text-sm">Нет данных</div>',
             'Заказов всего', totalOrders.toString()
         );
     }
@@ -1391,7 +1391,7 @@
         rows.sort((a, b) => (b.total_cost || 0) - (a.total_cost || 0));
         tbody.innerHTML = rows.map(r => `
             <tr class="border-border">
-                <td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]">${esc(r.campaign_name)}</td>
+                <td class="px-4 py-2 text-gray-800 font-medium truncate max-w-[160px]">${esc(r.campaign_name)}</td>
                 <td class="px-4 py-2 text-xs">${r.date ? formatDateShort(r.date) : '—'}</td>
                 <td class="px-4 py-2 text-right">${(r.total_impressions || 0).toLocaleString('ru')}</td>
                 <td class="px-4 py-2 text-right">${(r.total_clicks || 0).toLocaleString('ru')}</td>
@@ -1418,7 +1418,7 @@
         container.innerHTML = filtered.map(d => {
             const actionCount = d.actions_json?.actions?.length || 0;
             const actionsDetail = (d.actions || d.actions_json?.actions || []).map(a =>
-                `<span class="px-1.5 py-0.5 bg-dark-950 rounded text-xs">${translateActionType(a.action_type)}</span>`
+                `<span class="px-1.5 py-0.5 bg-[hsl(228,33%,97.6%)] rounded text-xs">${translateActionType(a.action_type)}</span>`
             ).join(' ');
             return `
             <div class="card p-5 animate-fade-in cursor-pointer" onclick="openDecisionDetail(${d.id})">
@@ -1427,9 +1427,9 @@
                     <span class="text-xs">${formatDate(d.created_at)}</span>
                 </div>
                 <div class="grid grid-cols-3 gap-3 mb-3 text-xs">
-                    <div><span class="text-dark-400">Модель:</span> <span class="text-dark-300">${d.llm_model || '—'}</span></div>
-                    <div><span class="text-dark-400">Провайдер:</span> <span class="text-dark-300">${d.llm_provider || '—'}</span></div>
-                    <div><span class="text-dark-400">Кампания:</span> <span class="text-dark-300">${d.campaign_id || '—'}</span></div>
+                    <div><span class="text-gray-500">Модель:</span> <span class="text-gray-700">${d.llm_model || '—'}</span></div>
+                    <div><span class="text-gray-500">Провайдер:</span> <span class="text-gray-700">${d.llm_provider || '—'}</span></div>
+                    <div><span class="text-gray-500">Кампания:</span> <span class="text-gray-700">${d.campaign_id || '—'}</span></div>
                 </div>
                 ${actionsDetail ? `<div class="flex flex-wrap gap-1">${actionsDetail}</div>` : ''}
                 ${d.status === 'pending' ? `
@@ -1456,7 +1456,7 @@
         } else {
             tbody.innerHTML = filtered.map(a => `
                 <tr class="border-border card-hover transition-all">
-                    <td class="px-4 py-3"><span class="text-sm text-dark-200">${translateActionType(a.action_type)}</span></td>
+                    <td class="px-4 py-3"><span class="text-sm text-gray-800">${translateActionType(a.action_type)}</span></td>
                     <td class="px-4 py-3 text-xs truncate max-w-[180px]">${esc(a.parameters_json ? JSON.stringify(a.parameters_json) : '')}</td>
                     <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(a.status)}">${statusLabel(a.status)}</span></td>
                     <td class="px-4 py-3 text-right text-xs">${formatDate(a.applied_at)}</td>
@@ -1483,7 +1483,7 @@
                     <div class="flex items-center gap-3">
                         <span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(a.platform)}">${platformLabel(a.platform)}</span>
                         <div>
-                            <span class="text-sm text-dark-200 font-medium">${esc(a.name)}</span>
+                            <span class="text-sm text-gray-800 font-medium">${esc(a.name)}</span>
                             <span class="text-xs ${hasToken ? 'text-green-400' : 'text-red-400'} ml-2">${hasToken ? '✓ ' + tokenLabel : '✗ нет ' + tokenLabel}</span>
                         </div>
                     </div>
@@ -1540,7 +1540,7 @@
         }
         tbody.innerHTML = rules.map(r => `
             <tr class="border-border card-hover transition-all">
-                <td class="px-4 py-3 text-dark-200 font-medium text-sm">${esc(r.rule_name)}</td>
+                <td class="px-4 py-3 text-gray-800 font-medium text-sm">${esc(r.rule_name)}</td>
                 <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(r.platform)}">${platformLabel(r.platform)}</span></td>
                 <td class="px-4 py-3 text-xs max-w-[200px] truncate" title="${esc(r.rule_description || '')}">${esc(r.rule_description || '')}</td>
                 <td class="px-4 py-3 text-xs text-right">${r.rule_params_json ? JSON.stringify(r.rule_params_json) : '—'}</td>
@@ -1762,18 +1762,18 @@
         if (!d) { showToast('Решение не найдено', 'error'); return; }
         const actionsCount = d.actions_json?.actions?.length || 0;
         const actionsList = (d.actions || []).map(a => `
-            <div class="bg-dark-950 border rounded-xl p-3 text-xs">
+            <div class="bg-[hsl(228,33%,97.6%)] border rounded-xl p-3 text-xs">
                 <div class="flex items-center justify-between mb-2">
                     <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 font-medium">${translateActionType(a.action_type)}</span>
                     <span class="px-2 py-0.5 rounded ${statusClass(a.status)}">${statusLabel(a.status)}</span>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <div class="text-dark-400 mb-1">Метрики до:</div>
+                        <div class="text-gray-500 mb-1">Метрики до:</div>
                         <pre class="p-2 rounded-xl overflow-x-auto">${esc(a.metrics_before_json ? JSON.stringify(a.metrics_before_json, null, 2) : '—')}</pre>
                     </div>
                     <div>
-                        <div class="text-dark-400 mb-1">Метрики после:</div>
+                        <div class="text-gray-500 mb-1">Метрики после:</div>
                         <pre class="p-2 rounded-xl overflow-x-auto">${esc(a.metrics_after_json ? JSON.stringify(a.metrics_after_json, null, 2) : '—')}</pre>
                     </div>
                 </div>
@@ -1782,9 +1782,9 @@
         openModal(`Решение ИИ #${d.id}`, `
             <div class="space-y-4">
                 <div class="grid grid-cols-3 gap-3 text-xs">
-                    <div><span class="text-dark-400">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(d.status)}">${statusLabel(d.status)}</span></div>
-                    <div><span class="text-dark-400">Модель:</span> <span class="text-dark-300">${d.llm_model}</span></div>
-                    <div><span class="text-dark-400">Создано:</span> <span class="text-dark-300">${formatDate(d.created_at)}</span></div>
+                    <div><span class="text-gray-500">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(d.status)}">${statusLabel(d.status)}</span></div>
+                    <div><span class="text-gray-500">Модель:</span> <span class="text-gray-700">${d.llm_model}</span></div>
+                    <div><span class="text-gray-500">Создано:</span> <span class="text-gray-700">${formatDate(d.created_at)}</span></div>
                 </div>
                 <div>
                     <div class="text-xs mb-1">Действия (${actionsCount}):</div>
@@ -1794,11 +1794,11 @@
                 </div>
                 <details class="text-xs">
                     <summary class="cursor-pointer ">Показать промпт</summary>
-                    <pre class="mt-2 p-3 bg-dark-950 rounded overflow-x-auto max-h-48">${esc(d.prompt_text)}</pre>
+                    <pre class="mt-2 p-3 bg-[hsl(228,33%,97.6%)] rounded overflow-x-auto max-h-48">${esc(d.prompt_text)}</pre>
                 </details>
                 <details class="text-xs">
                     <summary class="cursor-pointer ">Показать ответ LLM</summary>
-                    <pre class="mt-2 p-3 bg-dark-950 rounded overflow-x-auto max-h-48">${esc(d.llm_response)}</pre>
+                    <pre class="mt-2 p-3 bg-[hsl(228,33%,97.6%)] rounded overflow-x-auto max-h-48">${esc(d.llm_response)}</pre>
                 </details>
                 ${actionsList ? `<div><div class="text-xs mb-2">Применённые действия:</div>${actionsList}</div>` : ''}
             </div>
@@ -1815,20 +1815,20 @@
         openModal(`${translateActionType(action.action_type)} #${action.id}`, `
             <div class="space-y-3 text-xs">
                 <div class="grid grid-cols-2 gap-2">
-                    <div><span class="text-dark-400">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(action.status)}">${statusLabel(action.status)}</span></div>
-                    <div><span class="text-dark-400">Время:</span> <span class="text-dark-300">${formatDate(action.applied_at)}</span></div>
+                    <div><span class="text-gray-500">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(action.status)}">${statusLabel(action.status)}</span></div>
+                    <div><span class="text-gray-500">Время:</span> <span class="text-gray-700">${formatDate(action.applied_at)}</span></div>
                 </div>
                 <div>
-                    <div class="text-dark-400 mb-1">Параметры:</div>
-                    <pre class="p-3 bg-dark-950 rounded overflow-x-auto">${esc(JSON.stringify(action.parameters_json, null, 2))}</pre>
+                    <div class="text-gray-500 mb-1">Параметры:</div>
+                    <pre class="p-3 bg-[hsl(228,33%,97.6%)] rounded overflow-x-auto">${esc(JSON.stringify(action.parameters_json, null, 2))}</pre>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <div class="text-dark-400 mb-1">Метрики до:</div>
+                        <div class="text-gray-500 mb-1">Метрики до:</div>
                         <pre class="p-2 rounded-xl overflow-x-auto">${action.metrics_before_json ? esc(JSON.stringify(action.metrics_before_json, null, 2)) : '—'}</pre>
                     </div>
                     <div>
-                        <div class="text-dark-400 mb-1">Метрики после:</div>
+                        <div class="text-gray-500 mb-1">Метрики после:</div>
                         <pre class="p-2 rounded-xl overflow-x-auto">${action.metrics_after_json ? esc(JSON.stringify(action.metrics_after_json, null, 2)) : '—'}</pre>
                     </div>
                 </div>
