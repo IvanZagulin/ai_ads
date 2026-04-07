@@ -5,7 +5,11 @@ from celery import Celery, Task
 
 from app.config import settings
 
-nest_asyncio.apply()
+try:
+    nest_asyncio.apply()
+except ValueError:
+    # uvloop.Loop cannot be patched — happens when imported from uvicorn
+    pass
 
 
 class AsyncTask(Task):
