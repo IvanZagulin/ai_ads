@@ -157,7 +157,7 @@ async def _find_or_create_wb_campaign(
             campaign_type=data.get("campaign_type", "search"),
             status=data.get("status", "active"),
             name=data.get("name", f"WB Campaign {platform_id}"),
-            daily_budget=data.get("daily_budget"),
+            daily_budget=data.get("remaining_budget") or data.get("daily_budget"),
             current_bid=data.get("current_bid"),
             nm_ids=data.get("nm_ids") or [],
             wb_status=data.get("wb_status"),
@@ -171,7 +171,9 @@ async def _find_or_create_wb_campaign(
         campaign.name = data.get("name", campaign.name)
         if data.get("current_bid") is not None:
             campaign.current_bid = data["current_bid"]
-        if data.get("daily_budget") is not None:
+        if data.get("remaining_budget") is not None:
+            campaign.daily_budget = data["remaining_budget"]
+        elif data.get("daily_budget") is not None:
             campaign.daily_budget = data["daily_budget"]
         if data.get("nm_ids") is not None:
             campaign.nm_ids = data["nm_ids"]

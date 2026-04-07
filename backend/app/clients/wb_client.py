@@ -73,16 +73,8 @@ class WBPromotionClient:
                     f"WB details error: {resp.status_code}, {resp.text[:300]}"
                 )
                 continue
-            raw_list = resp.json().get("adverts", [])
-            # Fetch budgets for this chunk in parallel
-            budgets = await self._fetch_budgets_for_chunk(chunk)
-            budget_map = {b["campaign_id"]: b for b in budgets}
-            for c in raw_list:
-                norm = self._normalize(c)
-                wb_id = c.get("id")
-                if wb_id and wb_id in budget_map:
-                    norm["daily_budget"] = budget_map[wb_id].get("total")
-                results.append(norm)
+            for c in resp.json().get("adverts", []):
+                results.append(self._normalize(c))
         return results
 
     async def start_campaign(self, advert_id: int) -> int:
@@ -314,12 +306,34 @@ class WBPromotionClient:
         return []
 
     async def get_campaigns_with_stats(self, days: int = 30) -> list[dict[str, Any]]:
-        """Fetch campaigns with cluster lists and daily stats."""
+        """Fetch campaigns with cluster lists, daily stats, and fresh budget."""
         from datetime import date, timedelta
 
         campaigns = await self.get_campaigns()
         if not campaigns:
             return campaigns
+
+        # Fetch all budgets in parallel for active/paused campaigns
+        adv_ids = [c["wb_adv_id"] for c in campaigns if c.get("status") in ("active", "paused")]
+        if adv_ids:
+            budgets_map = {}
+            async with httpx.AsyncClient() as client:
+                tasks = {}
+                for cid in adv_ids:
+                    await self._rate_limiter.acquire()
+                    url = f"{self.base_url}/adv/v1/budget"
+                    tasks[cid] = client.get(url, headers=self._headers(), params={"id": cid}, timeout=15.0)
+                responses = await asyncio.gather(*tasks.values(), return_exceptions=True)
+                for cid, resp in zip(tasks.keys(), responses):
+                    if isinstance(resp, Exception) or resp.status_code != 200:
+                        continue
+                    data = resp.json()
+                    budgets_map[cid] = data.get("total")
+
+            for camp in campaigns:
+                adv_id = camp.get("wb_adv_id")
+                if adv_id in budgets_map:
+                    camp["remaining_budget"] = budgets_map[adv_id]
 
         today = date.today()
         from_date = (today - timedelta(days=days)).strftime("%Y-%m-%d")
