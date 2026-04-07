@@ -4,7 +4,7 @@ import json
 import logging
 from typing import Any
 
-from openai import AsyncOpenAI, APIError, APIConnectionError, RateLimitError
+from anthropic import AsyncAnthropic, APIError, APIConnectionError, RateLimitError
 
 from app.config import settings
 
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class LLMClient:
-    """LLM client using OpenAI-compatible SDK with ClaudeHub proxy."""
+    """LLM client using Anthropic SDK with claudehub.fun proxy."""
 
     def __init__(
         self,
@@ -26,7 +26,7 @@ class LLMClient:
         self.model = model or settings.CLAUDE_MODEL
         self.max_retries = max_retries
 
-        self._client = AsyncOpenAI(
+        self._client = AsyncAnthropic(
             api_key=self.api_key,
             base_url=self.base_url,
             max_retries=0,
@@ -38,27 +38,23 @@ class LLMClient:
 
         for attempt in range(1, self.max_retries + 1):
             try:
-                response = await self._client.chat.completions.create(
+                message = await self._client.messages.create(
                     model=self.model,
+                    max_tokens=4096,
+                    system=(
+                        "You are an expert advertising campaign manager. "
+                        "Always respond with valid JSON only. No markdown, no explanation. "
+                        "Return a single JSON object with the key 'actions' containing "
+                        "an array of action objects."
+                    ),
                     messages=[
-                        {
-                            "role": "system",
-                            "content": (
-                                "You are an expert advertising campaign manager. "
-                                "Always respond with valid JSON only. No markdown, no explanation. "
-                                "Return a single JSON object with the key 'actions' containing "
-                                "an array of action objects."
-                            ),
-                        },
                         {"role": "user", "content": prompt},
                     ],
-                    response_format={"type": "json_object"},
                     temperature=0.3,
-                    max_tokens=4096,
                 )
 
-                content = response.choices[0].message.content
-                if content is None:
+                content = message.content[0].text if message.content else ""
+                if not content:
                     raise ValueError("LLM returned empty response")
 
                 return json.loads(content)
