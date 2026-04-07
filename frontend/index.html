@@ -290,12 +290,12 @@
                 <div class="flex items-center justify-between h-14">
                     <div class="flex items-center gap-8">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <div class="w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                                 <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z"/>
                                 </svg>
                             </div>
-                            <span class="text-sm font-semibold tracking-tight text-white">AI Ads Manager</span>
+                            <span class="text-sm font-semibold tracking-tight text-gray-800">AI Ads Manager</span>
                         </div>
                         <nav class="flex items-center gap-1" id="nav-links">
                             <a href="#" data-section="dashboard" class="nav-link active px-3 py-2 text-sm font-medium rounded-lg">Главная</a>
@@ -312,7 +312,7 @@
                             <span class="w-2 h-2 rounded-full bg-dark-500 pulse-dot" id="health-dot"></span>
                             <span class="text-xs" id="health-text">Проверка...</span>
                         </div>
-                        <button id="btn-trigger-analysis" class="inline-flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/25 active:scale-[0.97]">
+                        <button id="btn-trigger-analysis" class="inline-flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-cyan-500/25 active:scale-[0.97]">
                             <svg id="trigger-spinner" class="w-4 h-4 hidden spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                             <span class="hidden sm:inline">Оптимизация</span>
                         </button>
@@ -331,8 +331,8 @@
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-xs uppercase tracking-wider font-medium">Кампаний</span>
-                                <div class="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25z"/></svg>
+                                <div class="w-8 h-8 rounded-xl bg-cyan-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25z"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-total-campaigns">—</div>
@@ -350,8 +350,8 @@
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-xs uppercase tracking-wider font-medium">Клики</span>
-                                <div class="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834-1.66l-1.591 1.591M2.25 12h3.5m12.678 0H14.5m.566 5.882l1.591-1.591M4.75 18.364l1.591-1.591"/></svg>
+                                <div class="w-8 h-8 rounded-xl bg-sky-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834-1.66l-1.591 1.591M2.25 12h3.5m12.678 0H14.5m.566 5.882l1.591-1.591M4.75 18.364l1.591-1.591"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-total-clicks">—</div>
@@ -369,7 +369,7 @@
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-xs uppercase tracking-wider font-medium">Рекомендации</span>
                                 <div class="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
+                                    <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-pending">—</div>
@@ -377,8 +377,8 @@
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-xs uppercase tracking-wider font-medium">Режим</span>
-                                <div class="w-8 h-8 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.841m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312"/></svg>
+                                <div class="w-8 h-8 rounded-xl bg-cyan-500/10 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.841m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-auto-mode">—</div>
@@ -401,7 +401,7 @@
                                         <option value="paused">На паузе</option>
                                         <option value="completed">Завершённые</option>
                                     </select>
-                                    <button onclick="syncCampaigns()" class="text-xs px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-lg hover:bg-indigo-500/25 transition-all">↓ Импорт</button>
+                                    <button onclick="syncCampaigns()" class="text-xs px-3 py-1 bg-cyan-500/20 text-cyan-500 rounded-lg hover:bg-cyan-500/25 transition-all">↓ Импорт</button>
                                 </div>
                             </div>
                             <div class="overflow-x-auto" id="campaigns-body">
@@ -424,7 +424,7 @@
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b flex items-center justify-between">
                                 <h2 class="text-sm font-semibold text-white">Рекомендации</h2>
-                                <a href="#" data-section="recommendations" class="text-xs text-indigo-400 hover:text-indigo-300" onclick="event.preventDefault();navigateTo('recommendations')">Все →</a>
+                                <a href="#" data-section="recommendations" class="text-xs text-gray-500 hover:text-cyan-600" onclick="event.preventDefault();navigateTo('recommendations')">Все →</a>
                             </div>
                             <div class="divide-y border-border max-h-96 overflow-y-auto" id="recent-recommendations"></div>
                         </div>
@@ -433,7 +433,7 @@
                     <div class="card animate-fade-in">
                         <div class="px-5 py-4 border-b flex items-center justify-between">
                             <h2 class="text-sm font-semibold text-white">Журнал действий</h2>
-                            <a href="#" data-section="actions" class="text-xs text-indigo-400 hover:text-indigo-300" onclick="event.preventDefault();navigateTo('actions')">Все →</a>
+                            <a href="#" data-section="actions" class="text-xs text-gray-500 hover:text-cyan-600" onclick="event.preventDefault();navigateTo('actions')">Все →</a>
                         </div>
                         <div class="divide-y border-border max-h-64 overflow-y-auto" id="recent-actions-log"></div>
                     </div>
@@ -508,7 +508,7 @@
                                 </div>
                                 <div class="hidden mt-2 card-sm p-2" id="detail-date-range-panel">
                                     <div class="flex gap-2 mb-2 flex-wrap">
-                                        <button onclick="applyPreset(1)" class="px-2 py-1 text-xs bg-indigo-600/30 text-indigo-300 rounded-lg hover:bg-indigo-600/50 transition-colors">1 день</button>
+                                        <button onclick="applyPreset(1)" class="px-2 py-1 text-xs bg-cyan-500/30 text-cyan-300 rounded-lg hover:bg-cyan-500/50 transition-colors">1 день</button>
                                         <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-dark-600 transition-colors">7 дней</button>
                                         <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-dark-600 transition-colors">14 дней</button>
                                         <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-dark-600 transition-colors">30 дней</button>
@@ -516,13 +516,13 @@
                                     <div class="flex gap-3 items-center">
                                         <label class="text-xs flex items-center gap-1">С: <input type="date" id="detail-date-from" class="input-style  " /></label>
                                         <label class="text-xs flex items-center gap-1">По: <input type="date" id="detail-date-to" class="input-style  " /></label>
-                                        <button onclick="applyCustomDateRange()" class="px-2 py-1 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors">Применить</button>
+                                        <button onclick="applyCustomDateRange()" class="px-2 py-1 text-xs bg-cyan-500 text-white rounded-lg hover:bg-cyan-500 transition-colors">Применить</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2" id="detail-status-buttons">
                                 <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-500/20 text-green-400 rounded-xl hover:bg-green-500/25 transition-all">Старт</button>
-                                <button onclick="changeCampaignStatus('paused')" class="px-3 py-1.5 text-xs bg-amber-500/20 text-amber-400 rounded-xl hover:bg-amber-600/30 transition-all">Пауза</button>
+                                <button onclick="changeCampaignStatus('paused')" class="px-3 py-1.5 text-xs bg-amber-500/20 text-amber-500 rounded-xl hover:bg-amber-600/30 transition-all">Пауза</button>
                                 <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-white rounded-xl hover:bg-dark-600 transition-all">Стоп</button>
                             </div>
                         </div>
@@ -715,7 +715,7 @@
                 <section id="section-rules" class="section-content">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-lg font-semibold text-white">Правила оптимизации</h2>
-                        <button onclick="showAddRuleModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-500/20 text-indigo-400 text-sm rounded-xl hover:bg-indigo-500/25 transition-all">
+                        <button onclick="showAddRuleModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-500/20 text-cyan-500 text-sm rounded-xl hover:bg-cyan-500/25 transition-all">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                             Добавить правило
                         </button>
@@ -777,7 +777,7 @@
                                             <input type="password" id="acc-ozon-secret" placeholder="Client Secret" class="w-full input-style   ">
                                         </div>
                                     </div>
-                                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/25 active:scale-[0.97]">
+                                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-cyan-500/25 active:scale-[0.97]">
                                         Добавить аккаунт
                                     </button>
                                 </form>
@@ -897,7 +897,7 @@
         const icons = {
             success: '<svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
             error: '<svg class="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>',
-            info: '<svg class="w-5 h-5 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>',
+            info: '<svg class="w-5 h-5 text-cyan-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>',
         };
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -948,8 +948,8 @@
     }
     function statusClass(s) {
         const map = {
-            active: 'bg-green-500/15 text-green-400', paused: 'bg-amber-500/15 text-amber-400',
-            completed: 'bg-dark-600/40', pending: 'bg-indigo-500/15 text-indigo-400',
+            active: 'bg-green-500/15 text-green-400', paused: 'bg-amber-500/15 text-amber-500',
+            completed: 'bg-dark-600/40', pending: 'bg-cyan-500/15 text-cyan-500',
             approved: 'bg-green-500/15 text-green-400', rejected: 'bg-red-500/15 text-red-400',
             applied: 'bg-green-500/15 text-green-400', executed: 'bg-green-500/15 text-green-400',
             success: 'bg-green-500/15 text-green-400', failed: 'bg-red-500/15 text-red-400',
@@ -1276,7 +1276,7 @@
                 <td class="px-4 py-2 text-center">
                     <div class="flex items-center justify-center gap-1">
                         ${kw.status !== 'minus' ? `<button onclick="minusKeyword(${kw.id})" class="p-1 hover:text-red-400 transition-colors" title="Минусовать"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg></button>` : ''}
-                        <button onclick="editKeywordBid(${kw.id}, ${kw.current_bid || 0})" class="p-1 hover:text-indigo-400 transition-colors" title="Изменить ставку"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0H4.5z"/></svg></button>
+                        <button onclick="editKeywordBid(${kw.id}, ${kw.current_bid || 0})" class="p-1 hover:text-cyan-500 transition-colors" title="Изменить ставку"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0H4.5z"/></svg></button>
                     </div>
                 </td>
             </tr>`;
@@ -1487,7 +1487,7 @@
                             <span class="text-xs ${hasToken ? 'text-green-400' : 'text-red-400'} ml-2">${hasToken ? '✓ ' + tokenLabel : '✗ нет ' + tokenLabel}</span>
                         </div>
                     </div>
-                    <button onclick="setToken(${a.id}, '${a.platform}')" class="text-xs px-2 py-1 bg-indigo-500/20 text-indigo-400 rounded hover:bg-indigo-500/25 transition-all">Установить токен</button>
+                    <button onclick="setToken(${a.id}, '${a.platform}')" class="text-xs px-2 py-1 bg-cyan-500/20 text-cyan-500 rounded hover:bg-cyan-500/25 transition-all">Установить токен</button>
                 </div>`;
             }).join('');
         }
@@ -1549,7 +1549,7 @@
                 </td>
                 <td class="px-4 py-3 text-center">
                     <div class="flex items-center justify-center gap-1">
-                        <button onclick="editRule(${r.id})" class="p-1 hover:text-indigo-400 transition-colors" title="Редактировать">
+                        <button onclick="editRule(${r.id})" class="p-1 hover:text-cyan-500 transition-colors" title="Редактировать">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.8a4.5 4.5 0 011.13-1.897l10.606-10.606.324.324z"/></svg>
                         </button>
                         <button onclick="deleteRule(${r.id})" class="p-1 hover:text-red-400 transition-colors" title="Удалить">
@@ -1592,7 +1592,7 @@
                     <label class="block text-sm font-medium mb-1">Параметры (JSON)</label>
                     <textarea id="edit-rule-params" rows="4" class="w-full input-style   font-mono">${esc(JSON.stringify(r.rule_params_json, null, 2))}</textarea>
                 </div>
-                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all">Сохранить</button>
+                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white text-sm font-medium rounded-xl transition-all">Сохранить</button>
             </form>
         `);
         setTimeout(() => {
@@ -1643,7 +1643,7 @@
                     <label class="block text-sm font-medium mb-1">Параметры (JSON)</label>
                     <textarea id="rule-params" rows="3" class="w-full input-style   font-mono">{"min_ctr": 0.02, "min_impressions": 1000}</textarea>
                 </div>
-                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all">Добавить правило</button>
+                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white text-sm font-medium rounded-xl transition-all">Добавить правило</button>
             </form>
         `);
         setTimeout(() => {
@@ -1692,7 +1692,7 @@
                         <label class="block text-sm font-medium mb-1">Base URL</label>
                         <input type="text" id="llm-base-url" value="${esc(analysisSettings.base_url)}" readonly class="w-full input-style  rounded-xl px-3 py-2 text-sm cursor-not-allowed" title="Меняется в .env на сервере">
                     </div>
-                    <button onclick="saveLlmSettings()" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all">Сохранить</button>
+                    <button onclick="saveLlmSettings()" class="w-full px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white text-sm font-medium rounded-xl transition-all">Сохранить</button>
                 </div>
             `;
             // Mode toggle
@@ -1764,7 +1764,7 @@
         const actionsList = (d.actions || []).map(a => `
             <div class="bg-[hsl(228,33%,97.6%)] border rounded-xl p-3 text-xs">
                 <div class="flex items-center justify-between mb-2">
-                    <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 font-medium">${translateActionType(a.action_type)}</span>
+                    <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-500 font-medium">${translateActionType(a.action_type)}</span>
                     <span class="px-2 py-0.5 rounded ${statusClass(a.status)}">${statusLabel(a.status)}</span>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
