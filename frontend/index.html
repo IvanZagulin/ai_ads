@@ -221,7 +221,7 @@
             justify-content: space-between;
             padding: 12px 16px;
             border-radius: 10px;
-            background: hsl(228 30% 11%);
+            background: #fff;
             border: 1px solid hsl(228,20%,90%);
             animation: fadeInUp 0.25s ease backwards;
             transition: all 0.2s ease;
@@ -239,7 +239,7 @@
         }
         /* ── skeletons for loading ── */
         .skeleton {
-            background: hsl(228 25% 16%);
+            background: hsl(225,14%,95%);
             border-radius: 10px;
             position: relative;
             overflow: hidden;
@@ -254,7 +254,7 @@
         }
         /* ── input styling ── */
         .input-style {
-            background: hsl(225 30% 14%) !important;
+            background: #fff !important;
             border: 1px solid hsl(228,20%,90%) !important;
             border-radius: 8px !important;
             color: var(--text-1);
@@ -299,17 +299,17 @@
                         </div>
                         <nav class="flex items-center gap-1" id="nav-links">
                             <a href="#" data-section="dashboard" class="nav-link active px-3 py-2 text-sm font-medium rounded-lg">Главная</a>
-                            <a href="#" data-section="campaigns" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Кампании</a>
-                            <a href="#" data-section="analytics" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Аналитика</a>
-                            <a href="#" data-section="recommendations" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Рекомендации</a>
-                            <a href="#" data-section="actions" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Действия</a>
-                            <a href="#" data-section="rules" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Правила</a>
-                            <a href="#" data-section="settings" class="nav-link px-3 py-2 text-sm font-medium hover:text-white rounded-lg">Настройки</a>
+                            <a href="#" data-section="campaigns" class="nav-link px-3 py-2 text-sm font-medium hover:text-cyan-500 rounded-lg">Кампании</a>
+                            <a href="#" data-section="analytics" class="nav-link px-3 py-2 text-sm font-medium hover:text-cyan-500 rounded-lg">Аналитика</a>
+                            <a href="#" data-section="recommendations" class="nav-link px-3 py-2 text-sm font-medium hover:text-cyan-500 rounded-lg">Рекомендации</a>
+                            <a href="#" data-section="actions" class="nav-link px-3 py-2 text-sm font-medium hover:text-cyan-500 rounded-lg">Действия</a>
+                            <a href="#" data-section="rules" class="nav-link px-3 py-2 text-sm font-medium hover:text-cyan-500 rounded-lg">Правила</a>
+                            <a href="#" data-section="settings" class="nav-link px-3 py-2 text-sm font-medium hover:text-cyan-500 rounded-lg">Настройки</a>
                         </nav>
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="flex items-center gap-2 px-3 py-1.5 rounded-full card border /50" id="health-indicator">
-                            <span class="w-2 h-2 rounded-full bg-dark-500 pulse-dot" id="health-dot"></span>
+                            <span class="w-2 h-2 rounded-full bg-gray-400 pulse-dot" id="health-dot"></span>
                             <span class="text-xs" id="health-text">Проверка...</span>
                         </div>
                         <button id="btn-trigger-analysis" class="inline-flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-cyan-500/25 active:scale-[0.97]">
@@ -335,17 +335,17 @@
                                     <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25z"/></svg>
                                 </div>
                             </div>
-                            <div class="text-2xl font-bold text-white" id="stat-total-campaigns">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="stat-total-campaigns">—</div>
                             <div class="text-xs mt-1" id="stat-campaigns-delta"></div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-xs uppercase tracking-wider font-medium">Расход сегодня</span>
                                 <div class="w-8 h-8 rounded-xl bg-red-500/10 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 </div>
                             </div>
-                            <div class="text-2xl font-bold text-white" id="stat-spent-today">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="stat-spent-today">—</div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
@@ -354,16 +354,16 @@
                                     <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834-1.66l-1.591 1.591M2.25 12h3.5m12.678 0H14.5m.566 5.882l1.591-1.591M4.75 18.364l1.591-1.591"/></svg>
                                 </div>
                             </div>
-                            <div class="text-2xl font-bold text-white" id="stat-total-clicks">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="stat-total-clicks">—</div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-xs uppercase tracking-wider font-medium">Заказы</span>
                                 <div class="w-8 h-8 rounded-xl bg-green-500/10 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
                                 </div>
                             </div>
-                            <div class="text-2xl font-bold text-white" id="stat-total-orders">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="stat-total-orders">—</div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
@@ -372,7 +372,7 @@
                                     <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
                                 </div>
                             </div>
-                            <div class="text-2xl font-bold text-white" id="stat-pending">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="stat-pending">—</div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
@@ -381,14 +381,14 @@
                                     <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.841m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312"/></svg>
                                 </div>
                             </div>
-                            <div class="text-2xl font-bold text-white" id="stat-auto-mode">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="stat-auto-mode">—</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                         <!-- Campaigns Table -->
                         <div class="lg:col-span-2 card animate-fade-in">
                             <div class="px-5 py-4 border-b flex items-center justify-between">
-                                <h2 class="text-sm font-semibold text-white">Кампании</h2>
+                                <h2 class="text-sm font-semibold text-gray-800">Кампании</h2>
                                 <div class="flex items-center gap-2">
                                     <select id="filter-platform" class="input-style  ">
                                         <option value="">Все платформы</option>
@@ -423,7 +423,7 @@
                         <!-- Recent Recommendations -->
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b flex items-center justify-between">
-                                <h2 class="text-sm font-semibold text-white">Рекомендации</h2>
+                                <h2 class="text-sm font-semibold text-gray-800">Рекомендации</h2>
                                 <a href="#" data-section="recommendations" class="text-xs text-gray-500 hover:text-cyan-600" onclick="event.preventDefault();navigateTo('recommendations')">Все →</a>
                             </div>
                             <div class="divide-y border-border max-h-96 overflow-y-auto" id="recent-recommendations"></div>
@@ -432,7 +432,7 @@
                     <!-- Recent Actions Log -->
                     <div class="card animate-fade-in">
                         <div class="px-5 py-4 border-b flex items-center justify-between">
-                            <h2 class="text-sm font-semibold text-white">Журнал действий</h2>
+                            <h2 class="text-sm font-semibold text-gray-800">Журнал действий</h2>
                             <a href="#" data-section="actions" class="text-xs text-gray-500 hover:text-cyan-600" onclick="event.preventDefault();navigateTo('actions')">Все →</a>
                         </div>
                         <div class="divide-y border-border max-h-64 overflow-y-auto" id="recent-actions-log"></div>
@@ -442,7 +442,7 @@
                 <section id="section-campaigns" class="section-content">
                     <div class="card animate-fade-in">
                         <div class="px-5 py-4 border-b flex items-center justify-between">
-                            <h2 class="text-sm font-semibold text-white">Все кампании</h2>
+                            <h2 class="text-sm font-semibold text-gray-800">Все кампании</h2>
                             <div class="flex items-center gap-2">
                                 <select id="filter-platform2" class="input-style  ">
                                     <option value="">Все платформы</option>
@@ -479,7 +479,7 @@
                 <!-- ===== CAMPAIGN DETAIL SECTION ===== -->
                 <section id="section-campaign-detail" class="section-content">
                     <div class="mb-6">
-                        <button onclick="navigateTo('campaigns')" class="inline-flex items-center gap-1.5 text-sm hover:text-white transition-all">
+                        <button onclick="navigateTo('campaigns')" class="inline-flex items-center gap-1.5 text-sm hover:text-cyan-500 transition-all">
                             <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25h11.25m0 0v11.25"/></svg>
                             Назад к кампаниям
                         </button>
@@ -489,7 +489,7 @@
                         <div class="px-5 py-4 flex items-start justify-between flex-wrap gap-4">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-3 mb-2">
-                                    <h2 class="text-lg font-semibold text-white truncate" id="detail-name">—</h2>
+                                    <h2 class="text-lg font-semibold text-gray-800 truncate" id="detail-name">—</h2>
                                     <span id="detail-platform-badge" class="inline-flex px-2 py-0.5 rounded text-xs font-medium"></span>
                                     <span id="detail-status-badge" class="inline-flex px-2 py-0.5 rounded text-xs font-medium"></span>
                                 </div>
@@ -509,9 +509,9 @@
                                 <div class="hidden mt-2 card-sm p-2" id="detail-date-range-panel">
                                     <div class="flex gap-2 mb-2 flex-wrap">
                                         <button onclick="applyPreset(1)" class="px-2 py-1 text-xs bg-cyan-500/30 text-cyan-300 rounded-lg hover:bg-cyan-500/50 transition-colors">1 день</button>
-                                        <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-dark-600 transition-colors">7 дней</button>
-                                        <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-dark-600 transition-colors">14 дней</button>
-                                        <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-dark-600 transition-colors">30 дней</button>
+                                        <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-gray-100 transition-colors">7 дней</button>
+                                        <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-gray-100 transition-colors">14 дней</button>
+                                        <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-white rounded-lg hover:bg-gray-100 transition-colors">30 дней</button>
                                     </div>
                                     <div class="flex gap-3 items-center">
                                         <label class="text-xs flex items-center gap-1">С: <input type="date" id="detail-date-from" class="input-style  " /></label>
@@ -521,9 +521,9 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-2" id="detail-status-buttons">
-                                <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-500/20 text-green-400 rounded-xl hover:bg-green-500/25 transition-all">Старт</button>
+                                <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-500/20 text-green-500 rounded-xl hover:bg-green-500/25 transition-all">Старт</button>
                                 <button onclick="changeCampaignStatus('paused')" class="px-3 py-1.5 text-xs bg-amber-500/20 text-amber-500 rounded-xl hover:bg-amber-600/30 transition-all">Пауза</button>
-                                <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-white rounded-xl hover:bg-dark-600 transition-all">Стоп</button>
+                                <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-white rounded-xl hover:bg-gray-100 transition-all">Стоп</button>
                             </div>
                         </div>
                     </div>
@@ -601,37 +601,37 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="text-xs uppercase tracking-wider mb-2">Общий CTR</div>
-                            <div class="text-2xl font-bold text-white" id="analytics-ctr">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="analytics-ctr">—</div>
                             <div class="text-xs mt-1" id="analytics-ctr-delta"></div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="text-xs uppercase tracking-wider mb-2">Общий расход</div>
-                            <div class="text-2xl font-bold text-white" id="analytics-cost">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="analytics-cost">—</div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="text-xs uppercase tracking-wider mb-2">Общие заказы</div>
-                            <div class="text-2xl font-bold text-white" id="analytics-orders">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="analytics-orders">—</div>
                         </div>
                         <div class="card p-4 card-hover animate-fade-in">
                             <div class="text-xs uppercase tracking-wider mb-2">Ключевых слов</div>
-                            <div class="text-2xl font-bold text-white" id="analytics-keywords">—</div>
+                            <div class="text-2xl font-bold text-gray-800" id="analytics-keywords">—</div>
                         </div>
                     </div>
                     <!-- Charts -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="card animate-fade-in">
-                            <div class="px-5 py-4 border-b"><h2 class="text-sm font-semibold text-white">Расход по кампаниям (топ-10)</h2></div>
+                            <div class="px-5 py-4 border-b"><h2 class="text-sm font-semibold text-gray-800">Расход по кампаниям (топ-10)</h2></div>
                             <div class="p-5" id="chart-cost-bars"></div>
                         </div>
                         <div class="card animate-fade-in">
-                            <div class="px-5 py-4 border-b"><h2 class="text-sm font-semibold text-white">CTR по кампаниям (топ-10)</h2></div>
+                            <div class="px-5 py-4 border-b"><h2 class="text-sm font-semibold text-gray-800">CTR по кампаниям (топ-10)</h2></div>
                             <div class="p-5" id="chart-ctr-bars"></div>
                         </div>
                     </div>
                     <!-- Campaign Stats Table -->
                     <div class="card animate-fade-in">
                         <div class="px-5 py-4 border-b flex items-center justify-between">
-                            <h2 class="text-sm font-semibold text-white">Статистика по кампаниям за последние дни</h2>
+                            <h2 class="text-sm font-semibold text-gray-800">Статистика по кампаниям за последние дни</h2>
                             <select id="analytics-platform" class="input-style  ">
                                 <option value="">Все платформы</option>
                                 <option value="wildberries">Wildberries</option>
@@ -660,7 +660,7 @@
                 <!-- ===== RECOMMENDATIONS SECTION ===== -->
                 <section id="section-recommendations" class="section-content">
                     <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-semibold text-white">Рекомендации ИИ</h2>
+                        <h2 class="text-lg font-semibold text-gray-800">Рекомендации ИИ</h2>
                         <div class="flex items-center gap-2">
                             <select id="rec-filter-status" class="input-style  ">
                                 <option value="">Все статусы</option>
@@ -676,7 +676,7 @@
                 <section id="section-actions" class="section-content">
                     <div class="card animate-fade-in">
                         <div class="px-5 py-4 border-b flex items-center justify-between">
-                            <h2 class="text-sm font-semibold text-white">Журнал действий</h2>
+                            <h2 class="text-sm font-semibold text-gray-800">Журнал действий</h2>
                             <div class="flex items-center gap-2">
                                 <select id="action-filter-type" class="input-style  ">
                                     <option value="">Все типы</option>
@@ -714,7 +714,7 @@
                 <!-- ===== RULES SECTION ===== -->
                 <section id="section-rules" class="section-content">
                     <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-semibold text-white">Правила оптимизации</h2>
+                        <h2 class="text-lg font-semibold text-gray-800">Правила оптимизации</h2>
                         <button onclick="showAddRuleModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-500/20 text-cyan-500 text-sm rounded-xl hover:bg-cyan-500/25 transition-all">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                             Добавить правило
@@ -723,7 +723,7 @@
                     <!-- Default rules table from diploma -->
                     <div class="card animate-fade-in mb-6">
                         <div class="px-5 py-4 border-b">
-                            <h3 class="text-sm font-semibold text-white">Встроенные правила Wildberries</h3>
+                            <h3 class="text-sm font-semibold text-gray-800">Встроенные правила Wildberries</h3>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
@@ -748,7 +748,7 @@
                         <!-- Add Account Form -->
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b">
-                                <h2 class="text-sm font-semibold text-white">Добавить аккаунт</h2>
+                                <h2 class="text-sm font-semibold text-gray-800">Добавить аккаунт</h2>
                             </div>
                             <div class="p-5">
                                 <form id="form-add-account" class="space-y-4">
@@ -786,14 +786,14 @@
                         <!-- Connected Accounts -->
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b">
-                                <h2 class="text-sm font-semibold text-white">Подключённые аккаунты</h2>
+                                <h2 class="text-sm font-semibold text-gray-800">Подключённые аккаунты</h2>
                             </div>
                             <div class="divide-y border-border max-h-[400px] overflow-y-auto" id="connected-accounts"></div>
                         </div>
                         <!-- LLM Settings -->
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b">
-                                <h2 class="text-sm font-semibold text-white">Настройки LLM</h2>
+                                <h2 class="text-sm font-semibold text-gray-800">Настройки LLM</h2>
                             </div>
                             <div class="p-5 space-y-4" id="llm-settings-form">
                                 <div class="text-sm">Загрузка...</div>
@@ -802,7 +802,7 @@
                         <!-- Mode Toggle -->
                         <div class="card animate-fade-in">
                             <div class="px-5 py-4 border-b">
-                                <h2 class="text-sm font-semibold text-white">Режим работы</h2>
+                                <h2 class="text-sm font-semibold text-gray-800">Режим работы</h2>
                             </div>
                             <div class="p-5 flex items-center justify-between">
                                 <div>
@@ -827,8 +827,8 @@
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="card w-full max-w-3xl max-h-[85vh] overflow-y-auto" onclick="event.stopPropagation()">
                 <div class="sticky top-0 border-b border-border px-5 py-4 flex items-center justify-between z-10">
-                    <h3 class="text-sm font-semibold text-white" id="modal-title">Детали</h3>
-                    <button onclick="closeModal()" class="text-gray-500 hover:text-white transition-colors">
+                    <h3 class="text-sm font-semibold text-gray-800" id="modal-title">Детали</h3>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-cyan-500 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
@@ -895,8 +895,8 @@
             info: 'badge-info',
         };
         const icons = {
-            success: '<svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
-            error: '<svg class="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>',
+            success: '<svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+            error: '<svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>',
             info: '<svg class="w-5 h-5 text-cyan-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>',
         };
         const container = document.getElementById('toast-container');
@@ -948,14 +948,14 @@
     }
     function statusClass(s) {
         const map = {
-            active: 'bg-green-500/15 text-green-400', paused: 'bg-amber-500/15 text-amber-500',
-            completed: 'bg-dark-600/40', pending: 'bg-cyan-500/15 text-cyan-500',
-            approved: 'bg-green-500/15 text-green-400', rejected: 'bg-red-500/15 text-red-400',
-            applied: 'bg-green-500/15 text-green-400', executed: 'bg-green-500/15 text-green-400',
-            success: 'bg-green-500/15 text-green-400', failed: 'bg-red-500/15 text-red-400',
-            unmanaged: 'bg-dark-600/40', minus: 'bg-red-500/15 text-red-400',
+            active: 'bg-green-500/15 text-green-500', paused: 'bg-amber-500/15 text-amber-500',
+            completed: 'bg-gray-200', pending: 'bg-cyan-500/15 text-cyan-500',
+            approved: 'bg-green-500/15 text-green-500', rejected: 'bg-red-500/15 text-red-500',
+            applied: 'bg-green-500/15 text-green-500', executed: 'bg-green-500/15 text-green-500',
+            success: 'bg-green-500/15 text-green-500', failed: 'bg-red-500/15 text-red-500',
+            unmanaged: 'bg-gray-200', minus: 'bg-red-500/15 text-red-500',
         };
-        return map[s] || 'bg-dark-600/40';
+        return map[s] || 'bg-gray-200';
     }
     function translateActionType(t) {
         const m = { raise_bid: 'Повысить ставку', lower_bid: 'Понизить ставку', minus_word: 'Минус-слово', increase_budget: 'Увеличить бюджет', create_search_campaign: 'Создать кампанию', adjust_price: 'Скорректировать цену' };
@@ -966,7 +966,7 @@
         if (oldVal === null || oldVal === undefined || newVal === null || oldVal === 0) return '';
         const pct = ((newVal - oldVal) / Math.abs(oldVal) * 100).toFixed(1);
         const isUp = newVal >= oldVal;
-        return `<span class="${isUp ? 'text-green-400' : 'text-red-400'}">${isUp ? '↑' : '↓'}${pct}%</span>`;
+        return `<span class="${isUp ? 'text-green-500' : 'text-red-500'}">${isUp ? '↑' : '↓'}${pct}%</span>`;
     }
     // ============================================================
     //  SPARKLINE
@@ -999,9 +999,9 @@
         nameValuePairs.forEach((pair, i) => {
             const y = padding + i * (barH + 4);
             const w = Math.max(2, (pair[1] / maxVal) * (400 - padding - 10));
-            html += `<text x="2" y="${y + barH / 2 + 4}" class="fill-dark-400" font-size="9">${esc(pair[0]?.substring(0, 25) || '')}</text>`;
+            html += `<text x="2" y="${y + barH / 2 + 4}" class="fill-gray-400" font-size="9">${esc(pair[0]?.substring(0, 25) || '')}</text>`;
             html += `<rect x="${padding}" y="${y}" width="${w.toFixed(1)}" height="${barH}" rx="2" fill="${barColor}" opacity="0.8"/>`;
-            html += `<text x="${(padding + w + 4).toFixed(1)}" y="${y + barH / 2 + 3}" class="fill-dark-300" font-size="9">${pair[1].toFixed(1)}</text>`;
+            html += `<text x="${(padding + w + 4).toFixed(1)}" y="${y + barH / 2 + 3}" class="fill-gray-300" font-size="9">${pair[1].toFixed(1)}</text>`;
         });
         html += '</svg>';
         return html;
@@ -1098,8 +1098,8 @@
                     <p class="text-xs">${actionCount} действий · ${d.llm_model || '—'}</p>
                     ${d.status === 'pending' ? `
                     <div class="flex items-center gap-2 mt-2">
-                        <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded hover:bg-green-500/25 transition-all">Одобрить</button>
-                        <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded hover:bg-red-500/25 transition-all">Отклонить</button>
+                        <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-2 py-1 bg-green-500/20 text-green-500 text-xs rounded hover:bg-green-500/25 transition-all">Одобрить</button>
+                        <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-2 py-1 bg-red-500/20 text-red-500 text-xs rounded hover:bg-red-500/25 transition-all">Отклонить</button>
                     </div>` : ''}
                 </div>`;
             }).join('');
@@ -1111,7 +1111,7 @@
         } else {
             log.innerHTML = actions.slice(0, 12).map(a => `
                 <div class="px-4 py-3 flex items-center gap-3 animate-fade-in">
-                    <div class="w-2 h-2 rounded-full ${a.status === 'success' ? 'bg-green-400' : a.status === 'pending' ? 'bg-amber-400' : 'bg-red-400'}"></div>
+                    <div class="w-2 h-2 rounded-full ${a.status === 'success' ? 'bg-green-500' : a.status === 'pending' ? 'bg-amber-500' : 'bg-red-500'}"></div>
                     <div class="flex-1 min-w-0">
                         <span class="text-sm font-medium text-gray-800">${translateActionType(a.action_type)}</span>
                         <span class="text-xs ml-2">${formatDate(a.applied_at)}</span>
@@ -1231,9 +1231,9 @@
     }
     function switchDetailTab(tabName, btn) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('text-white'); b.classList.add('text-gray-500'); });
+        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('text-gray-800'); b.classList.add('text-gray-500'); });
         document.getElementById('tab-' + tabName)?.classList.remove('hidden');
-        if (btn) { btn.classList.add('active'); btn.classList.remove('text-gray-500'); btn.classList.add('text-white'); }
+        if (btn) { btn.classList.add('active'); btn.classList.remove('text-gray-500'); btn.classList.add('text-gray-800'); }
     }
     async function changeCampaignStatus(newStatus) {
         if (!currentCampaignId) return;
@@ -1275,7 +1275,7 @@
                 <td class="px-4 py-2 text-right">${orders}</td>
                 <td class="px-4 py-2 text-center">
                     <div class="flex items-center justify-center gap-1">
-                        ${kw.status !== 'minus' ? `<button onclick="minusKeyword(${kw.id})" class="p-1 hover:text-red-400 transition-colors" title="Минусовать"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg></button>` : ''}
+                        ${kw.status !== 'minus' ? `<button onclick="minusKeyword(${kw.id})" class="p-1 hover:text-red-500 transition-colors" title="Минусовать"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg></button>` : ''}
                         <button onclick="editKeywordBid(${kw.id}, ${kw.current_bid || 0})" class="p-1 hover:text-cyan-500 transition-colors" title="Изменить ставку"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0H4.5z"/></svg></button>
                     </div>
                 </td>
@@ -1348,7 +1348,7 @@
                 </div>`;
             }).join('');
         } catch (err) {
-            container.innerHTML = `<div class="text-sm text-red-400 text-center">${esc(err.message)}</div>`;
+            container.innerHTML = `<div class="text-sm text-red-500 text-center">${esc(err.message)}</div>`;
         }
     }
     // ============================================================
@@ -1434,8 +1434,8 @@
                 ${actionsDetail ? `<div class="flex flex-wrap gap-1">${actionsDetail}</div>` : ''}
                 ${d.status === 'pending' ? `
                 <div class="flex items-center gap-2 mt-3 pt-3 border-t">
-                    <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-4 py-1.5 bg-green-500/20 text-green-400 text-sm rounded-xl hover:bg-green-500/25 transition-all">Одобрить</button>
-                    <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-4 py-1.5 bg-red-500/20 text-red-400 text-sm rounded-xl hover:bg-red-500/25 transition-all">Отклонить</button>
+                    <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-4 py-1.5 bg-green-500/20 text-green-500 text-sm rounded-xl hover:bg-green-500/25 transition-all">Одобрить</button>
+                    <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-4 py-1.5 bg-red-500/20 text-red-500 text-sm rounded-xl hover:bg-red-500/25 transition-all">Отклонить</button>
                 </div>` : ''}
             </div>`;
         }).join('');
@@ -1460,7 +1460,7 @@
                     <td class="px-4 py-3 text-xs truncate max-w-[180px]">${esc(a.parameters_json ? JSON.stringify(a.parameters_json) : '')}</td>
                     <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(a.status)}">${statusLabel(a.status)}</span></td>
                     <td class="px-4 py-3 text-right text-xs">${formatDate(a.applied_at)}</td>
-                    <td class="px-4 py-3 text-center"><button onclick="openActionDetail(${a.id})" class="text-xs hover:text-white">→</button></td>
+                    <td class="px-4 py-3 text-center"><button onclick="openActionDetail(${a.id})" class="text-xs hover:text-cyan-500">→</button></td>
                 </tr>
             `).join('');
         }
@@ -1484,7 +1484,7 @@
                         <span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(a.platform)}">${platformLabel(a.platform)}</span>
                         <div>
                             <span class="text-sm text-gray-800 font-medium">${esc(a.name)}</span>
-                            <span class="text-xs ${hasToken ? 'text-green-400' : 'text-red-400'} ml-2">${hasToken ? '✓ ' + tokenLabel : '✗ нет ' + tokenLabel}</span>
+                            <span class="text-xs ${hasToken ? 'text-green-500' : 'text-red-500'} ml-2">${hasToken ? '✓ ' + tokenLabel : '✗ нет ' + tokenLabel}</span>
                         </div>
                     </div>
                     <button onclick="setToken(${a.id}, '${a.platform}')" class="text-xs px-2 py-1 bg-cyan-500/20 text-cyan-500 rounded hover:bg-cyan-500/25 transition-all">Установить токен</button>
@@ -1552,7 +1552,7 @@
                         <button onclick="editRule(${r.id})" class="p-1 hover:text-cyan-500 transition-colors" title="Редактировать">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.8a4.5 4.5 0 011.13-1.897l10.606-10.606.324.324z"/></svg>
                         </button>
-                        <button onclick="deleteRule(${r.id})" class="p-1 hover:text-red-400 transition-colors" title="Удалить">
+                        <button onclick="deleteRule(${r.id})" class="p-1 hover:text-red-500 transition-colors" title="Удалить">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21ca.342.058.679.107 1.022.166M12 10.5V6.75m-6.292 4.942a.75.75 0 011.061 0M19.5 10.5H4.5"/></svg>
                         </button>
                     </div>
@@ -1677,7 +1677,7 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">Провайдер LLM</label>
-                        <div class="text-lg font-semibold text-white">${esc(prov)}</div>
+                        <div class="text-lg font-semibold text-gray-800">${esc(prov)}</div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Модель</label>
@@ -1709,7 +1709,7 @@
                 desc.textContent = 'Требует подтверждения пользователя для каждого действия';
             }
         } catch (err) {
-            container.innerHTML = `<div class="text-sm text-red-400">${esc(err.message)}</div>`;
+            container.innerHTML = `<div class="text-sm text-red-500">${esc(err.message)}</div>`;
         }
     }
     async function saveLlmSettings() {
@@ -1889,14 +1889,14 @@
         try {
             const res = await fetch(API_BASE + '/health');
             if (res.ok) {
-                document.getElementById('health-dot').className = 'w-2 h-2 rounded-full bg-green-400 pulse-dot';
+                document.getElementById('health-dot').className = 'w-2 h-2 rounded-full bg-green-500 pulse-dot';
                 document.getElementById('health-text').textContent = 'Подключено';
-                document.getElementById('health-text').className = 'text-xs text-green-400';
+                document.getElementById('health-text').className = 'text-xs text-green-500';
             } else { throw new Error(); }
         } catch {
-            document.getElementById('health-dot').className = 'w-2 h-2 rounded-full bg-red-400 pulse-dot';
+            document.getElementById('health-dot').className = 'w-2 h-2 rounded-full bg-red-500 pulse-dot';
             document.getElementById('health-text').textContent = 'Не подключено';
-            document.getElementById('health-text').className = 'text-xs text-red-400';
+            document.getElementById('health-text').className = 'text-xs text-red-500';
         }
     }
     // ============================================================
