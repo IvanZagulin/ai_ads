@@ -288,12 +288,12 @@
 <body class="bg-dark-950 text-dark-200 min-h-screen font-sans antialiased" style="font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;">
     <div id="app" class="flex flex-col min-h-screen">
         <!-- Top Navbar -->
-        <header class="border-b border-dark-800/80 bg-dark-950/90 backdrop-blur-sm sticky top-0 z-50">
+        <header class="border-b /80 bg-dark-950/90 backdrop-blur-sm sticky top-0 z-50">
             <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-14">
                     <div class="flex items-center gap-8">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                                 <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z"/>
                                 </svg>
@@ -301,21 +301,21 @@
                             <span class="text-sm font-semibold tracking-tight text-white">AI Ads Manager</span>
                         </div>
                         <nav class="flex items-center gap-1" id="nav-links">
-                            <a href="#" data-section="dashboard" class="nav-link active px-3 py-2 text-sm font-medium rounded-md">Главная</a>
-                            <a href="#" data-section="campaigns" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Кампании</a>
-                            <a href="#" data-section="analytics" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Аналитика</a>
-                            <a href="#" data-section="recommendations" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Рекомендации</a>
-                            <a href="#" data-section="actions" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Действия</a>
-                            <a href="#" data-section="rules" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Правила</a>
-                            <a href="#" data-section="settings" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-md">Настройки</a>
+                            <a href="#" data-section="dashboard" class="nav-link active px-3 py-2 text-sm font-medium rounded-lg">Главная</a>
+                            <a href="#" data-section="campaigns" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Кампании</a>
+                            <a href="#" data-section="analytics" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Аналитика</a>
+                            <a href="#" data-section="recommendations" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Рекомендации</a>
+                            <a href="#" data-section="actions" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Действия</a>
+                            <a href="#" data-section="rules" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Правила</a>
+                            <a href="#" data-section="settings" class="nav-link px-3 py-2 text-sm font-medium text-dark-400 hover:text-white rounded-lg">Настройки</a>
                         </nav>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-dark-800/80 border border-dark-700/50" id="health-indicator">
+                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full card border /50" id="health-indicator">
                             <span class="w-2 h-2 rounded-full bg-dark-500 pulse-dot" id="health-dot"></span>
                             <span class="text-xs text-dark-400" id="health-text">Проверка...</span>
                         </div>
-                        <button id="btn-trigger-analysis" class="inline-flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.97]">
+                        <button id="btn-trigger-analysis" class="inline-flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.97]">
                             <svg id="trigger-spinner" class="w-4 h-4 hidden spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                             <span class="hidden sm:inline">Оптимизация</span>
                         </button>
@@ -334,56 +334,56 @@
                 <!-- ===== DASHBOARD ===== -->
                 <section id="section-dashboard" class="section-content active">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8" id="summary-cards">
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                        <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Кампаний</span>
-                                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Кампаний</span>
+                                <div class="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25z"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-total-campaigns">—</div>
-                            <div class="text-xs text-dark-500 mt-1" id="stat-campaigns-delta"></div>
+                            <div class="text-xs text-dark-400 mt-1" id="stat-campaigns-delta"></div>
                         </div>
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                        <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Расход сегодня</span>
-                                <div class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Расход сегодня</span>
+                                <div class="w-8 h-8 rounded-xl bg-red-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-spent-today">—</div>
                         </div>
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                        <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Клики</span>
-                                <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Клики</span>
+                                <div class="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834-1.66l-1.591 1.591M2.25 12h3.5m12.678 0H14.5m.566 5.882l1.591-1.591M4.75 18.364l1.591-1.591"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-total-clicks">—</div>
                         </div>
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                        <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Заказы</span>
-                                <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Заказы</span>
+                                <div class="w-8 h-8 rounded-xl bg-green-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-total-orders">—</div>
                         </div>
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                        <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Рекомендации</span>
-                                <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Рекомендации</span>
+                                <div class="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
                                 </div>
                             </div>
                             <div class="text-2xl font-bold text-white" id="stat-pending">—</div>
                         </div>
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
+                        <div class="card p-4 card-hover animate-fade-in">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs uppercase tracking-wider text-dark-500 font-medium">Режим</span>
-                                <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                                <span class="text-xs uppercase tracking-wider text-dark-400 font-medium">Режим</span>
+                                <div class="w-8 h-8 rounded-xl bg-purple-500/10 flex items-center justify-center">
                                     <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.841m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312"/></svg>
                                 </div>
                             </div>
@@ -393,34 +393,34 @@
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                         <!-- Campaigns Table -->
-                        <div class="lg:col-span-2 bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                            <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                        <div class="lg:col-span-2 card animate-fade-in">
+                            <div class="px-5 py-4 border-b flex items-center justify-between">
                                 <h2 class="text-sm font-semibold text-white">Кампании</h2>
                                 <div class="flex items-center gap-2">
-                                    <select id="filter-platform" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <select id="filter-platform" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                         <option value="">Все платформы</option>
                                         <option value="wildberries">Wildberries</option>
                                         <option value="ozon">Ozon</option>
                                     </select>
-                                    <select id="filter-status" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <select id="filter-status" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                         <option value="">Все статусы</option>
                                         <option value="active">Активные</option>
                                         <option value="paused">На паузе</option>
                                         <option value="completed">Завершённые</option>
                                     </select>
-                                    <button onclick="syncCampaigns()" class="text-xs px-3 py-1 bg-indigo-600/20 text-indigo-400 rounded-md hover:bg-indigo-600/30 transition-all">↓ Импорт</button>
+                                    <button onclick="syncCampaigns()" class="text-xs px-3 py-1 bg-indigo-600/20 text-indigo-400 rounded-lg hover:bg-indigo-600/30 transition-all">↓ Импорт</button>
                                 </div>
                             </div>
                             <div class="overflow-x-auto" id="campaigns-body">
                                 <table class="w-full text-sm">
                                     <thead>
-                                        <tr class="border-b border-dark-800/40">
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Название</th>
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Платформа</th>
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Статус</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">CTR</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Расход</th>
-                                            <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Тренд</th>
+                                        <tr class="border-b">
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Название</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Платформа</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Статус</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">CTR</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Расход</th>
+                                            <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Тренд</th>
                                         </tr>
                                     </thead>
                                     <tbody id="table-campaigns"></tbody>
@@ -429,8 +429,8 @@
                         </div>
 
                         <!-- Recent Recommendations -->
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                            <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                        <div class="card animate-fade-in">
+                            <div class="px-5 py-4 border-b flex items-center justify-between">
                                 <h2 class="text-sm font-semibold text-white">Рекомендации</h2>
                                 <a href="#" data-section="recommendations" class="text-xs text-indigo-400 hover:text-indigo-300" onclick="event.preventDefault();navigateTo('recommendations')">Все →</a>
                             </div>
@@ -439,8 +439,8 @@
                     </div>
 
                     <!-- Recent Actions Log -->
-                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                        <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                    <div class="card animate-fade-in">
+                        <div class="px-5 py-4 border-b flex items-center justify-between">
                             <h2 class="text-sm font-semibold text-white">Журнал действий</h2>
                             <a href="#" data-section="actions" class="text-xs text-indigo-400 hover:text-indigo-300" onclick="event.preventDefault();navigateTo('actions')">Все →</a>
                         </div>
@@ -450,35 +450,35 @@
 
                 <!-- ===== CAMPAIGNS SECTION ===== -->
                 <section id="section-campaigns" class="section-content">
-                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                        <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                    <div class="card animate-fade-in">
+                        <div class="px-5 py-4 border-b flex items-center justify-between">
                             <h2 class="text-sm font-semibold text-white">Все кампании</h2>
                             <div class="flex items-center gap-2">
-                                <select id="filter-platform2" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <select id="filter-platform2" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                     <option value="">Все платформы</option>
                                     <option value="wildberries">Wildberries</option>
                                     <option value="ozon">Ozon</option>
                                 </select>
-                                <select id="filter-status2" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <select id="filter-status2" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                     <option value="">Все статусы</option>
                                     <option value="active">Активные</option>
                                     <option value="paused">На паузе</option>
                                     <option value="completed">Завершённые</option>
                                 </select>
-                                <button onclick="loadAllData()" class="text-xs px-3 py-1 bg-dark-800 border border-dark-700 rounded-md hover:bg-dark-700 transition-all">Обновить</button>
+                                <button onclick="loadAllData()" class="text-xs px-3 py-1 bg-dark-800 border  rounded-lg hover:bg-card-fallback transition-all">Обновить</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="border-b border-dark-800/40">
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Название</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Платформа</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Тип</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Статус</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Бюджет</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Ставка</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">CTR</th>
+                                    <tr class="border-b">
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Название</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Платформа</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Тип</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Статус</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Бюджет</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Ставка</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">CTR</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-campaigns-full"></tbody>
@@ -497,7 +497,7 @@
                     </div>
 
                     <!-- Campaign Header Card -->
-                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in mb-6">
+                    <div class="card animate-fade-in mb-6">
                         <div class="px-5 py-4 flex items-start justify-between flex-wrap gap-4">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-3 mb-2">
@@ -506,43 +506,43 @@
                                     <span id="detail-status-badge" class="inline-flex px-2 py-0.5 rounded text-xs font-medium"></span>
                                 </div>
                                 <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
-                                    <div><span class="text-dark-500">Тип:</span> <span class="text-dark-300" id="detail-type">—</span></div>
-                                    <div><span class="text-dark-500">Бюджет:</span> <span class="text-dark-300" id="detail-budget">—</span></div>
-                                    <div><span class="text-dark-500">Ставка:</span> <span class="text-dark-300" id="detail-bid">—</span></div>
-                                    <div><span class="text-dark-500">WB ID:</span> <span class="text-dark-300" id="detail-wb-id">—</span></div>
-                                    <div><span class="text-dark-500">Обновлено:</span> <span class="text-dark-300" id="detail-updated">—</span></div>
+                                    <div><span class="text-dark-400">Тип:</span> <span class="text-dark-300" id="detail-type">—</span></div>
+                                    <div><span class="text-dark-400">Бюджет:</span> <span class="text-dark-300" id="detail-budget">—</span></div>
+                                    <div><span class="text-dark-400">Ставка:</span> <span class="text-dark-300" id="detail-bid">—</span></div>
+                                    <div><span class="text-dark-400">WB ID:</span> <span class="text-dark-300" id="detail-wb-id">—</span></div>
+                                    <div><span class="text-dark-400">Обновлено:</span> <span class="text-dark-300" id="detail-updated">—</span></div>
                                 </div>
                                 <div class="mt-2 flex items-center gap-3 flex-wrap">
-                                    <span class="text-xs text-dark-500" id="detail-period-info"></span>
-                                    <button onclick="toggleDateRangePicker()" class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-dark-800 border border-dark-700 rounded-md text-dark-400 hover:text-dark-200 transition-colors">
+                                    <span class="text-xs text-dark-400" id="detail-period-info"></span>
+                                    <button onclick="toggleDateRangePicker()" class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-dark-800 border  rounded-lg text-dark-400 hover:text-dark-200 transition-colors">
                                         📅 <span id="detail-date-label">7 дней</span>
                                     </button>
                                 </div>
-                                <div class="hidden mt-2 bg-dark-900 border border-dark-800 rounded-lg p-3" id="detail-date-range-panel">
+                                <div class="hidden mt-2 card-sm p-2" id="detail-date-range-panel">
                                     <div class="flex gap-2 mb-2 flex-wrap">
-                                        <button onclick="applyPreset(1)" class="px-2 py-1 text-xs bg-indigo-600/30 text-indigo-300 rounded-md hover:bg-indigo-600/50 transition-colors">1 день</button>
-                                        <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-dark-700 text-dark-300 rounded-md hover:bg-dark-600 transition-colors">7 дней</button>
-                                        <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-dark-700 text-dark-300 rounded-md hover:bg-dark-600 transition-colors">14 дней</button>
-                                        <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-dark-700 text-dark-300 rounded-md hover:bg-dark-600 transition-colors">30 дней</button>
+                                        <button onclick="applyPreset(1)" class="px-2 py-1 text-xs bg-indigo-600/30 text-indigo-300 rounded-lg hover:bg-indigo-600/50 transition-colors">1 день</button>
+                                        <button onclick="applyPreset(7)" class="px-2 py-1 text-xs bg-card-fallback text-dark-300 rounded-lg hover:bg-dark-600 transition-colors">7 дней</button>
+                                        <button onclick="applyPreset(14)" class="px-2 py-1 text-xs bg-card-fallback text-dark-300 rounded-lg hover:bg-dark-600 transition-colors">14 дней</button>
+                                        <button onclick="applyPreset(30)" class="px-2 py-1 text-xs bg-card-fallback text-dark-300 rounded-lg hover:bg-dark-600 transition-colors">30 дней</button>
                                     </div>
                                     <div class="flex gap-3 items-center">
-                                        <label class="text-xs text-dark-400 flex items-center gap-1">С: <input type="date" id="detail-date-from" class="bg-dark-800 border border-dark-700 rounded px-2 py-1 text-dark-200 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500" /></label>
-                                        <label class="text-xs text-dark-400 flex items-center gap-1">По: <input type="date" id="detail-date-to" class="bg-dark-800 border border-dark-700 rounded px-2 py-1 text-dark-200 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500" /></label>
-                                        <button onclick="applyCustomDateRange()" class="px-2 py-1 text-xs bg-indigo-600 text-white rounded-md hover:bg-indigo-500 transition-colors">Применить</button>
+                                        <label class="text-xs text-dark-400 flex items-center gap-1">С: <input type="date" id="detail-date-from" class="bg-dark-800 border  rounded px-2 py-1 text-dark-200 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500" /></label>
+                                        <label class="text-xs text-dark-400 flex items-center gap-1">По: <input type="date" id="detail-date-to" class="bg-dark-800 border  rounded px-2 py-1 text-dark-200 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500" /></label>
+                                        <button onclick="applyCustomDateRange()" class="px-2 py-1 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors">Применить</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2" id="detail-status-buttons">
-                                <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-600/20 text-green-400 rounded-lg hover:bg-green-600/30 transition-all">Старт</button>
-                                <button onclick="changeCampaignStatus('paused')" class="px-3 py-1.5 text-xs bg-amber-600/20 text-amber-400 rounded-lg hover:bg-amber-600/30 transition-all">Пауза</button>
-                                <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-dark-700 text-dark-300 rounded-lg hover:bg-dark-600 transition-all">Стоп</button>
+                                <button onclick="changeCampaignStatus('active')" class="px-3 py-1.5 text-xs bg-green-600/20 text-green-400 rounded-xl hover:bg-green-600/30 transition-all">Старт</button>
+                                <button onclick="changeCampaignStatus('paused')" class="px-3 py-1.5 text-xs bg-amber-600/20 text-amber-400 rounded-xl hover:bg-amber-600/30 transition-all">Пауза</button>
+                                <button onclick="changeCampaignStatus('completed')" class="px-3 py-1.5 text-xs bg-card-fallback text-dark-300 rounded-xl hover:bg-dark-600 transition-all">Стоп</button>
                             </div>
                         </div>
                     </div>
 
                     <!-- Tabs -->
-                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in mb-6">
-                        <div class="px-5 border-b border-dark-800/60 flex items-center gap-6">
+                    <div class="card animate-fade-in mb-6">
+                        <div class="px-5 border-b flex items-center gap-6">
                             <button class="tab-btn px-3 py-3 text-sm font-medium text-dark-400 border-b-2 border-transparent active" data-tab="keywords" onclick="switchDetailTab('keywords', this)">Ключевые слова</button>
                             <button class="tab-btn px-3 py-3 text-sm font-medium text-dark-400 border-b-2 border-transparent" data-tab="stats" onclick="switchDetailTab('stats', this)">Статистика</button>
                             <button class="tab-btn px-3 py-3 text-sm font-medium text-dark-400 border-b-2 border-transparent" data-tab="decisions" onclick="switchDetailTab('decisions', this)">Решения ИИ</button>
@@ -550,10 +550,10 @@
 
                         <!-- Keywords Tab -->
                         <div id="tab-keywords" class="tab-content">
-                            <div class="px-5 py-3 border-b border-dark-800/40 flex items-center justify-between">
+                            <div class="px-5 py-3 border-b flex items-center justify-between">
                                 <h3 class="text-sm font-medium text-dark-300">Ключевые слова и кластеры</h3>
                                 <div class="flex items-center gap-2">
-                                    <select id="kw-filter-status" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                    <select id="kw-filter-status" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                         <option value="">Все статусы</option>
                                         <option value="active">Активные</option>
                                         <option value="minus">Минусованные</option>
@@ -564,16 +564,16 @@
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead>
-                                        <tr class="border-b border-dark-800/40">
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Кластер</th>
-                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Статус</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Ставка</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Показы</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Клики</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">CTR</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Расход</th>
-                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Заказы</th>
-                                            <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Действия</th>
+                                        <tr class="border-b">
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Кластер</th>
+                                            <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Статус</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Ставка</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Показы</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Клики</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">CTR</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Расход</th>
+                                            <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Заказы</th>
+                                            <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Действия</th>
                                         </tr>
                                     </thead>
                                     <tbody id="table-keywords"></tbody>
@@ -586,19 +586,19 @@
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 <div>
                                     <h4 class="text-sm font-medium text-dark-300 mb-3">Расход за период</h4>
-                                    <div class="bg-dark-950 border border-dark-800/40 rounded-lg p-4">
+                                    <div class="bg-dark-950 border rounded-xl p-4">
                                         <div id="sparkline-cost" class="w-full h-32" style="min-height: 128px;"></div>
                                     </div>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-medium text-dark-300 mb-3">CTR за период</h4>
-                                    <div class="bg-dark-950 border border-dark-800/40 rounded-lg p-4">
+                                    <div class="bg-dark-950 border rounded-xl p-4">
                                         <div id="sparkline-ctr" class="w-full h-32" style="min-height: 128px;"></div>
                                     </div>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-medium text-dark-300 mb-3">Заказы за период</h4>
-                                    <div class="bg-dark-950 border border-dark-800/40 rounded-lg p-4">
+                                    <div class="bg-dark-950 border rounded-xl p-4">
                                         <div id="sparkline-orders" class="w-full h-32" style="min-height: 128px;"></div>
                                     </div>
                                 </div>
@@ -616,42 +616,42 @@
                 <section id="section-analytics" class="section-content">
                     <!-- Overview Cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
-                            <div class="text-xs uppercase tracking-wider text-dark-500 mb-2">Общий CTR</div>
+                        <div class="card p-4 card-hover animate-fade-in">
+                            <div class="text-xs uppercase tracking-wider text-dark-400 mb-2">Общий CTR</div>
                             <div class="text-2xl font-bold text-white" id="analytics-ctr">—</div>
                             <div class="text-xs mt-1" id="analytics-ctr-delta"></div>
                         </div>
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
-                            <div class="text-xs uppercase tracking-wider text-dark-500 mb-2">Общий расход</div>
+                        <div class="card p-4 card-hover animate-fade-in">
+                            <div class="text-xs uppercase tracking-wider text-dark-400 mb-2">Общий расход</div>
                             <div class="text-2xl font-bold text-white" id="analytics-cost">—</div>
                         </div>
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
-                            <div class="text-xs uppercase tracking-wider text-dark-500 mb-2">Общие заказы</div>
+                        <div class="card p-4 card-hover animate-fade-in">
+                            <div class="text-xs uppercase tracking-wider text-dark-400 mb-2">Общие заказы</div>
                             <div class="text-2xl font-bold text-white" id="analytics-orders">—</div>
                         </div>
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-4 card-hover animate-fade-in">
-                            <div class="text-xs uppercase tracking-wider text-dark-500 mb-2">Ключевых слов</div>
+                        <div class="card p-4 card-hover animate-fade-in">
+                            <div class="text-xs uppercase tracking-wider text-dark-400 mb-2">Ключевых слов</div>
                             <div class="text-2xl font-bold text-white" id="analytics-keywords">—</div>
                         </div>
                     </div>
 
                     <!-- Charts -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                            <div class="px-5 py-4 border-b border-dark-800/60"><h2 class="text-sm font-semibold text-white">Расход по кампаниям (топ-10)</h2></div>
+                        <div class="card animate-fade-in">
+                            <div class="px-5 py-4 border-b"><h2 class="text-sm font-semibold text-white">Расход по кампаниям (топ-10)</h2></div>
                             <div class="p-5" id="chart-cost-bars"></div>
                         </div>
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                            <div class="px-5 py-4 border-b border-dark-800/60"><h2 class="text-sm font-semibold text-white">CTR по кампаниям (топ-10)</h2></div>
+                        <div class="card animate-fade-in">
+                            <div class="px-5 py-4 border-b"><h2 class="text-sm font-semibold text-white">CTR по кампаниям (топ-10)</h2></div>
                             <div class="p-5" id="chart-ctr-bars"></div>
                         </div>
                     </div>
 
                     <!-- Campaign Stats Table -->
-                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                        <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                    <div class="card animate-fade-in">
+                        <div class="px-5 py-4 border-b flex items-center justify-between">
                             <h2 class="text-sm font-semibold text-white">Статистика по кампаниям за последние дни</h2>
-                            <select id="analytics-platform" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                            <select id="analytics-platform" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                 <option value="">Все платформы</option>
                                 <option value="wildberries">Wildberries</option>
                                 <option value="ozon">Ozon</option>
@@ -660,15 +660,15 @@
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="border-b border-dark-800/40">
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Кампания</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Дата</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Показы</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Клики</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">CTR</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Расход</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Заказы</th>
-                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Тренд</th>
+                                    <tr class="border-b">
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Кампания</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Дата</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Показы</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Клики</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">CTR</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Расход</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Заказы</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Тренд</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-analytics-stats"></tbody>
@@ -682,7 +682,7 @@
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-lg font-semibold text-white">Рекомендации ИИ</h2>
                         <div class="flex items-center gap-2">
-                            <select id="rec-filter-status" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                            <select id="rec-filter-status" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                 <option value="">Все статусы</option>
                                 <option value="pending">Ожидает</option>
                                 <option value="executed">Выполнено</option>
@@ -695,11 +695,11 @@
 
                 <!-- ===== ACTIONS SECTION ===== -->
                 <section id="section-actions" class="section-content">
-                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                        <div class="px-5 py-4 border-b border-dark-800/60 flex items-center justify-between">
+                    <div class="card animate-fade-in">
+                        <div class="px-5 py-4 border-b flex items-center justify-between">
                             <h2 class="text-sm font-semibold text-white">Журнал действий</h2>
                             <div class="flex items-center gap-2">
-                                <select id="action-filter-type" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <select id="action-filter-type" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                     <option value="">Все типы</option>
                                     <option value="raise_bid">Повысить ставку</option>
                                     <option value="lower_bid">Понизить ставку</option>
@@ -708,7 +708,7 @@
                                     <option value="create_search_campaign">Создать кампанию</option>
                                     <option value="adjust_price">Скорректировать цену</option>
                                 </select>
-                                <select id="action-filter-status" class="bg-dark-800 border border-dark-700 rounded-md text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <select id="action-filter-status" class="bg-dark-800 border  rounded-lg text-xs px-2 py-1 text-dark-300 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                     <option value="">Все статусы</option>
                                     <option value="success">Успешно</option>
                                     <option value="pending">Ожидает</option>
@@ -719,12 +719,12 @@
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="border-b border-dark-800/40">
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Тип</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Параметры</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Статус</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Время</th>
-                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Детали</th>
+                                    <tr class="border-b">
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Тип</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Параметры</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Статус</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Время</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Детали</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-actions"></tbody>
@@ -737,27 +737,27 @@
                 <section id="section-rules" class="section-content">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-lg font-semibold text-white">Правила оптимизации</h2>
-                        <button onclick="showAddRuleModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600/20 text-indigo-400 text-sm rounded-lg hover:bg-indigo-600/30 transition-all">
+                        <button onclick="showAddRuleModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600/20 text-indigo-400 text-sm rounded-xl hover:bg-indigo-600/30 transition-all">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                             Добавить правило
                         </button>
                     </div>
 
                     <!-- Default rules table from diploma -->
-                    <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in mb-6">
-                        <div class="px-5 py-4 border-b border-dark-800/60">
+                    <div class="card animate-fade-in mb-6">
+                        <div class="px-5 py-4 border-b">
                             <h3 class="text-sm font-semibold text-white">Встроенные правила Wildberries</h3>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm">
                                 <thead>
-                                    <tr class="border-b border-dark-800/40">
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Название</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Платформа</th>
-                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Описание</th>
-                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Параметры</th>
-                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Активно</th>
-                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-500 uppercase">Действия</th>
+                                    <tr class="border-b">
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Название</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Платформа</th>
+                                        <th class="text-left px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Описание</th>
+                                        <th class="text-right px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Параметры</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Активно</th>
+                                        <th class="text-center px-4 py-2.5 text-xs font-medium text-dark-400 uppercase">Действия</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-rules"></tbody>
@@ -770,38 +770,38 @@
                 <section id="section-settings" class="section-content">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Add Account Form -->
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                            <div class="px-5 py-4 border-b border-dark-800/60">
+                        <div class="card animate-fade-in">
+                            <div class="px-5 py-4 border-b">
                                 <h2 class="text-sm font-semibold text-white">Добавить аккаунт</h2>
                             </div>
                             <div class="p-5">
                                 <form id="form-add-account" class="space-y-4">
                                     <div>
                                         <label class="block text-sm font-medium text-dark-300 mb-1">Платформа</label>
-                                        <select id="acc-platform" required class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <select id="acc-platform" required class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                             <option value="wildberries">Wildberries</option>
                                             <option value="ozon">Ozon</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-dark-300 mb-1">Название</label>
-                                        <input type="text" id="acc-name" required placeholder="Мой магазин" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <input type="text" id="acc-name" required placeholder="Мой магазин" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-dark-300 mb-1">Токен WB API</label>
-                                        <input type="text" id="acc-token" placeholder="Вставьте токен из ЛК WB" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <input type="text" id="acc-token" placeholder="Вставьте токен из ЛК WB" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                     </div>
                                     <div id="ozon-fields" class="hidden space-y-4">
                                         <div>
                                             <label class="block text-sm font-medium text-dark-300 mb-1">Ozon Client ID</label>
-                                            <input type="text" id="acc-ozon-id" placeholder="Client ID" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                            <input type="text" id="acc-ozon-id" placeholder="Client ID" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-dark-300 mb-1">Ozon Client Secret</label>
-                                            <input type="password" id="acc-ozon-secret" placeholder="Client Secret" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                            <input type="password" id="acc-ozon-secret" placeholder="Client Secret" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 placeholder-dark-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                         </div>
                                     </div>
-                                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.97]">
+                                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.97]">
                                         Добавить аккаунт
                                     </button>
                                 </form>
@@ -809,16 +809,16 @@
                         </div>
 
                         <!-- Connected Accounts -->
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                            <div class="px-5 py-4 border-b border-dark-800/60">
+                        <div class="card animate-fade-in">
+                            <div class="px-5 py-4 border-b">
                                 <h2 class="text-sm font-semibold text-white">Подключённые аккаунты</h2>
                             </div>
                             <div class="divide-y divide-dark-800/40 max-h-[400px] overflow-y-auto" id="connected-accounts"></div>
                         </div>
 
                         <!-- LLM Settings -->
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                            <div class="px-5 py-4 border-b border-dark-800/60">
+                        <div class="card animate-fade-in">
+                            <div class="px-5 py-4 border-b">
                                 <h2 class="text-sm font-semibold text-white">Настройки LLM</h2>
                             </div>
                             <div class="p-5 space-y-4" id="llm-settings-form">
@@ -827,14 +827,14 @@
                         </div>
 
                         <!-- Mode Toggle -->
-                        <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl animate-fade-in">
-                            <div class="px-5 py-4 border-b border-dark-800/60">
+                        <div class="card animate-fade-in">
+                            <div class="px-5 py-4 border-b">
                                 <h2 class="text-sm font-semibold text-white">Режим работы</h2>
                             </div>
                             <div class="p-5 flex items-center justify-between">
                                 <div>
                                     <div class="text-sm font-medium text-dark-200" id="mode-label">Загрузка...</div>
-                                    <div class="text-xs text-dark-500 mt-1" id="mode-description">Автоматическое применение рекомендаций ИИ</div>
+                                    <div class="text-xs text-dark-400 mt-1" id="mode-description">Автоматическое применение рекомендаций ИИ</div>
                                 </div>
                                 <div class="toggle-switch" id="auto-mode-toggle" onclick="toggleAutoMode()"></div>
                             </div>
@@ -845,7 +845,7 @@
             </div>
         </main>
 
-        <footer class="border-t border-dark-800/60 py-3">
+        <footer class="border-t py-3">
             <div class="max-w-screen-2xl mx-auto px-4 text-center text-xs text-dark-600">
                 AI Ads Manager v0.1.0 — Управление рекламой Wildberries и Ozon с помощью ИИ
             </div>
@@ -855,8 +855,8 @@
     <!-- Modal Backdrop -->
     <div id="modal-backdrop" class="fixed inset-0 z-[100] hidden modal-backdrop" onclick="closeModal()">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-dark-900 border border-dark-700/60 rounded-2xl max-w-3xl w-full shadow-2xl max-h-[85vh] overflow-y-auto" onclick="event.stopPropagation()">
-                <div class="sticky top-0 bg-dark-900 border-b border-dark-800/60 px-5 py-4 flex items-center justify-between z-10">
+            <div class="card w-full max-w-3xl max-h-[85vh] overflow-y-auto" onclick="event.stopPropagation()">
+                <div class="sticky top-0 border-b border-border px-5 py-4 flex items-center justify-between z-10">
                     <h3 class="text-sm font-semibold text-white" id="modal-title">Детали</h3>
                     <button onclick="closeModal()" class="text-dark-400 hover:text-white transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -926,9 +926,9 @@
     // ============================================================
     function showToast(message, type = 'info') {
         const colors = {
-            success: 'border-green-500/80 bg-dark-900 text-green-300',
-            error: 'border-red-500/80 bg-dark-900 text-red-300',
-            info: 'border-indigo-500/80 bg-dark-900 text-indigo-300',
+            success: 'badge-success',
+            error: 'badge-error',
+            info: 'badge-info',
         };
         const icons = {
             success: '<svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
@@ -937,7 +937,7 @@
         };
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
-        toast.className = `flex items-center gap-3 px-4 py-3 border rounded-lg shadow-xl animate-slide-in ${colors[type] || colors.info}`;
+        toast.className = `flex items-center gap-3 px-4 py-3 border rounded-xl shadow-xl animate-slide-in ${colors[type] || colors.info}`;
         toast.innerHTML = `${icons[type] || icons.info}<span class="text-sm flex-1">${message}</span>`;
         container.appendChild(toast);
         setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
@@ -987,7 +987,7 @@
     }
 
     function platformClass(p) {
-        return p === 'wildberries' ? 'bg-wb/20 text-wb' : p === 'ozon' ? 'bg-ozon/20 text-ozon' : 'bg-dark-700 text-dark-300';
+        return p === 'wildberries' ? 'bg-wb/20 text-wb' : p === 'ozon' ? 'bg-ozon/20 text-ozon' : 'bg-card-fallback text-dark-300';
     }
 
     function statusClass(s) {
@@ -1037,7 +1037,7 @@
     }
 
     function barChartSVG(nameValuePairs, height = 220) {
-        if (!nameValuePairs || nameValuePairs.length === 0) return '<div class="text-sm text-dark-500 text-center py-8">Нет данных</div>';
+        if (!nameValuePairs || nameValuePairs.length === 0) return '<div class="text-sm text-dark-400 text-center py-8">Нет данных</div>';
         const maxVal = Math.max(...nameValuePairs.map(p => p[1]), 1);
         const padding = 40;
         const barH = Math.min(20, (height - 20) / nameValuePairs.length - 4);
@@ -1121,7 +1121,7 @@
         // Campaign table (short)
         const tbody = document.getElementById('table-campaigns');
         if (campaigns.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-dark-500">Нет кампаний — нажмите "Импорт" чтобы загрузить из WB</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-dark-400">Нет кампаний — нажмите "Импорт" чтобы загрузить из WB</td></tr>';
             return;
         }
         const fp = document.getElementById('filter-platform')?.value || '';
@@ -1131,7 +1131,7 @@
         if (fs) filtered = filtered.filter(c => c.status === fs);
 
         tbody.innerHTML = filtered.slice(0, 10).map(c => `
-            <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
+            <tr class="border-b /20 hover:bg-dark-800/30 transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
                 <td class="px-4 py-3 text-dark-200 font-medium truncate max-w-[180px]">${esc(c.name || c.platform_campaign_id || '')}</td>
                 <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(c.platform)}">${platformLabel(c.platform)}</span></td>
                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${statusClass(c.status)}">${statusLabel(c.status)}</span></td>
@@ -1144,7 +1144,7 @@
         // Recent recommendations
         const rec = document.getElementById('recent-recommendations');
         if (decisions.length === 0) {
-            rec.innerHTML = '<div class="px-4 py-8 text-center text-dark-500 text-sm">Нет рекомендаций</div>';
+            rec.innerHTML = '<div class="px-4 py-8 text-center text-dark-400 text-sm">Нет рекомендаций</div>';
         } else {
             rec.innerHTML = decisions.slice(0, 8).map(d => {
                 const actionCount = d.actions_json?.actions?.length || 0;
@@ -1152,7 +1152,7 @@
                 <div class="px-4 py-3 animate-fade-in cursor-pointer" onclick="openDecisionDetail(${d.id})">
                     <div class="flex items-center justify-between mb-1">
                         <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
-                        <span class="text-xs text-dark-500">${formatDate(d.created_at)}</span>
+                        <span class="text-xs text-dark-400">${formatDate(d.created_at)}</span>
                     </div>
                     <p class="text-xs text-dark-400">${actionCount} действий · ${d.llm_model || '—'}</p>
                     ${d.status === 'pending' ? `
@@ -1167,16 +1167,16 @@
         // Recent actions log
         const log = document.getElementById('recent-actions-log');
         if (actions.length === 0) {
-            log.innerHTML = '<div class="px-4 py-8 text-center text-dark-500 text-sm">Нет действий</div>';
+            log.innerHTML = '<div class="px-4 py-8 text-center text-dark-400 text-sm">Нет действий</div>';
         } else {
             log.innerHTML = actions.slice(0, 12).map(a => `
                 <div class="px-4 py-3 flex items-center gap-3 animate-fade-in">
                     <div class="w-2 h-2 rounded-full ${a.status === 'success' ? 'bg-green-400' : a.status === 'pending' ? 'bg-amber-400' : 'bg-red-400'}"></div>
                     <div class="flex-1 min-w-0">
                         <span class="text-sm font-medium text-dark-200">${translateActionType(a.action_type)}</span>
-                        <span class="text-xs text-dark-500 ml-2">${formatDate(a.applied_at)}</span>
+                        <span class="text-xs text-dark-400 ml-2">${formatDate(a.applied_at)}</span>
                     </div>
-                    <button onclick="openActionDetail(${a.id})" class="text-xs text-dark-500 hover:text-dark-300">→</button>
+                    <button onclick="openActionDetail(${a.id})" class="text-xs text-dark-400 hover:text-dark-300">→</button>
                 </div>
             `).join('');
         }
@@ -1194,10 +1194,10 @@
         if (fs2) filtered = filtered.filter(c => c.status === fs2);
 
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-8 text-center text-dark-500">Нет кампаний</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-8 text-center text-dark-400">Нет кампаний</td></tr>';
         } else {
             tbody.innerHTML = filtered.map(c => `
-                <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
+                <tr class="border-b /20 hover:bg-dark-800/30 transition-all cursor-pointer" onclick="openCampaignDetail(${c.id})">
                     <td class="px-4 py-3 text-dark-200 font-medium truncate max-w-[200px]">${esc(c.name || c.platform_campaign_id || '')}</td>
                     <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(c.platform)}">${platformLabel(c.platform)}</span></td>
                     <td class="px-4 py-3 text-dark-400 text-xs">${c.campaign_type || '—'}</td>
@@ -1331,7 +1331,7 @@
         if (fs) filtered = filtered.filter(k => k.status === fs);
 
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center text-dark-500">Нет ключевых слов. Синхронизируйте кампании через API WB.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center text-dark-400">Нет ключевых слов. Синхронизируйте кампании через API WB.</td></tr>';
             return;
         }
 
@@ -1345,8 +1345,8 @@
             const orders = kw.stats?.[0]?.orders || 0;
 
             return `
-            <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all">
-                <td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]" title="${esc(kw.keyword_text)}"><span class="text-dark-500 text-xs mr-2">#${kw.id}</span>${esc(kw.keyword_text.substring(0, 35))}</td>
+            <tr class="border-b /20 hover:bg-dark-800/30 transition-all">
+                <td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]" title="${esc(kw.keyword_text)}"><span class="text-dark-400 text-xs mr-2">#${kw.id}</span>${esc(kw.keyword_text.substring(0, 35))}</td>
                 <td class="px-4 py-2"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(kw.status)}">${statusLabel(kw.status)}</span></td>
                 <td class="px-4 py-2 text-right text-dark-300 text-xs">${kw.current_bid ? formatRUB(kw.current_bid) : '—'}</td>
                 <td class="px-4 py-2 text-right text-dark-400">${impressions.toLocaleString('ru')}</td>
@@ -1356,8 +1356,8 @@
                 <td class="px-4 py-2 text-right text-dark-400">${orders}</td>
                 <td class="px-4 py-2 text-center">
                     <div class="flex items-center justify-center gap-1">
-                        ${kw.status !== 'minus' ? `<button onclick="minusKeyword(${kw.id})" class="p-1 text-dark-500 hover:text-red-400 transition-colors" title="Минусовать"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg></button>` : ''}
-                        <button onclick="editKeywordBid(${kw.id}, ${kw.current_bid || 0})" class="p-1 text-dark-500 hover:text-indigo-400 transition-colors" title="Изменить ставку"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0H4.5z"/></svg></button>
+                        ${kw.status !== 'minus' ? `<button onclick="minusKeyword(${kw.id})" class="p-1 text-dark-400 hover:text-red-400 transition-colors" title="Минусовать"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg></button>` : ''}
+                        <button onclick="editKeywordBid(${kw.id}, ${kw.current_bid || 0})" class="p-1 text-dark-400 hover:text-indigo-400 transition-colors" title="Изменить ставку"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0H4.5z"/></svg></button>
                     </div>
                 </td>
             </tr>`;
@@ -1395,19 +1395,19 @@
         const totalCost = costData.reduce((a, b) => a + b, 0);
 
         const buildStatCard = (html, avgLabel, avgValue) => {
-            return `<div class="flex flex-col items-center gap-2">${html}<div class="text-xs text-dark-500">${avgLabel}: <span class="text-dark-300 font-medium">${avgValue}</span></div></div>`;
+            return `<div class="flex flex-col items-center gap-2">${html}<div class="text-xs text-dark-400">${avgLabel}: <span class="text-dark-300 font-medium">${avgValue}</span></div></div>`;
         };
 
         document.getElementById('sparkline-cost').innerHTML = buildStatCard(
-            sparklineSVG(costData, '#ef4444', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>',
+            sparklineSVG(costData, '#ef4444', 128, 400) || '<div class="text-dark-400 text-center py-4 text-sm">Нет данных</div>',
             'Расход всего', formatRUB(totalCost)
         );
         document.getElementById('sparkline-ctr').innerHTML = buildStatCard(
-            sparklineSVG(ctrData, '#22c55e', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>',
+            sparklineSVG(ctrData, '#22c55e', 128, 400) || '<div class="text-dark-400 text-center py-4 text-sm">Нет данных</div>',
             'CTR средний', avgCtr.toFixed(2) + '%'
         );
         document.getElementById('sparkline-orders').innerHTML = buildStatCard(
-            sparklineSVG(ordersData, '#3b82f6', 128, 400) || '<div class="text-dark-500 text-center py-4 text-sm">Нет данных</div>',
+            sparklineSVG(ordersData, '#3b82f6', 128, 400) || '<div class="text-dark-400 text-center py-4 text-sm">Нет данных</div>',
             'Заказов всего', totalOrders.toString()
         );
     }
@@ -1417,21 +1417,21 @@
         try {
             const decs = await apiGet(`/decisions?campaign_id=${campaignId}&limit=15`);
             if (decs.length === 0) {
-                container.innerHTML = '<div class="text-sm text-dark-500 text-center py-8">Нет решений ИИ по этой кампании</div>';
+                container.innerHTML = '<div class="text-sm text-dark-400 text-center py-8">Нет решений ИИ по этой кампании</div>';
                 return;
             }
             container.innerHTML = decs.map(d => {
                 const actionCount = d.actions_json?.actions?.length || 0;
                 return `
-                <div class="bg-dark-800/30 border border-dark-700/40 rounded-lg p-4 cursor-pointer" onclick="openDecisionDetail(${d.id})">
+                <div class="bg-dark-800/30 border /40 rounded-xl p-4 cursor-pointer" onclick="openDecisionDetail(${d.id})">
                     <div class="flex items-center justify-between mb-2">
                         <span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
-                        <span class="text-xs text-dark-500">${formatDate(d.created_at)}</span>
+                        <span class="text-xs text-dark-400">${formatDate(d.created_at)}</span>
                     </div>
                     <div class="text-xs text-dark-400">${d.llm_model} · ${d.llm_provider} · ${actionCount} действий</div>
                     ${(d.actions || []).length > 0 ? `
                     <div class="flex flex-wrap gap-1 mt-2">
-                        ${(d.actions || []).slice(0, 5).map(a => `<span class="px-1.5 py-0.5 bg-dark-900 rounded text-xs text-dark-300">${translateActionType(a.action_type)}</span>`).join('')}
+                        ${(d.actions || []).slice(0, 5).map(a => `<span class="px-1.5 py-0.5 badge-info">${translateActionType(a.action_type)}</span>`).join('')}
                     </div>` : ''}
                 </div>`;
             }).join('');
@@ -1473,7 +1473,7 @@
         if (fp) filtered = filtered.filter(c => c.platform === fp);
 
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-dark-500">Нет данных</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-dark-400">Нет данных</td></tr>';
             return;
         }
 
@@ -1488,7 +1488,7 @@
         rows.sort((a, b) => (b.total_cost || 0) - (a.total_cost || 0));
 
         tbody.innerHTML = rows.map(r => `
-            <tr class="border-b border-dark-800/20">
+            <tr class="border-b /20">
                 <td class="px-4 py-2 text-dark-200 font-medium truncate max-w-[160px]">${esc(r.campaign_name)}</td>
                 <td class="px-4 py-2 text-dark-400 text-xs">${r.date ? formatDateShort(r.date) : '—'}</td>
                 <td class="px-4 py-2 text-right text-dark-400">${(r.total_impressions || 0).toLocaleString('ru')}</td>
@@ -1513,7 +1513,7 @@
         if (fs) filtered = filtered.filter(d => d.status === fs);
 
         if (filtered.length === 0) {
-            container.innerHTML = '<div class="px-4 py-8 text-center text-dark-500 text-sm bg-dark-900/80 border border-dark-800/60 rounded-xl">Нет рекомендаций</div>';
+            container.innerHTML = '<div class="px-4 py-8 text-center text-dark-400 text-sm card">Нет рекомендаций</div>';
             return;
         }
 
@@ -1523,21 +1523,21 @@
                 `<span class="px-1.5 py-0.5 bg-dark-950 rounded text-xs text-dark-300">${translateActionType(a.action_type)}</span>`
             ).join(' ');
             return `
-            <div class="bg-dark-900/80 border border-dark-800/60 rounded-xl p-5 animate-fade-in cursor-pointer" onclick="openDecisionDetail(${d.id})">
+            <div class="card p-5 animate-fade-in cursor-pointer" onclick="openDecisionDetail(${d.id})">
                 <div class="flex items-center justify-between mb-3">
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
-                    <span class="text-xs text-dark-500">${formatDate(d.created_at)}</span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${statusClass(d.status)}">${statusLabel(d.status)}</span>
+                    <span class="text-xs text-dark-400">${formatDate(d.created_at)}</span>
                 </div>
                 <div class="grid grid-cols-3 gap-3 mb-3 text-xs">
-                    <div><span class="text-dark-500">Модель:</span> <span class="text-dark-300">${d.llm_model || '—'}</span></div>
-                    <div><span class="text-dark-500">Провайдер:</span> <span class="text-dark-300">${d.llm_provider || '—'}</span></div>
-                    <div><span class="text-dark-500">Кампания:</span> <span class="text-dark-300">${d.campaign_id || '—'}</span></div>
+                    <div><span class="text-dark-400">Модель:</span> <span class="text-dark-300">${d.llm_model || '—'}</span></div>
+                    <div><span class="text-dark-400">Провайдер:</span> <span class="text-dark-300">${d.llm_provider || '—'}</span></div>
+                    <div><span class="text-dark-400">Кампания:</span> <span class="text-dark-300">${d.campaign_id || '—'}</span></div>
                 </div>
                 ${actionsDetail ? `<div class="flex flex-wrap gap-1">${actionsDetail}</div>` : ''}
                 ${d.status === 'pending' ? `
-                <div class="flex items-center gap-2 mt-3 pt-3 border-t border-dark-800/60">
-                    <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-4 py-1.5 bg-green-600/20 text-green-400 text-sm rounded-lg hover:bg-green-600/30 transition-all">Одобрить</button>
-                    <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-4 py-1.5 bg-red-600/20 text-red-400 text-sm rounded-lg hover:bg-red-600/30 transition-all">Отклонить</button>
+                <div class="flex items-center gap-2 mt-3 pt-3 border-t">
+                    <button onclick="event.stopPropagation();approveDecision(${d.id})" class="px-4 py-1.5 bg-green-600/20 text-green-400 text-sm rounded-xl hover:bg-green-600/30 transition-all">Одобрить</button>
+                    <button onclick="event.stopPropagation();rejectDecision(${d.id})" class="px-4 py-1.5 bg-red-600/20 text-red-400 text-sm rounded-xl hover:bg-red-600/30 transition-all">Отклонить</button>
                 </div>` : ''}
             </div>`;
         }).join('');
@@ -1557,14 +1557,14 @@
         if (fs) filtered = filtered.filter(a => a.status === fs);
 
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-dark-500">Нет действий</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-dark-400">Нет действий</td></tr>';
         } else {
             tbody.innerHTML = filtered.map(a => `
-                <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all">
+                <tr class="border-b /20 hover:bg-dark-800/30 transition-all">
                     <td class="px-4 py-3"><span class="text-sm text-dark-200">${translateActionType(a.action_type)}</span></td>
                     <td class="px-4 py-3 text-xs text-dark-400 truncate max-w-[180px]">${esc(a.parameters_json ? JSON.stringify(a.parameters_json) : '')}</td>
                     <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusClass(a.status)}">${statusLabel(a.status)}</span></td>
-                    <td class="px-4 py-3 text-right text-xs text-dark-500">${formatDate(a.applied_at)}</td>
+                    <td class="px-4 py-3 text-right text-xs text-dark-400">${formatDate(a.applied_at)}</td>
                     <td class="px-4 py-3 text-center"><button onclick="openActionDetail(${a.id})" class="text-xs text-dark-400 hover:text-white">→</button></td>
                 </tr>
             `).join('');
@@ -1580,7 +1580,7 @@
     function renderAccounts() {
         const container = document.getElementById('connected-accounts');
         if (accounts.length === 0) {
-            container.innerHTML = '<div class="px-4 py-8 text-center text-dark-500 text-sm">Нет подключённых аккаунтов</div>';
+            container.innerHTML = '<div class="px-4 py-8 text-center text-dark-400 text-sm">Нет подключённых аккаунтов</div>';
         } else {
             container.innerHTML = accounts.map(a => {
                 const hasToken = a.wb_token !== false && a.wb_token != null;
@@ -1646,11 +1646,11 @@
     function renderRulesTable() {
         const tbody = document.getElementById('table-rules');
         if (!rules.length) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-dark-500">Нет правил</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-dark-400">Нет правил</td></tr>';
             return;
         }
         tbody.innerHTML = rules.map(r => `
-            <tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-all">
+            <tr class="border-b /20 hover:bg-dark-800/30 transition-all">
                 <td class="px-4 py-3 text-dark-200 font-medium text-sm">${esc(r.rule_name)}</td>
                 <td class="px-4 py-3"><span class="inline-flex px-2 py-0.5 rounded text-xs font-medium ${platformClass(r.platform)}">${platformLabel(r.platform)}</span></td>
                 <td class="px-4 py-3 text-xs text-dark-400 max-w-[200px] truncate" title="${esc(r.rule_description || '')}">${esc(r.rule_description || '')}</td>
@@ -1660,10 +1660,10 @@
                 </td>
                 <td class="px-4 py-3 text-center">
                     <div class="flex items-center justify-center gap-1">
-                        <button onclick="editRule(${r.id})" class="p-1 text-dark-500 hover:text-indigo-400 transition-colors" title="Редактировать">
+                        <button onclick="editRule(${r.id})" class="p-1 text-dark-400 hover:text-indigo-400 transition-colors" title="Редактировать">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.8a4.5 4.5 0 011.13-1.897l10.606-10.606.324.324z"/></svg>
                         </button>
-                        <button onclick="deleteRule(${r.id})" class="p-1 text-dark-500 hover:text-red-400 transition-colors" title="Удалить">
+                        <button onclick="deleteRule(${r.id})" class="p-1 text-dark-400 hover:text-red-400 transition-colors" title="Удалить">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21ca.342.058.679.107 1.022.166M12 10.5V6.75m-6.292 4.942a.75.75 0 011.061 0M19.5 10.5H4.5"/></svg>
                         </button>
                     </div>
@@ -1687,11 +1687,11 @@
             <form id="form-edit-rule" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-dark-300 mb-1">Название</label>
-                    <input type="text" id="edit-rule-name" value="${esc(r.rule_name)}" required class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <input type="text" id="edit-rule-name" value="${esc(r.rule_name)}" required class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-dark-300 mb-1">Платформа</label>
-                    <select id="edit-rule-platform" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <select id="edit-rule-platform" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                         <option value="wildberries" ${r.platform === 'wildberries' ? 'selected' : ''}>Wildberries</option>
                         <option value="ozon" ${r.platform === 'ozon' ? 'selected' : ''}>Ozon</option>
                         <option value="both" ${r.platform === 'both' ? 'selected' : ''}>Обе платформы</option>
@@ -1699,13 +1699,13 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-dark-300 mb-1">Описание</label>
-                    <textarea id="edit-rule-desc" rows="2" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">${esc(r.rule_description)}</textarea>
+                    <textarea id="edit-rule-desc" rows="2" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">${esc(r.rule_description)}</textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-dark-300 mb-1">Параметры (JSON)</label>
-                    <textarea id="edit-rule-params" rows="4" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono">${esc(JSON.stringify(r.rule_params_json, null, 2))}</textarea>
+                    <textarea id="edit-rule-params" rows="4" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono">${esc(JSON.stringify(r.rule_params_json, null, 2))}</textarea>
                 </div>
-                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all">Сохранить</button>
+                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all">Сохранить</button>
             </form>
         `);
         setTimeout(() => {
@@ -1740,11 +1740,11 @@
             <form id="form-add-rule" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-dark-300 mb-1">Название</label>
-                    <input type="text" id="rule-name" required class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <input type="text" id="rule-name" required class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-dark-300 mb-1">Платформа</label>
-                    <select id="rule-platform" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                    <select id="rule-platform" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                         <option value="wildberries">Wildberries</option>
                         <option value="ozon">Ozon</option>
                         <option value="both">Обе платформы</option>
@@ -1752,13 +1752,13 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-dark-300 mb-1">Описание</label>
-                    <textarea id="rule-desc" rows="2" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"></textarea>
+                    <textarea id="rule-desc" rows="2" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"></textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-dark-300 mb-1">Параметры (JSON)</label>
-                    <textarea id="rule-params" rows="3" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono">{"min_ctr": 0.02, "min_impressions": 1000}</textarea>
+                    <textarea id="rule-params" rows="3" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono">{"min_ctr": 0.02, "min_impressions": 1000}</textarea>
                 </div>
-                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all">Добавить правило</button>
+                <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all">Добавить правило</button>
             </form>
         `);
         setTimeout(() => {
@@ -1802,14 +1802,14 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-dark-300 mb-1">API ключ нейросети</label>
-                        <input type="password" id="llm-api-key" value="${esc(apiKey)}" class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                        <div class="text-xs text-dark-500 mt-1">Ключ от ClaudeHub (sk-hub-...). На сервере уже сохранён в .env</div>
+                        <input type="password" id="llm-api-key" value="${esc(apiKey)}" class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-200 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                        <div class="text-xs text-dark-400 mt-1">Ключ от ClaudeHub (sk-hub-...). На сервере уже сохранён в .env</div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-dark-300 mb-1">Base URL</label>
-                        <input type="text" id="llm-base-url" value="${esc(analysisSettings.base_url)}" readonly class="w-full bg-dark-800 border border-dark-700 rounded-lg px-3 py-2 text-sm text-dark-400 cursor-not-allowed" title="Меняется в .env на сервере">
+                        <input type="text" id="llm-base-url" value="${esc(analysisSettings.base_url)}" readonly class="w-full bg-dark-800 border  rounded-xl px-3 py-2 text-sm text-dark-400 cursor-not-allowed" title="Меняется в .env на сервере">
                     </div>
-                    <button onclick="saveLlmSettings()" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-lg transition-all">Сохранить</button>
+                    <button onclick="saveLlmSettings()" class="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-medium rounded-xl transition-all">Сохранить</button>
                 </div>
             `;
 
@@ -1888,19 +1888,19 @@
 
         const actionsCount = d.actions_json?.actions?.length || 0;
         const actionsList = (d.actions || []).map(a => `
-            <div class="bg-dark-950 border border-dark-800/40 rounded-lg p-3 text-xs">
+            <div class="bg-dark-950 border rounded-xl p-3 text-xs">
                 <div class="flex items-center justify-between mb-2">
                     <span class="px-2 py-0.5 rounded bg-indigo-600/20 text-indigo-400 font-medium">${translateActionType(a.action_type)}</span>
                     <span class="px-2 py-0.5 rounded ${statusClass(a.status)}">${statusLabel(a.status)}</span>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <div class="text-dark-500 mb-1">Метрики до:</div>
-                        <pre class="p-2 bg-dark-900 rounded text-dark-400 overflow-x-auto">${esc(a.metrics_before_json ? JSON.stringify(a.metrics_before_json, null, 2) : '—')}</pre>
+                        <div class="text-dark-400 mb-1">Метрики до:</div>
+                        <pre class="p-2 rounded-xl text-dark-400 overflow-x-auto">${esc(a.metrics_before_json ? JSON.stringify(a.metrics_before_json, null, 2) : '—')}</pre>
                     </div>
                     <div>
-                        <div class="text-dark-500 mb-1">Метрики после:</div>
-                        <pre class="p-2 bg-dark-900 rounded text-dark-400 overflow-x-auto">${esc(a.metrics_after_json ? JSON.stringify(a.metrics_after_json, null, 2) : '—')}</pre>
+                        <div class="text-dark-400 mb-1">Метрики после:</div>
+                        <pre class="p-2 rounded-xl text-dark-400 overflow-x-auto">${esc(a.metrics_after_json ? JSON.stringify(a.metrics_after_json, null, 2) : '—')}</pre>
                     </div>
                 </div>
             </div>
@@ -1909,12 +1909,12 @@
         openModal(`Решение ИИ #${d.id}`, `
             <div class="space-y-4">
                 <div class="grid grid-cols-3 gap-3 text-xs">
-                    <div><span class="text-dark-500">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(d.status)}">${statusLabel(d.status)}</span></div>
-                    <div><span class="text-dark-500">Модель:</span> <span class="text-dark-300">${d.llm_model}</span></div>
-                    <div><span class="text-dark-500">Создано:</span> <span class="text-dark-300">${formatDate(d.created_at)}</span></div>
+                    <div><span class="text-dark-400">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(d.status)}">${statusLabel(d.status)}</span></div>
+                    <div><span class="text-dark-400">Модель:</span> <span class="text-dark-300">${d.llm_model}</span></div>
+                    <div><span class="text-dark-400">Создано:</span> <span class="text-dark-300">${formatDate(d.created_at)}</span></div>
                 </div>
                 <div>
-                    <div class="text-xs text-dark-500 mb-1">Действия (${actionsCount}):</div>
+                    <div class="text-xs text-dark-400 mb-1">Действия (${actionsCount}):</div>
                     <div class="flex flex-wrap gap-1">${(d.actions_json?.actions || []).map(a =>
                         `<span class="px-1.5 py-0.5 bg-dark-800 rounded text-xs text-dark-300">${translateActionType(a.action_type)}</span>`
                     ).join('')}</div>
@@ -1927,7 +1927,7 @@
                     <summary class="cursor-pointer text-dark-400 hover:text-dark-200">Показать ответ LLM</summary>
                     <pre class="mt-2 p-3 bg-dark-950 rounded text-dark-400 overflow-x-auto max-h-48">${esc(d.llm_response)}</pre>
                 </details>
-                ${actionsList ? `<div><div class="text-xs text-dark-500 mb-2">Применённые действия:</div>${actionsList}</div>` : ''}
+                ${actionsList ? `<div><div class="text-xs text-dark-400 mb-2">Применённые действия:</div>${actionsList}</div>` : ''}
             </div>
         `);
     }
@@ -1943,21 +1943,21 @@
         openModal(`${translateActionType(action.action_type)} #${action.id}`, `
             <div class="space-y-3 text-xs">
                 <div class="grid grid-cols-2 gap-2">
-                    <div><span class="text-dark-500">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(action.status)}">${statusLabel(action.status)}</span></div>
-                    <div><span class="text-dark-500">Время:</span> <span class="text-dark-300">${formatDate(action.applied_at)}</span></div>
+                    <div><span class="text-dark-400">Статус:</span> <span class="px-2 py-0.5 rounded ${statusClass(action.status)}">${statusLabel(action.status)}</span></div>
+                    <div><span class="text-dark-400">Время:</span> <span class="text-dark-300">${formatDate(action.applied_at)}</span></div>
                 </div>
                 <div>
-                    <div class="text-dark-500 mb-1">Параметры:</div>
+                    <div class="text-dark-400 mb-1">Параметры:</div>
                     <pre class="p-3 bg-dark-950 rounded text-dark-300 overflow-x-auto">${esc(JSON.stringify(action.parameters_json, null, 2))}</pre>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <div class="text-dark-500 mb-1">Метрики до:</div>
-                        <pre class="p-2 bg-dark-900 rounded text-dark-400 overflow-x-auto">${action.metrics_before_json ? esc(JSON.stringify(action.metrics_before_json, null, 2)) : '—'}</pre>
+                        <div class="text-dark-400 mb-1">Метрики до:</div>
+                        <pre class="p-2 rounded-xl text-dark-400 overflow-x-auto">${action.metrics_before_json ? esc(JSON.stringify(action.metrics_before_json, null, 2)) : '—'}</pre>
                     </div>
                     <div>
-                        <div class="text-dark-500 mb-1">Метрики после:</div>
-                        <pre class="p-2 bg-dark-900 rounded text-dark-400 overflow-x-auto">${action.metrics_after_json ? esc(JSON.stringify(action.metrics_after_json, null, 2)) : '—'}</pre>
+                        <div class="text-dark-400 mb-1">Метрики после:</div>
+                        <pre class="p-2 rounded-xl text-dark-400 overflow-x-auto">${action.metrics_after_json ? esc(JSON.stringify(action.metrics_after_json, null, 2)) : '—'}</pre>
                     </div>
                 </div>
             </div>
