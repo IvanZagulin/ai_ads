@@ -6,11 +6,27 @@
     <title>AI Ads Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        /* ── Quasar-X Design Tokens ── */
+        document.documentElement.style.setProperty('--neon',         '#00c8ff');
+        document.documentElement.style.setProperty('--neon-dim',    'rgba(0,200,255,.2)');
+        document.documentElement.style.setProperty('--neon-glow',   'rgba(0,200,255,.08)');
+        document.documentElement.style.setProperty('--neon-strong', 'rgba(0,200,255,.28)');
+        document.documentElement.style.setProperty('--accent-blue', '#3d8bff');
+        document.documentElement.style.setProperty('--electric',    '#8b7cf7');
+        document.documentElement.style.setProperty('--text-1', '#e0e4ec');
+        document.documentElement.style.setProperty('--text-2', '#8b92a8');
+        document.documentElement.style.setProperty('--text-3', '#6b7290');
+
         tailwind.config = {
             darkMode: 'class',
+            fontFamily: {
+                sans: ["'Plus Jakarta Sans'", "system-ui", "-apple-system", "sans-serif"],
+                mono: ["'JetBrains Mono'", "monospace"],
+            },
             theme: {
                 extend: {
                     colors: {
+                        neon: '#00c8ff',
                         wb: '#e0296b',
                         ozon: '#005bff',
                         dark: {
@@ -19,49 +35,256 @@
                             600: '#475569', 700: '#334155', 800: '#1e293b',
                             850: '#172033', 900: '#0f172a', 950: '#020617',
                         }
+                    },
+                    boxShadow: {
+                        'neon': '0 0 8px var(--neon-dim)',
                     }
                 }
             }
         }
     </script>
     <style>
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #1e293b; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .animate-fade-in { animation: fadeIn 0.35s ease-out both; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        /* ── scrollbar ── */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: hsla(228,25%,16%,.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: hsla(225,14%,58%,.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: hsla(225,14%,58%,.6); }
+
+        /* ── keyframes ── */
+        @keyframes fadeIn     { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp   { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+        @keyframes scaleIn    { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+        @keyframes slideIn    { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+        @keyframes slideLeft  { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+        @keyframes pulse-dot  { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes neonPulse  { 0%,100% { box-shadow: 0 0 8px rgba(0,200,255,.15); } 50% { box-shadow: 0 0 20px rgba(0,200,255,.3); } }
+        @keyframes spin       { to { transform: rotate(360deg); } }
+        @keyframes shimmer    { from { transform: translateX(-100%); } to { transform: translateX(200%); } }
+        @keyframes numberIn   { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+        /* ── animations ── */
+        .animate-fade-in  { animation: fadeIn .35s ease-out both; }
+        .animate-fade-in-up { animation: fadeInUp 0.3s ease backwards; }
         .animate-slide-in { animation: slideIn 0.3s ease-out both; }
-        .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
-        .spin { animation: spin 1s linear infinite; }
-        .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-        .nav-link.active { color: #fff; background: #334155; }
-        .nav-link { transition: all 0.15s ease-out; }
+        .pulse-dot        { animation: pulse-dot 2s ease-in-out infinite; }
+        .spin             { animation: spin 1s linear infinite; }
+
+        /* ── nav links (Quasar-X glow) ── */
+        .nav-link.active {
+            color: var(--neon);
+            font-weight: 600;
+            background: var(--neon-glow);
+            margin-left: -3px;
+            padding-left: 6px;
+            position: relative;
+        }
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 70%;
+            background: var(--neon);
+            border-radius: 2px;
+        }
+        .nav-link {
+            transition: all 0.15s ease-out;
+            position: relative;
+        }
+        .nav-link:not(.active):hover {
+            color: var(--neon);
+            background: var(--neon-glow);
+        }
+
+        /* ── sections ── */
         .section-content { display: none; }
         .section-content.active { display: block; }
-        .modal-backdrop { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
-        details > summary { list-style: none; }
+
+        /* ── cards ── */
+        .card {
+            border-radius: 14px;
+            border: 1px solid hsla(228,20%,18%,1);
+            box-shadow: 0 8px 32px rgba(0,200,255,.06);
+            transition: box-shadow .3s, transform .3s;
+        }
+        .card-hover { transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow .3s; }
+        .card-hover:hover {
+            border-color: var(--neon-dim);
+            box-shadow: 0 8px 32px rgba(0,200,255,.12);
+            transform: translateY(-2px);
+        }
+
+        /* ── stat numbers ── */
+        .stat-number { animation: numberIn 0.4s ease backwards; animation-delay: 0.1s; }
+
+        /* ── badge ── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 9999px;
+            padding: 0.125rem 0.625rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: none;
+        }
+        .badge-success { background: rgba(34,197,94,.15); color: #4ade80; }
+        .badge-warning { background: rgba(245,158,11,.15); color: #fbbf24; }
+        .badge-error   { background: rgba(239,68,68,.15);  color: #f87171; }
+        .badge-info    { background: rgba(0,200,255,.12);   color: #00c8ff; }
+
+        /* ── neon gradient text ── */
+        .neon-gradient {
+            background: linear-gradient(135deg, var(--neon), var(--accent-blue), var(--electric));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── glow dot ── */
+        .glow-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: var(--neon);
+            box-shadow: 0 0 8px var(--neon-dim);
+        }
+        .glow-dot.off { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,.3); }
+
+        /* ── modal ── */
+        .modal-backdrop {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        details > summary { list-style: none; cursor: pointer; }
         details > summary::-webkit-details-marker { display: none; }
 
-        /* Sparkline styles */
+        /* ── sparkline ── */
         .sparkline { width: 60px; height: 24px; }
 
-        /* Toggle switch */
-        .toggle-switch { width: 40px; height: 22px; border-radius: 11px; position: relative; cursor: pointer; }
-        .toggle-switch::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; top: 2px; left: 2px; transition: all 0.2s; background: white; }
-        .toggle-switch.on { background: #6366f1; }
+        /* ── toggle switch ── */
+        .toggle-switch {
+            width: 40px; height: 22px;
+            border-radius: 11px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            top: 2px; left: 2px;
+            transition: all 0.2s;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,.3);
+        }
+        .toggle-switch.on {
+            background: linear-gradient(135deg, var(--neon), var(--accent-blue));
+        }
         .toggle-switch.on::after { left: 20px; }
         .toggle-switch.off { background: #475569; }
 
-        /* Tab system for campaign detail */
-        .tab-btn.active { color: #fff; border-bottom-color: #6366f1; }
+        /* ── campaign card (like product-card from repraiser) ── */
+        .campaign-card {
+            border-radius: 14px;
+            border: 2px solid hsla(228,20%,18%,1);
+            transition: all .3s cubic-bezier(.22,1,.36,1);
+            position: relative;
+            animation: fadeInUp 0.3s ease backwards;
+        }
+        .campaign-card:hover {
+            border-color: var(--neon);
+            box-shadow: 0 8px 32px rgba(0,200,255,.18);
+            transform: translateY(-4px);
+        }
+        .campaign-card::after {
+            content: '→';
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--neon);
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: all .25s ease;
+        }
+        .campaign-card:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ── run-row ── */
+        .run-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: hsl(228 30% 11%);
+            border: 1px solid hsla(228,20%,18%,1);
+            animation: fadeInUp 0.25s ease backwards;
+            transition: all 0.2s ease;
+        }
+        .run-row:hover {
+            background: var(--neon-glow);
+            border-color: var(--neon-dim);
+        }
+
+        /* ── tab buttons ── */
+        .tab-btn { transition: all 0.15s ease; cursor: pointer; }
+        .tab-btn:hover { color: #e0e4ec !important; }
+        .tab-btn.active {
+            color: #fff !important;
+            border-bottom-color: var(--neon) !important;
+        }
+
+        /* ── skeletons for loading ── */
+        .skeleton {
+            background: hsl(228 25% 16%);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 50%;
+            background: linear-gradient(90deg, transparent, hsl(228 30% 11%), transparent);
+            animation: shimmer 1.5s ease-in-out infinite;
+        }
+
+        /* ── page heading ── */
+        .page-h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        /* ── logo gradient text ── */
+        .logo-gradient-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            letter-spacing: .06em;
+        }
+
+        /* ── global transitions ── */
+        *, *::before, *::after {
+            transition:
+                background-color 0.15s ease,
+                border-color     0.15s ease,
+                color            0.1s ease;
+        }
     </style>
 </head>
-<body class="bg-dark-950 text-dark-200 min-h-screen font-sans antialiased">
+<body class="bg-dark-950 text-dark-200 min-h-screen font-sans antialiased" style="font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;">
     <div id="app" class="flex flex-col min-h-screen">
         <!-- Top Navbar -->
         <header class="border-b border-dark-800/80 bg-dark-950/90 backdrop-blur-sm sticky top-0 z-50">
