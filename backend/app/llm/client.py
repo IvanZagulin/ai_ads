@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 from typing import Any
 
-from anthropic import AsyncAnthropic, APIError, APIConnectionError, RateLimitError
+from anthropic import Anthropic
 
 from app.config import settings
 
@@ -12,7 +13,11 @@ logger = logging.getLogger(__name__)
 
 
 class LLMClient:
-    """LLM client using Anthropic SDK with claudehub.fun proxy."""
+    """LLM client using Anthropic SDK with claudehub.fun proxy.
+
+    Uses sync streaming API because the proxy returns SSE events
+    that AsyncAnthropic cannot parse.
+    """
 
     def __init__(
         self,
@@ -26,10 +31,9 @@ class LLMClient:
         self.model = model or settings.CLAUDE_MODEL
         self.max_retries = max_retries
 
-        self._client = AsyncAnthropic(
+        self._client = Anthropic(
             api_key=self.api_key,
             base_url=self.base_url,
-            max_retries=0,
         )
 
     async def analyze(self, prompt: str) -> dict[str, Any]:
@@ -38,7 +42,9 @@ class LLMClient:
 
         for attempt in range(1, self.max_retries + 1):
             try:
-                message = await self._client.messages.create(
+                full_text = ""
+
+                with self._client.messages.stream(
                     model=self.model,
                     max_tokens=4096,
                     system=(
@@ -51,51 +57,41 @@ class LLMClient:
                         {"role": "user", "content": prompt},
                     ],
                     temperature=0.3,
-                )
+                ) as stream:
+                    for text in stream.text_stream:
+                        full_text += text
 
-                content = message.content[0].text if message.content else ""
-                if not content:
+                if not full_text:
                     raise ValueError("LLM returned empty response")
 
-                return json.loads(content)
+                logger.info("LLM response (%d chars): %s", len(full_text), full_text[:300])
 
-            except (APIConnectionError, TimeoutError) as exc:
+                # Try to extract JSON from the response
+                try:
+                    return json.loads(full_text)
+                except json.JSONDecodeError:
+                    # Try to find JSON object in the text
+                    start = full_text.find("{")
+                    end = full_text.rfind("}") + 1
+                    if start >= 0 and end > start:
+                        return json.loads(full_text[start:end])
+                    raise ValueError(
+                        f"LLM did not return valid JSON: {full_text[:200]}"
+                    )
+
+            except Exception as exc:
                 last_error = exc
                 logger.warning(
-                    "LLM connection error (attempt %d/%d): %s",
+                    "LLM error (attempt %d/%d): %s",
                     attempt,
                     self.max_retries,
                     exc,
                 )
-                await self._backoff(attempt)
-
-            except RateLimitError as exc:
-                last_error = exc
-                logger.warning(
-                    "LLM rate limited (attempt %d/%d): %s",
-                    attempt,
-                    self.max_retries,
-                    exc,
-                )
-                await self._backoff(attempt)
-
-            except (APIError, json.JSONDecodeError, ValueError) as exc:
-                last_error = exc
-                logger.warning(
-                    "LLM API error (attempt %d/%d): %s",
-                    attempt,
-                    self.max_retries,
-                    exc,
-                )
-                await self._backoff(attempt)
+                if attempt < self.max_retries:
+                    delay = min(2 ** attempt * 2.0, 30.0)
+                    time.sleep(delay)
 
         raise RuntimeError(
             f"LLM analysis failed after {self.max_retries} retries. "
             f"Last error: {last_error}"
         )
-
-    async def _backoff(self, attempt: int) -> None:
-        import asyncio
-
-        delay = min(2 ** attempt * 2.0, 30.0)
-        await asyncio.sleep(delay)
