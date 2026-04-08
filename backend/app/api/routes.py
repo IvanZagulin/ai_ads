@@ -687,16 +687,17 @@ async def list_actions(
 # Analysis Trigger
 # ---------------------------------------------------------------------------
 @router.post("/analysis/trigger")
-async def trigger_analysis() -> dict[str, str]:
-    """Запустить цикл оптимизации вручную."""
-    logger.info("Ручной запуск цикла оптимизации")
-    orchestrator = OptimizationOrchestrator()
-    try:
-        result = await orchestrator.run_full_cycle()
-        return {"status": "completed", "message": f"Оптимизация завершена для {len(result)} групп", "details": result}
-    except Exception as exc:
-        logger.error("Оптимизация не удалась: %s", exc)
-        raise HTTPException(status_code=500, detail=f"Ошибка оптимизации: {exc}")
+async def trigger_analysis() -> dict[str, Any]:
+    """Запустить цикл оптимизации вручную (фоновая задача)."""
+    from app.tasks.optimization_cycle import run_optimization_cycle
+
+    logger.info("Ручной запуск цикла оптимизации (фоновая задача)")
+    task = run_optimization_cycle.delay()
+    return {
+        "status": "started",
+        "message": "Оптимизация запущена в фоне",
+        "task_id": task.id,
+    }
 
 
 # ---------------------------------------------------------------------------

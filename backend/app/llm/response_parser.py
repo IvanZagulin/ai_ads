@@ -74,6 +74,24 @@ class ResponseParser:
             f"Errors: {'; '.join(last_errors)}"
         )
 
+    def validate_from_dict(self, parsed: dict[str, Any]) -> list[dict[str, Any]]:
+        """Validate actions from an already-parsed dict (bypasses JSON extraction)."""
+        actions_raw = parsed.get("actions", [])
+        if not isinstance(actions_raw, list):
+            raise ValueError(
+                f"'actions' must be an array, got {type(actions_raw).__name__}"
+            )
+
+        validated_actions: list[dict[str, Any]] = []
+        for i, action_dict in enumerate(actions_raw):
+            validated = self._validate_action(action_dict, action_index=i)
+            validated_actions.append(validated)
+
+        logger.info(
+            "Validated %d actions from pre-parsed dict", len(validated_actions)
+        )
+        return validated_actions
+
     def _extract_json(self, text: str) -> Any:
         """Try to extract a JSON object from text that may contain markdown or other noise."""
         stripped = text.strip()

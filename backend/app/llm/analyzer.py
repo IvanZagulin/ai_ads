@@ -49,10 +49,12 @@ class LLMAnalyzer:
 
         logger.debug("Prompt built (%d chars), sending to LLM", len(prompt))
         raw_response = await self.llm_client.analyze(prompt)
-        logger.info("LLM response received (%d chars)", len(str(raw_response)))
 
-        raw_text = str(raw_response)
-        actions = self.response_parser.validate_and_parse(raw_text)
+        # client.analyze() already returns a parsed dict
+        if isinstance(raw_response, dict):
+            actions = self.response_parser.validate_from_dict(raw_response)
+        else:
+            actions = self.response_parser.validate_and_parse(str(raw_response))
 
         logger.info(
             "Analysis complete: %d validated actions for campaign '%s'",

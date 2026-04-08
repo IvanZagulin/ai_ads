@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import datetime, timezone
 from typing import Any
@@ -33,6 +34,9 @@ logger = logging.getLogger(__name__)
 
 class OptimizationOrchestrator:
     """Orchestrates one complete optimization cycle: gather data -> LLM analyze -> execute."""
+
+    # Max concurrent LLM calls (avoid rate limits)
+    SEMAPHORE = asyncio.Semaphore(10)
 
     def __init__(self) -> None:
         self.llm_analyzer = LLMAnalyzer(llm_client=LLMClient())
@@ -204,6 +208,68 @@ class OptimizationOrchestrator:
         await session.flush()
         return decision
 
+    async def _process_single_campaign(self, campaign_id: int) -> dict[str, Any]:
+        """Process one campaign with its own isolated DB session and semaphore."""
+        async with self.SEMAPHORE:
+            async with async_session_factory() as session:
+                try:
+                    campaign = await session.get(Campaign, campaign_id)
+                    if campaign is None:
+                        return {"status": "skipped", "campaign_id": campaign_id, "reason": "campaign not found"}
+
+                    account = await session.get(Account, campaign.account_id)
+                    if account is None:
+                        return {"status": "skipped", "campaign_id": campaign_id, "reason": "account not found"}
+
+                    wb_client, ozon_client = await self._get_api_clients(account)
+                    context = await self._gather_campaign_context(session, campaign)
+                    rules = await self._get_active_rules(session, campaign.platform)
+                    history = await self._get_decision_history(session, campaign.id)
+
+                    actions = await self.llm_analyzer.analyze_campaign(
+                        campaign_data=context,
+                        rules=rules,
+                        history=history,
+                        platform=campaign.platform,
+                    )
+
+                    if not actions:
+                        return {"status": "no_actions", "campaign_id": campaign_id}
+
+                    decision = await self._save_llm_decision(
+                        session, campaign.id, str(context), {"actions": actions}, actions
+                    )
+                    await session.commit()
+
+                    if settings.AUTO_MODE and actions:
+                        executor = ActionExecutor(
+                            db_session=session,
+                            wb_client=wb_client or WBPromotionClient(api_token=""),
+                            ozon_client=ozon_client or OzonPerformanceClient(client_id="", client_secret=""),
+                            auto_mode=True,
+                        )
+                        applied_actions = await executor.execute_decision(decision.id)
+                        await session.commit()
+                        return {
+                            "status": "executed",
+                            "campaign_id": campaign.id,
+                            "decision_id": decision.id,
+                            "actions_count": len(actions),
+                            "applied_count": len(applied_actions),
+                        }
+                    else:
+                        return {
+                            "status": "pending_review",
+                            "campaign_id": campaign.id,
+                            "decision_id": decision.id,
+                            "actions_count": len(actions),
+                        }
+                except Exception as exc:
+                    logger.error(
+                        "Optimization failed for campaign %d: %s", campaign_id, exc
+                    )
+                    return {"status": "error", "campaign_id": campaign_id, "error": str(exc)}
+
     async def run_single_campaign(
         self, session: AsyncSession, campaign: Campaign
     ) -> dict[str, Any]:
@@ -256,44 +322,43 @@ class OptimizationOrchestrator:
             }
 
     async def run_full_cycle(self) -> dict[str, Any]:
-        """Run optimization for all active campaigns across all accounts."""
+        """Run optimization for all active campaigns across all accounts, in parallel."""
         logger.info("Starting full optimization cycle")
 
+        # First, collect all active campaign IDs
         async with async_session_factory() as session:
-            accounts_stmt = select(Account).where(Account.is_active.is_(True))
-            accounts_result = await session.execute(accounts_stmt)
-            accounts = list(accounts_result.scalars().all())
+            campaigns_stmt = (
+                select(Campaign.id).where(Campaign.status == "active")
+            )
+            campaigns_result = await session.execute(campaigns_stmt)
+            campaign_ids = [row[0] for row in campaigns_result.all()]
 
-            results: dict[str, Any] = {}
+        logger.info("Found %d active campaigns to optimize", len(campaign_ids))
 
-            for account in accounts:
-                campaigns_stmt = (
-                    select(Campaign)
-                    .where(Campaign.account_id == account.id, Campaign.status == "active")
-                    .options(selectinload(Campaign.keywords))
-                )
-                campaigns_result = await session.execute(campaigns_stmt)
-                campaigns = list(campaigns_result.scalars().all())
+        if not campaign_ids:
+            logger.info("No active campaigns found")
+            return {}
 
-                campaign_results: list[dict[str, Any]] = []
-                for campaign in campaigns:
-                    try:
-                        r = await self.run_single_campaign(session, campaign)
-                        campaign_results.append(r)
-                    except Exception as exc:
-                        logger.error(
-                            "Optimization failed for campaign %d: %s", campaign.id, exc
-                        )
-                        campaign_results.append(
-                            {"status": "error", "campaign_id": campaign.id, "error": str(exc)}
-                        )
+        # Process all campaigns in parallel with their own sessions and semaphore
+        tasks = [
+            self._process_single_campaign(cid)
+            for cid in campaign_ids
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
 
-                results[f"{account.platform}:{account.id}:{account.name}"] = campaign_results
+        processed: list[dict[str, Any]] = []
+        for i, r in enumerate(results):
+            if isinstance(r, Exception):
+                processed.append({
+                    "status": "error",
+                    "campaign_id": campaign_ids[i],
+                    "error": str(r),
+                })
+            else:
+                processed.append(r)
 
-            await session.commit()
-
-        logger.info("Optimization cycle complete: %d accounts processed", len(results))
-        return results
+        logger.info("Optimization cycle complete: %d campaigns processed", len(campaign_ids))
+        return {"campaigns": processed}
 
 
 @celery_app.task(name="app.tasks.optimization_cycle.run_optimization_cycle")
