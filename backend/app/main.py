@@ -1,9 +1,11 @@
 from contextlib import asynccontextmanager
 import logging
+import os
 import sys
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.api.routes import router as api_router
 from app.config import settings
@@ -45,23 +47,43 @@ async def lifespan(app: FastAPI):  # noqa: ANN201  # FastAPI signature
         logger.info("Соединение закрыто")
 
 
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        return response
+
+
 def create_app() -> FastAPI:
     configure_logging()
+
+    _extra_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
+    _allowed_origins = ["https://qvaz.quasar-x.ru"] + _extra_origins
 
     app = FastAPI(
         title="AI Ads Manager",
         description="Управление рекламой на Wildberries и Ozon с помощью ИИ",
         version="0.1.0",
         lifespan=lifespan,
+        docs_url=None,
+        redoc_url=None,
+        openapi_url=None,
     )
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=_allowed_origins,
         allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type"],
     )
+
+    app.add_middleware(SecurityHeadersMiddleware)
 
     app.include_router(api_router)
 

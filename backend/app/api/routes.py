@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from datetime import date, timedelta, timezone
-from typing import Any
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, select
@@ -47,7 +47,8 @@ from app.schemas.schemas import (
     OptimizationRuleUpdate,
 )
 from app.tasks.optimization_cycle import OptimizationOrchestrator
-from app.utils.encryption import encrypt_token, decrypt_token
+from app.utils.encryption import encrypt, decrypt
+from app.api.auth import get_current_user
 from app.utils.rate_limiter import TokenBucketRateLimiter
 
 logger = logging.getLogger(__name__)
@@ -63,7 +64,7 @@ _api_limiter = TokenBucketRateLimiter(rate=100, capacity=200)
 def _get_wb_client(account: Account) -> WBPromotionClient:
     if not account.wb_token:
         raise HTTPException(status_code=400, detail="Токен API Wildberries не настроен")
-    return WBPromotionClient(api_token=decrypt_token(account.wb_token))
+    return WBPromotionClient(api_token=decrypt(account.wb_token))
 
 
 def _get_ozon_client(account: Account) -> OzonPerformanceClient:
@@ -71,7 +72,7 @@ def _get_ozon_client(account: Account) -> OzonPerformanceClient:
         raise HTTPException(status_code=400, detail="Учётные данные Ozon не настроены")
     return OzonPerformanceClient(
         client_id=account.ozon_client_id or "",
-        client_secret=decrypt_token(account.ozon_client_secret),
+        client_secret=decrypt(account.ozon_client_secret),
     )
 
 
@@ -103,7 +104,7 @@ async def list_accounts(
 
 
 @router.post("/accounts", response_model=AccountResponse, status_code=201)
-async def create_account(data: AccountCreate) -> Any:
+async def create_account(current_user: Annotated[dict, Depends(get_current_user)], data: AccountCreate) -> Any:
     with session_factory() as db:
         account = Account(
             platform=data.platform,
@@ -111,11 +112,11 @@ async def create_account(data: AccountCreate) -> Any:
             is_active=data.is_active if data.is_active is not None else True,
         )
         if data.wb_token:
-            account.wb_token = encrypt_token(data.wb_token)
+            account.wb_token = encrypt(data.wb_token)
         if data.ozon_client_id:
             account.ozon_client_id = data.ozon_client_id
         if data.ozon_client_secret:
-            account.ozon_client_secret = encrypt_token(data.ozon_client_secret)
+            account.ozon_client_secret = encrypt(data.ozon_client_secret)
 
         db.add(account)
         db.commit()
@@ -124,7 +125,7 @@ async def create_account(data: AccountCreate) -> Any:
 
 
 @router.get("/accounts/{account_id}", response_model=AccountResponse)
-async def get_account(account_id: int) -> Any:
+async def get_account(current_user: Annotated[dict, Depends(get_current_user)], account_id: int) -> Any:
     with session_factory() as db:
         account = db.get(Account, account_id)
         if account is None:
@@ -133,7 +134,7 @@ async def get_account(account_id: int) -> Any:
 
 
 @router.patch("/accounts/{account_id}", response_model=AccountResponse)
-async def update_account(account_id: int, data: AccountUpdate) -> Any:
+async def update_account(current_user: Annotated[dict, Depends(get_current_user)], account_id: int, data: AccountUpdate) -> Any:
     with session_factory() as db:
         account = db.get(Account, account_id)
         if account is None:
@@ -142,11 +143,11 @@ async def update_account(account_id: int, data: AccountUpdate) -> Any:
         if data.name is not None:
             account.name = data.name
         if data.wb_token is not None:
-            account.wb_token = encrypt_token(data.wb_token)
+            account.wb_token = encrypt(data.wb_token)
         if data.ozon_client_id is not None:
             account.ozon_client_id = data.ozon_client_id
         if data.ozon_client_secret is not None:
-            account.ozon_client_secret = encrypt_token(data.ozon_client_secret)
+            account.ozon_client_secret = encrypt(data.ozon_client_secret)
         if data.is_active is not None:
             account.is_active = data.is_active
 
@@ -159,7 +160,7 @@ async def update_account(account_id: int, data: AccountUpdate) -> Any:
 # Sync campaigns from marketplace API
 # ---------------------------------------------------------------------------
 @router.post("/accounts/{account_id}/sync-campaigns")
-async def sync_campaigns(account_id: int) -> dict[str, Any]:
+async def sync_campaigns(current_user: Annotated[dict, Depends(get_current_user)], account_id: int) -> dict[str, Any]:
     """Fetch campaigns from WB API and save to DB."""
     import asyncio
 
@@ -172,7 +173,7 @@ async def sync_campaigns(account_id: int) -> dict[str, Any]:
             if not account.wb_token:
                 raise HTTPException(status_code=400, detail="Токен WB не настроен")
 
-            wb_client = WBPromotionClient(api_token=decrypt_token(account.wb_token))
+            wb_client = WBPromotionClient(api_token=decrypt(account.wb_token))
             raw_campaigns = await wb_client.get_campaigns()
 
             imported = 0
@@ -222,7 +223,7 @@ async def sync_campaigns(account_id: int) -> dict[str, Any]:
 # Collect Data — clusters, bids, stats from WB API
 # ---------------------------------------------------------------------------
 @router.post("/accounts/{account_id}/collect-data")
-async def collect_data(account_id: int) -> dict[str, Any]:
+async def collect_data(current_user: Annotated[dict, Depends(get_current_user)], account_id: int) -> dict[str, Any]:
     """Fetch campaigns, clusters, bids, and stats from WB API — saves to DB."""
 
     from app.database import async_session_factory
@@ -238,7 +239,7 @@ async def collect_data(account_id: int) -> dict[str, Any]:
         if not account.wb_token:
             raise HTTPException(status_code=400, detail="Токен WB не настроен")
 
-    wb_client = WBPromotionClient(api_token=decrypt_token(account.wb_token))
+    wb_client = WBPromotionClient(api_token=decrypt(account.wb_token))
     campaigns = await wb_client.get_campaigns()
     if not campaigns:
         return {"status": "ok", "message": "Кампании не найдены"}
@@ -613,7 +614,7 @@ async def list_decisions(
 
 
 @router.post("/decisions/{decision_id}/approve", response_model=LLMDecisionResponse)
-async def approve_decision(decision_id: int) -> Any:
+async def approve_decision(current_user: Annotated[dict, Depends(get_current_user)], decision_id: int) -> Any:
     with session_factory() as db:
         decision = db.get(LLMDecision, decision_id)
         if decision is None:
@@ -645,7 +646,7 @@ async def approve_decision(decision_id: int) -> Any:
 
 
 @router.post("/decisions/{decision_id}/reject", response_model=LLMDecisionResponse)
-async def reject_decision(decision_id: int) -> Any:
+async def reject_decision(current_user: Annotated[dict, Depends(get_current_user)], decision_id: int) -> Any:
     with session_factory() as db:
         decision = db.get(LLMDecision, decision_id)
         if decision is None:
@@ -687,17 +688,12 @@ async def list_actions(
 # Analysis Trigger
 # ---------------------------------------------------------------------------
 @router.post("/analysis/trigger")
-async def trigger_analysis() -> dict[str, Any]:
-    """Запустить цикл оптимизации вручную (фоновая задача)."""
+async def trigger_analysis(current_user: Annotated[dict, Depends(get_current_user)]) -> dict[str, str]:
+    """Запустить цикл оптимизации вручную через Celery (асинхронно)."""
     from app.tasks.optimization_cycle import run_optimization_cycle
-
-    logger.info("Ручной запуск цикла оптимизации (фоновая задача)")
-    task = run_optimization_cycle.delay()
-    return {
-        "status": "started",
-        "message": "Оптимизация запущена в фоне",
-        "task_id": task.id,
-    }
+    logger.info("Ручной запуск цикла оптимизации (Celery)")
+    run_optimization_cycle.delay()
+    return {"status": "started", "message": "Оптимизация запущена в фоне. Обновите страницу через 1-2 минуты."}
 
 
 # ---------------------------------------------------------------------------
@@ -764,7 +760,7 @@ async def list_keywords(
 
 
 @router.post("/keywords", response_model=KeywordResponse, status_code=201)
-async def create_keyword(data: KeywordCreate) -> Any:
+async def create_keyword(current_user: Annotated[dict, Depends(get_current_user)], data: KeywordCreate) -> Any:
     with session_factory() as db:
         kw = Keyword(
             campaign_id=data.campaign_id,
@@ -781,7 +777,7 @@ async def create_keyword(data: KeywordCreate) -> Any:
 
 
 @router.patch("/keywords/{keyword_id}", response_model=KeywordResponse)
-async def update_keyword(keyword_id: int, data: KeywordUpdate) -> Any:
+async def update_keyword(current_user: Annotated[dict, Depends(get_current_user)], keyword_id: int, data: KeywordUpdate) -> Any:
     with session_factory() as db:
         kw = db.get(Keyword, keyword_id)
         if kw is None:
@@ -794,7 +790,7 @@ async def update_keyword(keyword_id: int, data: KeywordUpdate) -> Any:
 
 
 @router.delete("/keywords/{keyword_id}", status_code=204)
-async def delete_keyword(keyword_id: int) -> None:
+async def delete_keyword(current_user: Annotated[dict, Depends(get_current_user)], keyword_id: int) -> None:
     with session_factory() as db:
         kw = db.get(Keyword, keyword_id)
         if kw is None:
@@ -835,7 +831,7 @@ async def list_campaign_stats(
 # Campaign Status Change (start/pause/stop)
 # ---------------------------------------------------------------------------
 @router.post("/campaigns/{campaign_id}/status/{new_status}", response_model=CampaignResponse)
-async def update_campaign_status(campaign_id: int, new_status: str) -> Any:
+async def update_campaign_status(current_user: Annotated[dict, Depends(get_current_user)], campaign_id: int, new_status: str) -> Any:
     if new_status not in ("active", "paused", "completed"):
         raise HTTPException(status_code=400, detail="Недопустимый статус")
     with session_factory() as db:
@@ -863,7 +859,7 @@ async def list_rules(platform: str | None = Query(None)) -> Any:
 
 
 @router.post("/rules", response_model=OptimizationRuleResponse, status_code=201)
-async def create_rule(data: OptimizationRuleCreate) -> Any:
+async def create_rule(current_user: Annotated[dict, Depends(get_current_user)], data: OptimizationRuleCreate) -> Any:
     with session_factory() as db:
         rule = OptimizationRule(
             platform=data.platform,
@@ -879,7 +875,7 @@ async def create_rule(data: OptimizationRuleCreate) -> Any:
 
 
 @router.patch("/rules/{rule_id}", response_model=OptimizationRuleResponse)
-async def update_rule(rule_id: int, data: OptimizationRuleUpdate) -> Any:
+async def update_rule(current_user: Annotated[dict, Depends(get_current_user)], rule_id: int, data: OptimizationRuleUpdate) -> Any:
     with session_factory() as db:
         rule = db.get(OptimizationRule, rule_id)
         if rule is None:
@@ -892,7 +888,7 @@ async def update_rule(rule_id: int, data: OptimizationRuleUpdate) -> Any:
 
 
 @router.delete("/rules/{rule_id}", status_code=204)
-async def delete_rule(rule_id: int) -> None:
+async def delete_rule(current_user: Annotated[dict, Depends(get_current_user)], rule_id: int) -> None:
     with session_factory() as db:
         rule = db.get(OptimizationRule, rule_id)
         if rule is None:
@@ -921,7 +917,7 @@ def _write_settings_file(data: dict) -> None:
 
 
 @router.get("/analysis/settings")
-async def get_analysis_settings() -> dict[str, Any]:
+async def get_analysis_settings(current_user: Annotated[dict, Depends(get_current_user)]) -> dict[str, Any]:
     from app.config import settings as app_cfg
     cached = _read_settings_file()
     return {
@@ -953,7 +949,7 @@ async def serve_frontend():
 
 
 @router.post("/analysis/settings")
-async def update_analysis_settings(data: dict = {}) -> dict[str, str]:
+async def update_analysis_settings(current_user: Annotated[dict, Depends(get_current_user)], data: dict = {}) -> dict[str, str]:
     existing = _read_settings_file()
     existing.update(data)
     _write_settings_file(existing)

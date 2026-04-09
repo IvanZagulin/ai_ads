@@ -16,9 +16,13 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
 
     # LLM (ClaudeHub proxy)
-    CLAUDE_API_KEY: str = "sk-hub-U6sO4WBbMFVtCo8QDh7WJnpdWy42UDjM"
-    CLAUDE_API_BASE: str = "https://api.claudehub.fun"
-    CLAUDE_MODEL: str = "claude-opus-4-6"
+    CLAUDE_API_KEY: str = ""
+    CLAUDE_API_BASE: str = "https://api.claudehub.fun/v1"
+    CLAUDE_MODEL: str = "claude-sonnet-4-6"
+
+    # JWT (shared secret with repricer)
+    JWT_SECRET: str = ""
+    JWT_ALGORITHM: str = "HS256"
 
     # Wildberries
     WB_API_TOKEN: str = ""

@@ -1,27 +1,70 @@
-# Plaintext storage — no encryption for local development
-# In production, consider proper encryption with a persistent ENCRYPTION_KEY
+"""Fernet-based encryption for sensitive tokens."""
 
-def encrypt_token(plain_text: str) -> str:
-    """Store token as-is (no encryption for local dev)."""
-    return plain_text
+import base64
+import logging
+import os
+
+from cryptography.fernet import Fernet, InvalidToken
+
+logger = logging.getLogger(__name__)
 
 
-def decrypt_token(encrypted_text: str) -> str:
-    """Return token as-is. If it looks like a Fernet ciphertext, try decrypting."""
-    # Detect Fernet-encrypted tokens (start with 'gAAAAA') and try to decrypt
-    if encrypted_text.startswith('gAAAAA'):
-        try:
-            from cryptography.fernet import Fernet
-            import base64
-            # Try with common key that might have been used
-            fernet = Fernet(base64.urlsafe_b64encode(b'dummy-key-32-bytes-for-dev-only!'))
-            return fernet.decrypt(encrypted_text.encode()).decode()
-        except Exception:
-            pass  # Fall through to returning as-is
-    return encrypted_text
+def _get_fernet(key_str: str) -> Fernet:
+    """Create Fernet instance from a base64-encoded key string."""
+    if len(key_str) == 32 and not key_str.endswith('='):
+        key = base64.urlsafe_b64encode(key_str.encode())
+    else:
+        key = key_str.encode()
+    return Fernet(key)
+
+
+def encrypt_token(plain_text: str, encryption_key: str) -> str:
+    """Encrypt a token using Fernet symmetric encryption."""
+    if not encryption_key:
+        raise ValueError("ENCRYPTION_KEY is not configured")
+    fernet = _get_fernet(encryption_key)
+    return fernet.encrypt(plain_text.encode()).decode()
+
+
+def decrypt_token(encrypted_text: str, encryption_key: str) -> str:
+    """Decrypt a Fernet-encrypted token. Returns as-is if decryption fails."""
+    if not encryption_key:
+        return encrypted_text
+    try:
+        fernet = _get_fernet(encryption_key)
+        return fernet.decrypt(encrypted_text.encode()).decode()
+    except InvalidToken:
+        logger.warning("Failed to decrypt token — may be stored in plaintext")
+        return encrypted_text
+    except Exception:
+        logger.warning("Unexpected error during token decryption")
+        return encrypted_text
 
 
 def generate_encryption_key() -> str:
-    """Generate a random key (not used in plaintext mode)."""
-    import base64
-    return base64.urlsafe_b64encode(b'dummy-key-32-bytes-for-dev-only!').decode()
+    """Generate a new Fernet key (base64-encoded)."""
+    return Fernet.generate_key().decode()
+
+
+# ---------------------------------------------------------------------------
+# Convenience wrappers that read ENCRYPTION_KEY from settings
+# ---------------------------------------------------------------------------
+_key_cache: str | None = None
+
+
+def _get_key() -> str:
+    global _key_cache
+    if _key_cache is None:
+        from app.config import settings
+        _key_cache = settings.ENCRYPTION_KEY or ""
+    return _key_cache
+
+
+def encrypt(plain_text: str) -> str:
+    """Encrypt using the configured ENCRYPTION_KEY."""
+    return encrypt_token(plain_text, _get_key())
+
+
+def decrypt(encrypted_text: str) -> str:
+    """Decrypt using the configured ENCRYPTION_KEY."""
+    return decrypt_token(encrypted_text, _get_key())
