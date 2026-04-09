@@ -89,6 +89,7 @@ def _get_platform_client(account: Account):
 # ---------------------------------------------------------------------------
 @router.get("/accounts", response_model=list[AccountResponse])
 async def list_accounts(
+    current_user: Annotated[dict, Depends(get_current_user)],
     platform: str | None = Query(None),
     is_active: bool | None = Query(None),
 ) -> Any:
@@ -415,6 +416,7 @@ async def collect_data(current_user: Annotated[dict, Depends(get_current_user)],
 # ---------------------------------------------------------------------------
 @router.get("/campaigns", response_model=list[CampaignResponse])
 async def list_campaigns(
+    current_user: Annotated[dict, Depends(get_current_user)],
     account_id: int | None = Query(None),
     platform: str | None = Query(None),
     status: str | None = Query(None),
@@ -480,6 +482,7 @@ async def list_campaigns(
 
 @router.get("/campaigns/{campaign_id}", response_model=CampaignDetailResponse)
 async def get_campaign_detail(
+    current_user: Annotated[dict, Depends(get_current_user)],
     campaign_id: int,
     date_from: str | None = Query(None, description="Start date YYYY-MM-DD (default: 7 days ago)"),
     date_to: str | None = Query(None, description="End date YYYY-MM-DD (default: today)"),
@@ -594,6 +597,7 @@ async def get_campaign_detail(
 # ---------------------------------------------------------------------------
 @router.get("/decisions", response_model=list[LLMDecisionResponse])
 async def list_decisions(
+    current_user: Annotated[dict, Depends(get_current_user)],
     campaign_id: int | None = Query(None),
     status: str | None = Query(None),
     limit: int = Query(50, ge=1, le=200),
@@ -663,6 +667,7 @@ async def reject_decision(current_user: Annotated[dict, Depends(get_current_user
 # ---------------------------------------------------------------------------
 @router.get("/actions", response_model=list[AppliedActionResponse])
 async def list_actions(
+    current_user: Annotated[dict, Depends(get_current_user)],
     decision_id: int | None = Query(None),
     action_type: str | None = Query(None),
     status: str | None = Query(None),
@@ -746,6 +751,7 @@ return '<tr class="border-b border-dark-800/20 hover:bg-dark-800/30 transition-a
 # ---------------------------------------------------------------------------
 @router.get("/keywords", response_model=list[KeywordResponse])
 async def list_keywords(
+    current_user: Annotated[dict, Depends(get_current_user)],
     campaign_id: int | None = Query(None),
     status: str | None = Query(None),
 ) -> Any:
@@ -803,7 +809,9 @@ async def delete_keyword(current_user: Annotated[dict, Depends(get_current_user)
 # Keyword Stats
 # ---------------------------------------------------------------------------
 @router.get("/keyword-stats/{keyword_id}", response_model=list[KeywordStatsResponse])
-async def list_keyword_stats(keyword_id: int, limit: int = Query(30, ge=1, le=365)) -> Any:
+async def list_keyword_stats(
+    current_user: Annotated[dict, Depends(get_current_user)],
+    keyword_id: int, limit: int = Query(30, ge=1, le=365)) -> Any:
     with session_factory() as db:
         stmt = (
             select(KeywordStats)
@@ -817,6 +825,7 @@ async def list_keyword_stats(keyword_id: int, limit: int = Query(30, ge=1, le=36
 
 @router.get("/campaign-stats", response_model=list[CampaignStatsResponse])
 async def list_campaign_stats(
+    current_user: Annotated[dict, Depends(get_current_user)],
     campaign_id: int | None = Query(None), limit: int = Query(30, ge=1, le=365)
 ) -> Any:
     with session_factory() as db:
@@ -849,7 +858,9 @@ async def update_campaign_status(current_user: Annotated[dict, Depends(get_curre
 # Optimization Rules
 # ---------------------------------------------------------------------------
 @router.get("/rules", response_model=list[OptimizationRuleResponse])
-async def list_rules(platform: str | None = Query(None)) -> Any:
+async def list_rules(
+    current_user: Annotated[dict, Depends(get_current_user)],
+    platform: str | None = Query(None)) -> Any:
     with session_factory() as db:
         stmt = select(OptimizationRule).order_by(OptimizationRule.id)
         if platform is not None:
